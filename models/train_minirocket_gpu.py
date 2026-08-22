@@ -24,11 +24,18 @@ matplotlib.use('Agg')
 import warnings
 warnings.filterwarnings("ignore")
 
+try:
+    import fastcore.script
+    if not hasattr(fastcore.script, 'Param'):
+        fastcore.script.Param = lambda *args, **kwargs: None
+except Exception:
+    pass
+
 # Importar tsai
 try:
     from tsai.all import *
-except ImportError:
-    print("Error: tsai no está instalado. Ejecuta 'pip install tsai'")
+except ImportError as e:
+    print(f"Error: tsai no está instalado ({e}). Ejecuta 'pip install tsai'")
     sys.exit(1)
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))

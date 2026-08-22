@@ -69,6 +69,43 @@ def run_ai_update_background():
         AI_STATUS["is_running"] = False
         AI_STATUS["step_name"] = "Completado"
 
+LIVE_PRICES_CACHE = {}
+
+def update_live_prices_loop():
+    global LIVE_PRICES_CACHE
+    import time
+    import yfinance as yf
+    import pandas as pd
+    from backtester import TICKERS
+
+    while True:
+        try:
+            df = yf.download(TICKERS, period="1d", interval="1m", progress=False)
+            if not df.empty:
+                prices = {}
+                if isinstance(df.columns, pd.MultiIndex):
+                    if 'Close' in df.columns:
+                        close_df = df['Close']
+                        valid_df = close_df.dropna(how='all')
+                        if not valid_df.empty:
+                            last_row = valid_df.iloc[-1]
+                            for tk in TICKERS:
+                                if tk in last_row and pd.notna(last_row[tk]):
+                                    prices[tk] = float(last_row[tk])
+                else:
+                    if 'Close' in df.columns:
+                        valid_s = df['Close'].dropna()
+                        if not valid_s.empty:
+                            last_val = valid_s.iloc[-1]
+                            if pd.notna(last_val):
+                                for tk in TICKERS:
+                                    prices[tk] = float(last_val)
+                if prices:
+                    LIVE_PRICES_CACHE = prices
+        except Exception:
+            pass
+        time.sleep(15)
+
 class APIHandler(http.server.SimpleHTTPRequestHandler):
     def end_headers(self):
         self.send_header('Cache-Control', 'no-store, no-cache, must-revalidate')
@@ -181,35 +218,10 @@ class APIHandler(http.server.SimpleHTTPRequestHandler):
             return
             
         if parsed_path.path == '/api/live-prices':
-            try:
-                import yfinance as yf
-                import pandas as pd
-                from backtester import TICKERS
-                
-                # Fetch only 1 day, 1 minute interval to be lightning fast
-                df = yf.download(TICKERS, period="1d", interval="1m", progress=False)
-                prices = {}
-                
-                if isinstance(df.columns, pd.MultiIndex):
-                    # MultiIndex: (PriceType, Ticker)
-                    # Get the last row of 'Close'
-                    last_row = df['Close'].iloc[-1]
-                    for tk in TICKERS:
-                        prices[tk] = float(last_row[tk])
-                else:
-                    # Single ticker or flat index (shouldn't happen with 18 tickers but fallback)
-                    for tk in TICKERS:
-                        prices[tk] = float(df['Close'].iloc[-1])
-                        
-                self.send_response(200)
-                self.send_header('Content-type', 'application/json')
-                self.end_headers()
-                self.wfile.write(json.dumps(prices).encode('utf-8'))
-            except Exception as e:
-                self.send_response(500)
-                self.send_header('Content-type', 'application/json')
-                self.end_headers()
-                self.wfile.write(json.dumps({"error": str(e)}).encode('utf-8'))
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps(LIVE_PRICES_CACHE).encode('utf-8'))
             return
 
         # Serve static files normally
@@ -229,7 +241,12 @@ if __name__ == "__main__":
 
     # Start data loading in background
     threading.Thread(target=load_data_thread, daemon=True).start()
+    threading.Thread(target=update_live_prices_loop, daemon=True).start()
     
-    with socketserver.TCPServer(("", PORT), APIHandler) as httpd:
-        print(f"Serving at port {PORT}. Web Dashboard available at http://localhost:{PORT}")
-        httpd.serve_forever()
+    try:
+        with http.server.ThreadingHTTPServer(("", PORT), APIHandler) as httpd:
+            print(f"Serving at port {PORT}. Web Dashboard available at http://localhost:{PORT}")
+            httpd.serve_forever()
+    except KeyboardInterrupt:
+        print("\n[Server] Servidor detenido por el usuario.")
+

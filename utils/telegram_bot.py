@@ -132,22 +132,19 @@ def send_telegram_message(text, chat_id=None, parse_mode="HTML"):
 # -------------------------------------------------------------------------
 # Formateadores de Mensajes
 # -------------------------------------------------------------------------
-def format_active_positions_message(scanner_data):
+def format_active_positions_message(scanner_data, top_n=10):
     if not scanner_data:
-        return "⚠️ No hay información del escáner disponible."
+        return "⚠️ No hay datos del escáner disponible."
 
     ss11_list = scanner_data.get("ss11_signals", [])
     ais11_list = scanner_data.get("ais11_signals", [])
 
-    active_positions = []
-
-    # Extraer de SS11
+    ss11_active = []
     for item in ss11_list:
         met = item.get("metrics", {})
         if met.get("is_currently_in_position"):
-            active_positions.append({
+            ss11_active.append({
                 "ticker": item["ticker"],
-                "strategy": "SS11 (Macro)",
                 "category": item.get("category", "N/A"),
                 "price": item["price"],
                 "entry_price": met.get("entry_price", item["price"]),
@@ -156,13 +153,12 @@ def format_active_positions_message(scanner_data):
                 "signal": item.get("signal", "HOLD")
             })
 
-    # Extraer de AIS11
+    ais11_active = []
     for item in ais11_list:
         met = item.get("metrics", {})
         if met.get("is_currently_in_position"):
-            active_positions.append({
+            ais11_active.append({
                 "ticker": item["ticker"],
-                "strategy": "AIS11 (Multi-IA GPU)",
                 "category": item.get("category", "N/A"),
                 "price": item["price"],
                 "entry_price": met.get("entry_price", item["price"]),
@@ -171,35 +167,40 @@ def format_active_positions_message(scanner_data):
                 "signal": item.get("signal", "HOLD")
             })
 
-    if not active_positions:
+    total_active = len(ss11_active) + len(ais11_active)
+    if total_active == 0:
         return (
             "💼 <b>ESTADO DE POSICIONES ACTIVAS</b>\n\n"
             "ℹ️ Actualmente no hay posiciones abiertas en ninguna estrategia.\n"
             "El sistema se encuentra en liquidez esperando nuevas señales de compra."
         )
 
-    msg = [f"💼 <b>POSICIONES ACTIVAS EN CARTERA ({len(active_positions)})</b>"]
+    msg = [f"💼 <b>POSICIONES ACTIVAS EN CARTERA ({total_active})</b>"]
     msg.append(f"<i>Actualizado: {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}</i>\n")
 
-    for pos in active_positions:
-        pnl_icon = "🟢" if pos["pnl_pct"] >= 0 else "🔴"
-        pnl_sign = "+" if pos["pnl_pct"] >= 0 else ""
-        
-        entry_p = f"${pos['entry_price']:.2f}" if pos['entry_price'] > 1 else f"${pos['entry_price']:.4f}"
-        curr_p = f"${pos['price']:.2f}" if pos['price'] > 1 else f"${pos['price']:.4f}"
+    if ss11_active:
+        msg.append(f"<b>🟢 SS11 Macro Base Pura ({len(ss11_active)} activas - Top {min(len(ss11_active), top_n)}):</b>")
+        for pos in ss11_active[:top_n]:
+            pnl_icon = "🟢" if pos["pnl_pct"] >= 0 else "🔴"
+            pnl_sign = "+" if pos["pnl_pct"] >= 0 else ""
+            entry_p = f"${pos['entry_price']:.2f}" if pos['entry_price'] > 1 else f"${pos['entry_price']:.4f}"
+            curr_p = f"${pos['price']:.2f}" if pos['price'] > 1 else f"${pos['price']:.4f}"
+            msg.append(f" • <b>{pos['ticker']}</b> (${curr_p}) | Entr: {entry_p} | PnL: {pnl_icon} <b>{pnl_sign}{pos['pnl_pct']:.2f}%</b> | SL: <code>{pos['dist_sl']:+.1f}%</code>")
+        msg.append("")
 
-        msg.append(f"📌 <b>{pos['ticker']}</b> | <i>{pos['strategy']}</i>")
-        msg.append(f" • Entrada: {entry_p} ➔ Actual: {curr_p}")
-        msg.append(f" • PnL Flotante: {pnl_icon} <b>{pnl_sign}{pos['pnl_pct']:.2f}%</b>")
-        if "dist_sl" in pos:
-            msg.append(f" • Distancia a SL (-15%): <code>{pos['dist_sl']:+.1f}%</code>")
-        if "ai_score" in pos:
-            msg.append(f" • Score IA: <code>{pos['ai_score']:.1f}/100</code>")
-        msg.append(f" • Estado: <b>{pos['signal']}</b>\n")
+    if ais11_active:
+        msg.append(f"<b>🧠 AIS11 Multi-IA GPU Master ({len(ais11_active)} activas - Top {min(len(ais11_active), top_n)}):</b>")
+        for pos in ais11_active[:top_n]:
+            pnl_icon = "🟢" if pos["pnl_pct"] >= 0 else "🔴"
+            pnl_sign = "+" if pos["pnl_pct"] >= 0 else ""
+            entry_p = f"${pos['entry_price']:.2f}" if pos['entry_price'] > 1 else f"${pos['entry_price']:.4f}"
+            curr_p = f"${pos['price']:.2f}" if pos['price'] > 1 else f"${pos['price']:.4f}"
+            msg.append(f" • <b>{pos['ticker']}</b> (${curr_p}) | Entr: {entry_p} | PnL: {pnl_icon} <b>{pnl_sign}{pos['pnl_pct']:.2f}%</b> | Score IA: <code>{pos['ai_score']:.1f}</code>")
+        msg.append("")
 
     return "\n".join(msg)
 
-def format_scanner_summary_message(scanner_data):
+def format_scanner_summary_message(scanner_data, top_n=10):
     if not scanner_data:
         return "⚠️ No hay datos del escáner disponible."
 
@@ -208,25 +209,63 @@ def format_scanner_summary_message(scanner_data):
     ss11_buys = [s for s in scanner_data.get("ss11_signals", []) if s.get("signal") == "BUY"]
     ais11_buys = [s for s in scanner_data.get("ais11_signals", []) if s.get("signal") == "BUY"]
 
-    msg = ["⚡ <b>RESUMEN DEL ESCÁNER EN VIVO</b>"]
+    msg = ["⚡ <b>RESUMEN DEL ESCÁNER EN VIVO (TOP 10 POR ESTRATEGIA)</b>"]
     msg.append(f"<i>Filtro Macro SPY:</i> {mg.get('message', 'N/A')}\n")
     msg.append(f"📊 Total Activos Escaneados: <b>{summary.get('total_scanned', 0)}</b>")
-    msg.append(f"🚀 Señales BUY SS11: <b>{len(ss11_buys)}</b> | AIS11: <b>{len(ais11_buys)}</b>\n")
+    msg.append(f"🚀 Oportunidades BUY ➔ SS11: <b>{len(ss11_buys)}</b> | AIS11 Multi-IA: <b>{len(ais11_buys)}</b>\n")
 
     if ss11_buys:
-        msg.append("<b>🟢 OPORTUNIDADES BUY (SS11 Macro):</b>")
-        for b in ss11_buys[:5]:
-            msg.append(f" • <b>{b['ticker']}</b> (${b['price']}) ➔ Var 24h: {b['change_24h']:+.2f}%")
+        msg.append(f"<b>🟢 TOP {min(len(ss11_buys), top_n)} OPORTUNIDADES BUY (SS11 Macro):</b>")
+        for b in ss11_buys[:top_n]:
+            msg.append(f" • <b>{b['ticker']}</b> (${b['price']}) ➔ Var 24h: <b>{b['change_24h']:+.2f}%</b>")
         msg.append("")
 
     if ais11_buys:
-        msg.append("<b>🧠 OPORTUNIDADES BUY (AIS11 Multi-IA):</b>")
-        for b in ais11_buys[:5]:
-            msg.append(f" • <b>{b['ticker']}</b> (${b['price']}) ➔ Score IA: {b.get('ai_score', 50):.1f}")
+        msg.append(f"<b>🧠 TOP {min(len(ais11_buys), top_n)} OPORTUNIDADES BUY (AIS11 Multi-IA):</b>")
+        for b in ais11_buys[:top_n]:
+            msg.append(f" • <b>{b['ticker']}</b> (${b['price']}) ➔ Score IA: <b>{b.get('ai_score', 50):.1f}/100</b>")
         msg.append("")
 
     if not ss11_buys and not ais11_buys:
         msg.append("ℹ️ <i>Sin oportunidades de compra inmediatas. Mercado en espera.</i>")
+
+    return "\n".join(msg)
+
+def format_single_strategy_buys_message(scanner_data, strategy_code="SS11", top_n=15):
+    if not scanner_data:
+        return "⚠️ No hay datos del escáner disponible."
+
+    mg = scanner_data.get("macro_guard", {})
+    if strategy_code.upper() == "SS11":
+        signals = [s for s in scanner_data.get("ss11_signals", []) if s.get("signal") == "BUY"]
+        title = "🟢 <b>OPORTUNIDADES BUY — SS11 MACRO BASE PURA</b>"
+    else:
+        signals = [s for s in scanner_data.get("ais11_signals", []) if s.get("signal") == "BUY"]
+        title = "🧠 <b>OPORTUNIDADES BUY — AIS11 MULTI-IA GPU MASTER</b>"
+
+    msg = [title]
+    msg.append(f"<i>Filtro Macro SPY:</i> {mg.get('message', 'N/A')}")
+    msg.append(f"📊 Oportunidades Detectadas: <b>{len(signals)}</b>\n")
+
+    if not signals:
+        msg.append("ℹ️ <i>Sin oportunidades de compra activas actualmente para esta estrategia.</i>")
+        return "\n".join(msg)
+
+    for item in signals[:top_n]:
+        tk = item["ticker"]
+        cat = item.get("category", "N/A")
+        price = item["price"]
+        p_str = f"${price:.2f}" if price > 1 else f"${price:.4f}"
+        var_24h = item.get("change_24h", 0.0)
+
+        if strategy_code.upper() == "SS11":
+            dist_sma20 = item.get("dist_sma20_pct", 0.0)
+            msg.append(f" • <b>{tk}</b> ({cat}) | Precio: {p_str}")
+            msg.append(f"   └ Var 24h: <code>{var_24h:+.2f}%</code> | Recup SMA20: <code>{dist_sma20:+.1f}%</code>\n")
+        else:
+            score = item.get("ai_score", 50.0)
+            msg.append(f" • <b>{tk}</b> ({cat}) | Precio: {p_str}")
+            msg.append(f"   └ Score IA: <b>{score:.1f}/100</b> | Var 24h: <code>{var_24h:+.2f}%</code>\n")
 
     return "\n".join(msg)
 
@@ -379,7 +418,10 @@ def start_telegram_bot_listener():
                                 "👋 <b>¡Bienvenido al Bot de IA Backtester Trading!</b>\n\n"
                                 "✅ Tu Chat ID ha sido registrado exitosamente para recibir <b>alertas automáticas de trades</b>.\n\n"
                                 "<b>Comandos disponibles:</b>\n"
-                                "• /posiciones - Ver todas las posiciones activas en cartera\n"
+                                "• /posiciones - Ver posiciones activas agrupadas por estrategia\n"
+                                "• /top10 - Ver Top 10 mejores oportunidades BUY de ambas estrategias\n"
+                                "• /ss11 - Ver oportunidades BUY de la estrategia SS11 Macro únicamente\n"
+                                "• /ais11 - Ver oportunidades BUY de la estrategia AIS11 Multi-IA únicamente\n"
                                 "• /actualizar - Forzar actualización del escáner en tiempo real\n"
                                 "• /scanner - Ver resumen del mercado y oportunidades BUY\n"
                                 "• /help - Mostrar este menú de ayuda"
@@ -398,10 +440,61 @@ def start_telegram_bot_listener():
                                     from utils.scanner_engine import run_live_scanner
                                     scanner_data = run_live_scanner()
 
-                                reply = format_active_positions_message(scanner_data)
+                                reply = format_active_positions_message(scanner_data, top_n=10)
                                 send_telegram_message(reply, chat_id=chat_id)
                             except Exception as e:
                                 send_telegram_message(f"❌ Error al consultar posiciones: {e}", chat_id=chat_id)
+
+                        elif cmd in ["/top10", "/top", "/oportunidades"]:
+                            send_telegram_message("🔍 Consultando Top 10 oportunidades por estrategia...", chat_id=chat_id)
+                            try:
+                                cache_file = os.path.join(BASE_DIR, "data", "live_scanner_cache.json")
+                                scanner_data = None
+                                if os.path.exists(cache_file):
+                                    with open(cache_file, "r", encoding="utf-8") as f:
+                                        scanner_data = json.load(f)
+                                else:
+                                    from utils.scanner_engine import run_live_scanner
+                                    scanner_data = run_live_scanner()
+
+                                summary_msg = format_scanner_summary_message(scanner_data, top_n=10)
+                                send_telegram_message(summary_msg, chat_id=chat_id)
+                            except Exception as e:
+                                send_telegram_message(f"❌ Error al consultar Top 10: {e}", chat_id=chat_id)
+
+                        elif cmd in ["/ss11", "/macro"]:
+                            send_telegram_message("🟢 Consultando oportunidades BUY para SS11 Macro...", chat_id=chat_id)
+                            try:
+                                cache_file = os.path.join(BASE_DIR, "data", "live_scanner_cache.json")
+                                scanner_data = None
+                                if os.path.exists(cache_file):
+                                    with open(cache_file, "r", encoding="utf-8") as f:
+                                        scanner_data = json.load(f)
+                                else:
+                                    from utils.scanner_engine import run_live_scanner
+                                    scanner_data = run_live_scanner()
+
+                                msg_ss11 = format_single_strategy_buys_message(scanner_data, strategy_code="SS11", top_n=15)
+                                send_telegram_message(msg_ss11, chat_id=chat_id)
+                            except Exception as e:
+                                send_telegram_message(f"❌ Error al consultar SS11: {e}", chat_id=chat_id)
+
+                        elif cmd in ["/ais11", "/ia"]:
+                            send_telegram_message("🧠 Consultando oportunidades BUY para AIS11 Multi-IA...", chat_id=chat_id)
+                            try:
+                                cache_file = os.path.join(BASE_DIR, "data", "live_scanner_cache.json")
+                                scanner_data = None
+                                if os.path.exists(cache_file):
+                                    with open(cache_file, "r", encoding="utf-8") as f:
+                                        scanner_data = json.load(f)
+                                else:
+                                    from utils.scanner_engine import run_live_scanner
+                                    scanner_data = run_live_scanner()
+
+                                msg_ais11 = format_single_strategy_buys_message(scanner_data, strategy_code="AIS11", top_n=15)
+                                send_telegram_message(msg_ais11, chat_id=chat_id)
+                            except Exception as e:
+                                send_telegram_message(f"❌ Error al consultar AIS11: {e}", chat_id=chat_id)
 
                         elif cmd in ["/actualizar", "/scanner"]:
                             send_telegram_message("🔄 Ejecutando escáner en tiempo real...", chat_id=chat_id)
@@ -410,11 +503,11 @@ def start_telegram_bot_listener():
                                 scanner_data = run_live_scanner()
                                 
                                 # Enviar resumen
-                                summary_msg = format_scanner_summary_message(scanner_data)
+                                summary_msg = format_scanner_summary_message(scanner_data, top_n=10)
                                 send_telegram_message(summary_msg, chat_id=chat_id)
                                 
                                 # Enviar posiciones activas también
-                                pos_msg = format_active_positions_message(scanner_data)
+                                pos_msg = format_active_positions_message(scanner_data, top_n=10)
                                 send_telegram_message(pos_msg, chat_id=chat_id)
                             except Exception as e:
                                 send_telegram_message(f"❌ Error al actualizar el escáner: {e}", chat_id=chat_id)
@@ -422,9 +515,12 @@ def start_telegram_bot_listener():
                         elif cmd == "/help":
                             help_msg = (
                                 "ℹ️ <b>AYUDA Y COMANDOS DEL BOT</b>\n\n"
-                                "• /posiciones - Muestra las posiciones actualmente abiertas con sus PnL flotantes.\n"
-                                "• /actualizar - Fuerza un escaneo en vivo de las cotizaciones y actualiza las señales.\n"
-                                "• /scanner - Muestra el resumen de oportunidades BUY y filtro macro SPY.\n"
+                                "• /posiciones - Posiciones abiertas en cartera por estrategia.\n"
+                                "• /top10 - Top 10 oportunidades BUY de cada estrategia juntas.\n"
+                                "• /ss11 - Ver oportunidades BUY exclusivamente de SS11 Macro.\n"
+                                "• /ais11 - Ver oportunidades BUY exclusivamente de AIS11 Multi-IA.\n"
+                                "• /actualizar - Fuerza un escaneo en vivo de todo el mercado.\n"
+                                "• /scanner - Resumen del escáner en vivo y estado macro SPY.\n"
                                 "• /start - Registra tu usuario para notificaciones."
                             )
                             send_telegram_message(help_msg, chat_id=chat_id)

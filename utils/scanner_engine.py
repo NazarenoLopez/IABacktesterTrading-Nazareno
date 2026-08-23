@@ -44,6 +44,7 @@ def get_hardware_status():
 
 def sigmoid_norm(x, scale=1.0):
     val = np.asarray(x, dtype=float)
+    val = np.nan_to_num(val, nan=0.0)
     return 100.0 / (1.0 + np.exp(-val / scale))
 
 def clean_nans(obj):
@@ -139,6 +140,9 @@ def fetch_ticker_data(tickers=None, cache_expire=1800):
         if df.empty or len(df) < 30:
             continue
 
+        if not isinstance(df.index, pd.DatetimeIndex):
+            df.index = pd.to_datetime(df.index)
+
         # Indicadores Básicos
         c = df['Close']
         v = df['Volume'] if 'Volume' in df.columns else pd.Series(1000.0, index=df.index)
@@ -202,7 +206,18 @@ def simulate_strategy_trades(df, signals_long, signals_exit, stop_loss_pct=-15.0
     n = len(df)
     closes = df['Close'].values
     opens  = df['Open'].values
-    dates  = df.index
+    dates  = pd.to_datetime(df.index)
+
+    def _fmt_d(d):
+        if hasattr(d, 'strftime'):
+            return d.strftime("%Y-%m-%d")
+        return str(d)[:10]
+
+    def _days_diff(d1, d2):
+        try:
+            return int((d1 - d2).days)
+        except Exception:
+            return 0
 
     cash = 10000.0
     pos  = 0.0
@@ -243,14 +258,14 @@ def simulate_strategy_trades(df, signals_long, signals_exit, stop_loss_pct=-15.0
             pnl     = revenue - cost
             pct_ret = (revenue / cost - 1.0) * 100.0
             trades.append({
-                "entry_date":   dates[entry_idx].strftime("%Y-%m-%d"),
+                "entry_date":   _fmt_d(dates[entry_idx]),
                 "entry_price":  round(float(entry_price), 2),
-                "exit_date":    dates[i].strftime("%Y-%m-%d"),
+                "exit_date":    _fmt_d(dates[i]),
                 "exit_price":   round(float(opens[i]), 2),
                 "pct_return":   round(float(pct_ret), 2),
                 "pnl":          round(float(pnl), 2),
                 "reason":       "Stop Loss -15%" if hit_stop_loss else "Macro Crash Exit",
-                "duration_days": int((dates[i] - dates[entry_idx]).days),
+                "duration_days": _days_diff(dates[i], dates[entry_idx]),
                 "is_open": False
             })
             cash   = revenue
@@ -285,14 +300,14 @@ def simulate_strategy_trades(df, signals_long, signals_exit, stop_loss_pct=-15.0
             live_signal = "HOLD"
 
         trades.append({
-            "entry_date":   dates[entry_idx].strftime("%Y-%m-%d"),
+            "entry_date":   _fmt_d(dates[entry_idx]),
             "entry_price":  round(float(entry_price), 2),
             "exit_date":    "EN CURSO",
             "exit_price":   round(float(latest_close), 2),
             "pct_return":   round(float(floating_pnl_pct), 2),
             "pnl":          round(float(floating_pnl_usd), 2),
             "reason":       "Posición Activa",
-            "duration_days": int((dates[-1] - dates[entry_idx]).days),
+            "duration_days": _days_diff(dates[-1], dates[entry_idx]),
             "is_open": True
         })
     else:
@@ -432,6 +447,7 @@ def run_live_scanner(tickers=None):
         roc3_norm  = df['ROC_3_NORM'].values
 
         score = (ais10_gpu * 5.0 + ais10_tfm * 20.0 + ais10_tsp * 65.0 + roc3_norm * 10.0) / 100.0
+        score = np.nan_to_num(score, nan=50.0)
         latest_score = float(score[-1]) if n > 0 else 50.0
 
         ai_wants_in  = score > 55.0
@@ -444,6 +460,12 @@ def run_live_scanner(tickers=None):
             df, ais11_long, ais11_exit, stop_loss_pct=-15.0, is_strict_reentry=True
         )
 
+        dist_sl_ais = -15.0
+        if ais11_met['is_currently_in_position'] and ais11_met['entry_price']:
+            dist_sl_ais = ((latest_close / ais11_met['entry_price']) - 1.0) * 100.0 - (-15.0)
+
+        dist_sma20_ais = ((latest_close / latest_sma20) - 1.0) * 100.0
+
         results["ais11_signals"].append({
             "ticker": ticker,
             "category": category,
@@ -452,6 +474,8 @@ def run_live_scanner(tickers=None):
             "ai_score": round(latest_score, 1),
             "signal": ais11_sig,
             "metrics": ais11_met,
+            "dist_sl_pct": round(dist_sl_ais, 2),
+            "dist_sma20_pct": round(dist_sma20_ais, 2),
             "recent_trades": ais11_trades[-5:]
         })
 
@@ -473,6 +497,13 @@ def run_live_scanner(tickers=None):
         with open("data/live_scanner_cache.json", "w", encoding="utf-8") as f:
             json.dump(results, f, indent=2, ensure_ascii=False)
     except Exception: pass
+
+    # Enviar notificaciones de Telegram si hay señales o cambios de trade
+    try:
+        from utils.telegram_bot import check_and_notify_trades
+        check_and_notify_trades(results)
+    except Exception as e:
+        print(f"[Scanner Engine] Advertencia al notificar por Telegram: {e}")
 
     return results
 

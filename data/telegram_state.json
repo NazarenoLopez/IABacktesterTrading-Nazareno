@@ -1,0 +1,26 @@
+{
+  "SS11_MSFT": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_AAPL": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_BTC-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "AIS11_MSFT": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "AIS11_BTC-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_AAPL": {
+    "signal": "WAIT",
+    "in_pos": false
+  }
+}

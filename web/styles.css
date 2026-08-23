@@ -1199,6 +1199,29 @@ tr:hover td {
     box-shadow: 0 0 10px rgba(92, 96, 245, 0.4);
 }
 
+/* Active Positions Section & Cards */
+.active-positions-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.position-active-card {
+    border-color: rgba(245, 158, 11, 0.5) !important;
+    background: linear-gradient(135deg, rgba(30, 27, 46, 0.9), rgba(20, 22, 38, 0.9)) !important;
+}
+
+.position-active-card:hover {
+    border-color: rgba(245, 158, 11, 0.8) !important;
+    transform: translateY(-2px);
+}
+
+#active-pos-count-badge {
+    background: rgba(245, 158, 11, 0.15);
+    border-color: rgba(245, 158, 11, 0.4);
+    color: #f59e0b;
+}
+
 /* Opportunities Section & Cards */
 .opportunities-section {
     display: flex;

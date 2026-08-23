@@ -1,4 +1,4 @@
-﻿import os
+import os
 import json
 import numpy as np
 import pandas as pd
@@ -75,6 +75,7 @@ def fetch_data():
 # 2. Simulation Engine
 # -------------------------------------------------------------------------
 def run_simulation(signals_long, signals_exit, opens, closes, dates, initial_capital=10000.0, commission=0.004):
+    dates = pd.to_datetime(dates)
     n = len(closes)
     equity = np.full(n, float(initial_capital))
     cash   = float(initial_capital)

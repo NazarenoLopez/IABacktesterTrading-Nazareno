@@ -169,6 +169,18 @@ document.addEventListener("DOMContentLoaded", () => {
         const badge = document.getElementById("ai-status-badge");
         if (!banner) return;
 
+        function formatDateTime(timeStr) {
+            if (!timeStr || timeStr === "Desconocido") return timeStr;
+            const parts = timeStr.split(" ");
+            if (parts.length === 2) {
+                const dateParts = parts[0].split("-");
+                if (dateParts.length === 3) {
+                    return `${dateParts[2]}/${dateParts[1]}/${dateParts[0]} ${parts[1]}`;
+                }
+            }
+            return timeStr;
+        }
+
         function formatDDMMAAAA(dateStr) {
             if (!dateStr || dateStr === "Desconocido") return dateStr;
             const parts = dateStr.split("-");
@@ -180,6 +192,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const aiDateFmt = formatDDMMAAAA(data.last_ai_date);
         const mktDateFmt = formatDDMMAAAA(data.latest_market_date);
+        const updatedTimeFmt = formatDateTime(data.last_updated_time);
 
         banner.classList.remove("hidden", "warning", "running", "success");
         if (btn) btn.classList.add("hidden");
@@ -188,7 +201,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (data.status === "outdated") {
             banner.classList.add("warning");
             if (title) title.textContent = "⚠️ Predicciones de IA Desactualizadas";
-            if (desc) desc.textContent = `Las señales calculadas llegan hasta el ${aiDateFmt}, pero el mercado avanzó hasta el ${mktDateFmt}. Puedes recalcular en 2º plano.`;
+            if (desc) desc.textContent = `Las señales calculadas llegan hasta el ${aiDateFmt}, pero el mercado avanzó hasta el ${mktDateFmt}. (Última actualización: ${updatedTimeFmt})`;
             if (btn) btn.classList.remove("hidden");
         } else if (data.status === "running") {
             banner.classList.add("running");
@@ -197,10 +210,10 @@ document.addEventListener("DOMContentLoaded", () => {
         } else if (data.status === "up_to_date") {
             banner.classList.add("success");
             if (title) title.textContent = "✨ Oráculo IA Sincronizado";
-            if (desc) desc.textContent = `Modelos neuronales 100% al día con el mercado (${aiDateFmt}).`;
+            if (desc) desc.textContent = `Modelos neuronales 100% al día (${aiDateFmt}). Última actualización de IA: ${updatedTimeFmt} hs.`;
             if (badge) {
                 badge.classList.remove("hidden");
-                badge.textContent = "Al día";
+                badge.textContent = `IA Actualizada: ${updatedTimeFmt}`;
             }
         } else {
             banner.classList.add("hidden");
@@ -735,38 +748,83 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // -------------------------------------------------------------------------
-    // 7. Trade Log Table
+    // 7. Trade Log Table (Probador Histórico)
     // -------------------------------------------------------------------------
+    let histTradesSortKey = "entry_date";
+    let histTradesSortDir = "DESC"; // DESC = más reciente primero, ASC = más antiguo primero
+    let activeHistTradesList = [];
+
+    const elThHistEntryDate = document.getElementById("th-hist-entry-date");
+    const elThHistExitDate = document.getElementById("th-hist-exit-date");
+
+    if (elThHistEntryDate) {
+        elThHistEntryDate.addEventListener("click", () => {
+            if (histTradesSortKey === "entry_date") {
+                histTradesSortDir = (histTradesSortDir === "DESC") ? "ASC" : "DESC";
+            } else {
+                histTradesSortKey = "entry_date";
+                histTradesSortDir = "DESC";
+            }
+            renderHistTradesTable();
+        });
+    }
+
+    if (elThHistExitDate) {
+        elThHistExitDate.addEventListener("click", () => {
+            if (histTradesSortKey === "exit_date") {
+                histTradesSortDir = (histTradesSortDir === "DESC") ? "ASC" : "DESC";
+            } else {
+                histTradesSortKey = "exit_date";
+                histTradesSortDir = "DESC";
+            }
+            renderHistTradesTable();
+        });
+    }
+
     function populateTradesTable(trades) {
-        elTradesTableBody.innerHTML = "";
+        activeHistTradesList = trades || [];
+        renderHistTradesTable();
+    }
+
+    function renderHistTradesTable() {
+        if (!elTradesTableBody) return;
         
-        if (!trades || trades.length === 0) {
+        if (!activeHistTradesList || activeHistTradesList.length === 0) {
             elTradesTableBody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:var(--text-muted);padding:30px;">
                 No se registran operaciones en el historial para este activo.
             </td></tr>`;
             return;
         }
 
-        // Show all trades (reverse chronological order - newest first)
-        const recentTrades = [...trades].reverse();
-        
-        recentTrades.forEach((trade, idx) => {
+        const sorted = [...activeHistTradesList].sort((a, b) => {
+            let valA = new Date(a[histTradesSortKey] || "1970-01-01").getTime();
+            let valB = new Date(b[histTradesSortKey] || "1970-01-01").getTime();
+            return histTradesSortDir === "DESC" ? (valB - valA) : (valA - valB);
+        });
+
+        // Iconos de ordenamiento
+        const iconEntry = document.getElementById("icon-hist-entry-date");
+        const iconExit = document.getElementById("icon-hist-exit-date");
+        if (iconEntry) iconEntry.className = histTradesSortKey === "entry_date" ? (histTradesSortDir === "DESC" ? "fa-solid fa-sort-down text-warning" : "fa-solid fa-sort-up text-warning") : "fa-solid fa-sort";
+        if (iconExit) iconExit.className = histTradesSortKey === "exit_date" ? (histTradesSortDir === "DESC" ? "fa-solid fa-sort-down text-warning" : "fa-solid fa-sort-up text-warning") : "fa-solid fa-sort";
+
+        elTradesTableBody.innerHTML = sorted.map((trade, idx) => {
             const retClass = trade.pct_return >= 0 ? "text-success" : "text-danger";
             const retPrefix = trade.pct_return >= 0 ? "+" : "";
 
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-                <td>${trades.length - idx}</td>
-                <td>${trade.entry_date}</td>
-                <td>$${trade.entry_price.toFixed(2)}</td>
-                <td>${trade.exit_date}</td>
-                <td>$${trade.exit_price.toFixed(2)}</td>
-                <td>${trade.duration_days} días</td>
-                <td class="${retClass} font-bold">${retPrefix}${trade.pct_return.toFixed(2)}%</td>
-                <td><span style="font-size:11px;opacity:0.8;">${trade.reason}</span></td>
+            return `
+                <tr>
+                    <td>#${idx + 1}</td>
+                    <td>${trade.entry_date}</td>
+                    <td>$${trade.entry_price.toFixed(2)}</td>
+                    <td>${trade.exit_date}</td>
+                    <td>$${trade.exit_price.toFixed(2)}</td>
+                    <td>${trade.duration_days} días</td>
+                    <td class="${retClass} font-bold">${retPrefix}${trade.pct_return.toFixed(2)}%</td>
+                    <td><span style="font-size:11px;opacity:0.8;">${trade.reason}</span></td>
+                </tr>
             `;
-            elTradesTableBody.appendChild(tr);
-        });
+        }).join('');
     }
 
     // -------------------------------------------------------------------------
@@ -870,7 +928,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // LIVE SCANNER DASHBOARD LOGIC (SS11 & AIS11 GPU 300 TICKERS)
     // -------------------------------------------------------------------------
     let liveScannerData = null;
-    let selectedScannerStrategy = "SS11"; // SS11, AIS11, COMBO
+    let selectedScannerStrategy = "COMBO"; // SS11, AIS11, COMBO
     let selectedScannerUniverse = "ALL";  // ALL, US, CRYPTO, BUY_ONLY
 
     const elNavBtnScanner = document.getElementById("nav-btn-scanner");
@@ -889,6 +947,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const elOpportunitiesCardsGrid = document.getElementById("opportunities-cards-grid");
     const elBuyCountBadge = document.getElementById("buy-count-badge");
+    const elActivePositionsCardsGrid = document.getElementById("active-positions-cards-grid");
+    const elActivePosCountBadge = document.getElementById("active-pos-count-badge");
     const elLiveScannerTbody = document.getElementById("live-scanner-tbody");
     const elScannerSearchInput = document.getElementById("scanner-search-input");
 
@@ -1028,79 +1088,226 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
+        // Prepare signal lists with strategy tags
+        const ss11 = (liveScannerData.ss11_signals || []).map(x => ({ ...x, strat_label: "SS11" }));
+        const ais11 = (liveScannerData.ais11_signals || []).map(x => ({ ...x, strat_label: "AIS11" }));
+
         // Determine list of signals based on strategy pill
         let list = [];
         if (selectedScannerStrategy === "SS11") {
-            list = liveScannerData.ss11_signals || [];
+            list = ss11;
         } else if (selectedScannerStrategy === "AIS11") {
-            list = liveScannerData.ais11_signals || [];
+            list = ais11;
         } else {
-            // COMBO view
-            list = liveScannerData.ss11_signals || [];
+            // COMBO view: Combine both SS11 and AIS11 signals!
+            list = [...ss11, ...ais11];
         }
 
-        // Apply Universe Filter
+        // Update Universe Pill Count Badges dynamically
+        const totalCount = list.length;
+        const usCount = list.filter(x => x.category === "US Stock").length;
+        const cryptoCount = list.filter(x => x.category === "Crypto").length;
+        const buyCount = list.filter(x => x.signal === "BUY").length;
+        const posCount = list.filter(x => x.metrics && x.metrics.is_currently_in_position).length;
+
+        const pillAll = document.querySelector("#universe-pill-group [data-univ='ALL']");
+        const pillUs = document.querySelector("#universe-pill-group [data-univ='US']");
+        const pillCrypto = document.querySelector("#universe-pill-group [data-univ='CRYPTO']");
+        const pillBuy = document.querySelector("#universe-pill-group [data-univ='BUY_ONLY']");
+        const pillPos = document.querySelector("#universe-pill-group [data-univ='POS_ONLY']");
+
+        if (pillAll) pillAll.textContent = `Todos (${totalCount})`;
+        if (pillUs) pillUs.textContent = `Top 250 EE.UU. (${usCount})`;
+        if (pillCrypto) pillCrypto.textContent = `Top 50 Criptos (${cryptoCount})`;
+        if (pillBuy) pillBuy.textContent = `🚀 Oportunidades BUY (${buyCount})`;
+        if (pillPos) pillPos.textContent = `💼 Posiciones Activas (${posCount})`;
+
         const searchTerm = (elScannerSearchInput ? elScannerSearchInput.value : "").trim().toUpperCase();
+
+        // 2. Render Active Positions Cards (se filtran por mercado/búsqueda, independientemente de si la pestaña Oportunidades BUY está marcada)
+        const activePosItems = list.filter(item => {
+            if (searchTerm && !item.ticker.toUpperCase().includes(searchTerm)) return false;
+            if (selectedScannerUniverse === "US" && item.category !== "US Stock") return false;
+            if (selectedScannerUniverse === "CRYPTO" && item.category !== "Crypto") return false;
+            return item.metrics && item.metrics.is_currently_in_position;
+        });
+
+        if (elActivePosCountBadge) elActivePosCountBadge.textContent = `${activePosItems.length} Posiciones Abiertas`;
+
+        if (elActivePositionsCardsGrid) {
+            if (activePosItems.length === 0) {
+                elActivePositionsCardsGrid.innerHTML = `
+                    <div class="empty-cards-notice">
+                        <i class="fa-solid fa-folder-open" style="font-size: 24px; margin-bottom: 8px; color: var(--text-muted); display: block;"></i>
+                        No hay posiciones actualmente abiertas para los filtros seleccionados (${selectedScannerStrategy}).
+                    </div>
+                `;
+            } else {
+                elActivePositionsCardsGrid.innerHTML = activePosItems.map(item => {
+                    const met = item.metrics || {};
+                    const floatPnl = met.floating_pnl_pct || 0.0;
+                    const entryP = met.entry_price ? met.entry_price.toFixed(met.entry_price > 1 ? 2 : 4) : (item.price ? item.price.toFixed(item.price > 1 ? 2 : 4) : "0.00");
+                    const currP = item.price ? item.price.toFixed(item.price > 1 ? 2 : 4) : "0.00";
+                    const stratTag = item.strat_label ? `<span class="badge" style="background:rgba(255,255,255,0.1); margin-right:4px;">${item.strat_label}</span>` : '';
+                    const distSlVal = (item.dist_sl_pct !== undefined && item.dist_sl_pct !== null) ? item.dist_sl_pct : -15.0;
+                    
+                    return `
+                        <div class="opp-card position-active-card">
+                            <div class="opp-card-header">
+                                <span class="opp-ticker"><i class="fa-solid fa-briefcase text-warning"></i> ${item.ticker}</span>
+                                <span class="opp-cat">${stratTag}${item.category}</span>
+                            </div>
+                            <div class="opp-price-row">
+                                <div>
+                                    <span style="font-size: 11px; color: var(--text-muted); display: block;">Entrada ➔ Actual</span>
+                                    <span class="opp-price">$${entryP} ➔ $${currP}</span>
+                                </div>
+                                <div class="text-right">
+                                    <span style="font-size: 11px; color: var(--text-muted); display: block;">PnL Flotante</span>
+                                    <span class="opp-change ${floatPnl >= 0 ? 'text-success' : 'text-danger'}" style="font-weight: 700;">
+                                        ${floatPnl >= 0 ? '+' : ''}${floatPnl.toFixed(2)}%
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="opp-details-grid">
+                                <div>
+                                    <span>Dist. Stop Loss (-15%)</span>
+                                    <strong class="${distSlVal >= 0 ? 'text-success' : 'text-danger'}">${distSlVal > 0 ? '+' : ''}${distSlVal.toFixed(1)}%</strong>
+                                </div>
+                                <div>
+                                    <span>Estado en Vivo</span>
+                                    <strong class="text-warning">${item.signal}</strong>
+                                </div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px;">
+                                <span class="badge-signal hold"><i class="fa-solid fa-lock"></i> POSICIÓN ACTIVA</span>
+                                <button class="btn btn-secondary btn-view-trades" data-ticker="${item.ticker}" style="font-size: 11px; padding: 4px 10px;">
+                                    <i class="fa-solid fa-list-check"></i> Ver Trades
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        // Apply Main Table Filter
         let filtered = list.filter(item => {
             if (searchTerm && !item.ticker.toUpperCase().includes(searchTerm)) {
                 return false;
             }
-            if (selectedScannerUniverse === "US") return item.category === "US Stock";
-            if (selectedScannerUniverse === "CRYPTO") return item.category === "Crypto";
-            if (selectedScannerUniverse === "BUY_ONLY") return item.signal === "BUY";
+            if (selectedScannerUniverse === "US" && item.category !== "US Stock") return false;
+            if (selectedScannerUniverse === "CRYPTO" && item.category !== "Crypto") return false;
+            if (selectedScannerUniverse === "BUY_ONLY") {
+                if (buyCount > 0) return item.signal === "BUY";
+                // Si no hay BUY estrictos hoy, mostrar candidatos no-posicionados ordenados por score
+                return !item.metrics || !item.metrics.is_currently_in_position;
+            }
+            if (selectedScannerUniverse === "POS_ONLY" && (!item.metrics || !item.metrics.is_currently_in_position)) return false;
             return true;
         });
 
-        // 2. Render Opportunities Cards (BUY signals)
-        const buyItems = list.filter(item => item.signal === "BUY");
-        if (elBuyCountBadge) elBuyCountBadge.textContent = `${buyItems.length} Activos en BUY`;
+        // 3. Render Opportunities Cards (BUY signals or Top Candidates if BUY count is 0)
+        let buyItems = list.filter(item => {
+            if (searchTerm && !item.ticker.toUpperCase().includes(searchTerm)) return false;
+            if (selectedScannerUniverse === "US" && item.category !== "US Stock") return false;
+            if (selectedScannerUniverse === "CRYPTO" && item.category !== "Crypto") return false;
+            return item.signal === "BUY";
+        });
+
+        let isShowingCandidates = false;
+        let displayOppItems = buyItems;
+
+        if (buyItems.length === 0) {
+            isShowingCandidates = true;
+            // Obtener top candidatos ordenados por Score de IA o Momentum
+            const candidatesPool = list.filter(item => {
+                if (searchTerm && !item.ticker.toUpperCase().includes(searchTerm)) return false;
+                if (selectedScannerUniverse === "US" && item.category !== "US Stock") return false;
+                if (selectedScannerUniverse === "CRYPTO" && item.category !== "Crypto") return false;
+                return !item.metrics || !item.metrics.is_currently_in_position;
+            });
+            candidatesPool.sort((a, b) => (b.ai_score || b.change_24h || 0) - (a.ai_score || a.change_24h || 0));
+            displayOppItems = candidatesPool.slice(0, 6);
+        }
+
+        if (elBuyCountBadge) {
+            if (isShowingCandidates) {
+                elBuyCountBadge.textContent = `0 en BUY hoy (Mostrando Top Próximos Candidatos)`;
+                elBuyCountBadge.style.background = "rgba(92, 96, 245, 0.15)";
+                elBuyCountBadge.style.color = "#a5b4fc";
+                elBuyCountBadge.style.borderColor = "rgba(92, 96, 245, 0.4)";
+            } else {
+                elBuyCountBadge.textContent = `${buyItems.length} Activos en BUY`;
+                elBuyCountBadge.style.background = "rgba(16, 185, 129, 0.15)";
+                elBuyCountBadge.style.color = "#10b981";
+                elBuyCountBadge.style.borderColor = "rgba(16, 185, 129, 0.3)";
+            }
+        }
 
         if (elOpportunitiesCardsGrid) {
-            if (buyItems.length === 0) {
+            if (displayOppItems.length === 0) {
                 elOpportunitiesCardsGrid.innerHTML = `
                     <div class="empty-cards-notice">
                         <i class="fa-solid fa-shield-cat" style="font-size: 24px; margin-bottom: 8px; color: var(--text-muted); display: block;"></i>
-                        No hay señales de compra activas en este instante. El sistema está protegiendo el capital o en espera de confirmación.
+                        No hay oportunidades ni candidatos disponibles para los filtros seleccionados.
                     </div>
                 `;
             } else {
-                elOpportunitiesCardsGrid.innerHTML = buyItems.map(item => `
-                    <div class="opp-card">
-                        <div class="opp-card-header">
-                            <span class="opp-ticker">${item.ticker}</span>
-                            <span class="opp-cat">${item.category}</span>
-                        </div>
-                        <div class="opp-price-row">
-                            <span class="opp-price">$${item.price.toFixed(item.price > 1 ? 2 : 4)}</span>
-                            <span class="opp-change ${item.change_24h >= 0 ? 'text-success' : 'text-danger'}">
-                                ${item.change_24h >= 0 ? '+' : ''}${item.change_24h.toFixed(2)}%
-                            </span>
-                        </div>
-                        <div class="opp-details-grid">
-                            <div>
-                                <span>Dist. Stop Loss (-15%)</span>
-                                <strong class="${item.dist_sl_pct >= 0 ? 'text-success' : 'text-danger'}">${item.dist_sl_pct > 0 ? '+' : ''}${item.dist_sl_pct.toFixed(1)}%</strong>
+                elOpportunitiesCardsGrid.innerHTML = displayOppItems.map((item, idx) => {
+                    const stratTag = item.strat_label ? `<span class="badge" style="background:rgba(255,255,255,0.1); margin-right:4px;">${item.strat_label}</span>` : '';
+                    const badgeHtml = isShowingCandidates 
+                        ? `<span class="badge-signal wait" style="background:rgba(92,96,245,0.2); color:#a5b4fc;"><i class="fa-solid fa-fire text-indigo"></i> CANDIDATO #${idx + 1}</span>`
+                        : `<span class="badge-signal buy"><i class="fa-solid fa-circle"></i> BUY</span>`;
+                    
+                    const distSlOpp = (item.dist_sl_pct !== undefined && item.dist_sl_pct !== null) ? item.dist_sl_pct : -15.0;
+                    const distSma20Opp = (item.dist_sma20_pct !== undefined && item.dist_sma20_pct !== null) ? item.dist_sma20_pct : 0.0;
+                    const scoreText = item.ai_score !== undefined ? `Score IA: ${item.ai_score.toFixed(1)}/100` : `Dist. SMA20: ${distSma20Opp > 0 ? '+' : ''}${distSma20Opp.toFixed(1)}%`;
+
+                    return `
+                        <div class="opp-card">
+                            <div class="opp-card-header">
+                                <span class="opp-ticker">${item.ticker}</span>
+                                <span class="opp-cat">${stratTag}${item.category}</span>
                             </div>
-                            <div>
-                                <span>Dist. Recup. SMA(20)</span>
-                                <strong class="${item.dist_sma20_pct >= 0 ? 'text-success' : 'text-danger'}">${item.dist_sma20_pct > 0 ? '+' : ''}${item.dist_sma20_pct.toFixed(1)}%</strong>
+                            <div class="opp-price-row">
+                                <span class="opp-price">$${item.price ? item.price.toFixed(item.price > 1 ? 2 : 4) : '0.00'}</span>
+                                <span class="opp-change ${(item.change_24h || 0) >= 0 ? 'text-success' : 'text-danger'}">
+                                    ${(item.change_24h || 0) >= 0 ? '+' : ''}${(item.change_24h || 0).toFixed(2)}%
+                                </span>
+                            </div>
+                            <div class="opp-details-grid">
+                                <div>
+                                    <span>${scoreText}</span>
+                                    <strong class="text-indigo">${item.signal}</strong>
+                                </div>
+                                <div>
+                                    <span>Dist. Stop Loss (-15%)</span>
+                                    <strong class="${distSlOpp >= 0 ? 'text-success' : 'text-danger'}">${distSlOpp > 0 ? '+' : ''}${distSlOpp.toFixed(1)}%</strong>
+                                </div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px;">
+                                ${badgeHtml}
+                                <button class="btn btn-secondary btn-view-trades" data-ticker="${item.ticker}" style="font-size: 11px; padding: 4px 10px;">
+                                    <i class="fa-solid fa-list-check"></i> Ver Trades
+                                </button>
                             </div>
                         </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
-                            <span class="badge-signal buy"><i class="fa-solid fa-circle"></i> BUY</span>
-                            <button class="btn btn-secondary btn-view-trades" data-ticker="${item.ticker}" style="font-size: 11px; padding: 4px 10px;">
-                                <i class="fa-solid fa-list-check"></i> Ver Trades
-                            </button>
-                        </div>
-                    </div>
-                `).join('');
+                    `;
+                }).join('');
             }
         }
 
         // 3. Render Live Signals Table
         if (elLiveScannerTbody) {
             if (filtered.length === 0) {
-                elLiveScannerTbody.innerHTML = `<tr><td colspan="9" class="text-center p-4 text-muted">No se encontraron activos para los filtros seleccionados.</td></tr>`;
+                let msg = "No se encontraron activos para los filtros seleccionados.";
+                if (selectedScannerUniverse === "BUY_ONLY") {
+                    msg = `ℹ️ No hay nuevas señales de compra (BUY) generadas en la sesión de hoy (${buyCount}). Tus operaciones abiertas se encuentran en estado HOLD en la pestaña <b>💼 Posiciones Activas (${posCount})</b>.`;
+                } else if (selectedScannerUniverse === "POS_ONLY") {
+                    msg = `ℹ️ No hay posiciones abiertas actualmente para este mercado.`;
+                }
+                elLiveScannerTbody.innerHTML = `<tr><td colspan="9" class="text-center p-4 text-muted">${msg}</td></tr>`;
             } else {
                 elLiveScannerTbody.innerHTML = filtered.map(item => {
                     const sigClass = item.signal.toLowerCase();
@@ -1148,6 +1355,105 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Open TradingView Trade Log Modal/Section
+    let tvTradesSortKey = "entry_date";
+    let tvTradesSortDir = "DESC"; // DESC = más reciente primero, ASC = más antiguo primero
+    let activeTvTradesList = [];
+
+    const elThTvEntryDate = document.getElementById("th-tv-entry-date");
+    const elThTvExitDate = document.getElementById("th-tv-exit-date");
+
+    if (elThTvEntryDate) {
+        elThTvEntryDate.addEventListener("click", () => {
+            if (tvTradesSortKey === "entry_date") {
+                tvTradesSortDir = (tvTradesSortDir === "DESC") ? "ASC" : "DESC";
+            } else {
+                tvTradesSortKey = "entry_date";
+                tvTradesSortDir = "DESC";
+            }
+            renderTvTradesTable();
+        });
+    }
+
+    if (elThTvExitDate) {
+        elThTvExitDate.addEventListener("click", () => {
+            if (tvTradesSortKey === "exit_date") {
+                tvTradesSortDir = (tvTradesSortDir === "DESC") ? "ASC" : "DESC";
+            } else {
+                tvTradesSortKey = "exit_date";
+                tvTradesSortDir = "DESC";
+            }
+            renderTvTradesTable();
+        });
+    }
+
+    // Botón para ver TODOS los trades globales de la cartera por fecha
+    const elBtnShowAllTrades = document.getElementById("btn-show-all-trades");
+    if (elBtnShowAllTrades) {
+        elBtnShowAllTrades.addEventListener("click", () => {
+            if (!liveScannerData) return;
+            let list = (selectedScannerStrategy === "AIS11") ? liveScannerData.ais11_signals : liveScannerData.ss11_signals;
+            
+            let allTrades = [];
+            (list || []).forEach(item => {
+                (item.recent_trades || []).forEach(t => {
+                    allTrades.push({
+                        ...t,
+                        ticker: item.ticker
+                    });
+                });
+            });
+
+            if (elSelectedTradeTicker) elSelectedTradeTicker.textContent = `TODOS LOS ACTIVOS (${allTrades.length} Trades)`;
+            if (elSelectedTradeStrat) elSelectedTradeStrat.textContent = (selectedScannerStrategy === "AIS11") ? "AIS11: Multi-IA GPU" : "SS11: Macro Base Pura";
+
+            activeTvTradesList = allTrades;
+            tvTradesSortKey = "entry_date";
+            tvTradesSortDir = "DESC";
+            renderTvTradesTable();
+
+            if (elTvTradeLogPanel) {
+                elTvTradeLogPanel.classList.remove("hidden");
+                elTvTradeLogPanel.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    }
+
+    function renderTvTradesTable() {
+        if (!elTvTradesTbody) return;
+
+        if (!activeTvTradesList || activeTvTradesList.length === 0) {
+            elTvTradesTbody.innerHTML = `<tr><td colspan="10" class="text-center p-4 text-muted">No se registran operaciones históricas cerradas para este activo.</td></tr>`;
+            return;
+        }
+
+        const sorted = [...activeTvTradesList].sort((a, b) => {
+            let valA = new Date(a[tvTradesSortKey] === "EN CURSO" ? "2099-12-31" : (a[tvTradesSortKey] || "1970-01-01")).getTime();
+            let valB = new Date(b[tvTradesSortKey] === "EN CURSO" ? "2099-12-31" : (b[tvTradesSortKey] || "1970-01-01")).getTime();
+            return tvTradesSortDir === "DESC" ? (valB - valA) : (valA - valB);
+        });
+
+        // Actualizar iconos de cabecera
+        const iconEntry = document.getElementById("icon-tv-entry-date");
+        const iconExit = document.getElementById("icon-tv-exit-date");
+        if (iconEntry) iconEntry.className = tvTradesSortKey === "entry_date" ? (tvTradesSortDir === "DESC" ? "fa-solid fa-sort-down text-warning" : "fa-solid fa-sort-up text-warning") : "fa-solid fa-sort";
+        if (iconExit) iconExit.className = tvTradesSortKey === "exit_date" ? (tvTradesSortDir === "DESC" ? "fa-solid fa-sort-down text-warning" : "fa-solid fa-sort-up text-warning") : "fa-solid fa-sort";
+
+        elTvTradesTbody.innerHTML = sorted.map((t, idx) => `
+            <tr>
+                <td>#${idx + 1}</td>
+                <td><strong style="font-family: var(--font-mono); font-size: 13px; color: var(--text-bright);">${t.ticker || 'LONG'}</strong></td>
+                <td>${t.entry_date}</td>
+                <td>$${t.entry_price.toFixed(2)}</td>
+                <td>${t.exit_date}</td>
+                <td>$${t.exit_price.toFixed(2)}</td>
+                <td class="${t.pct_return >= 0 ? 'text-success' : 'text-danger'}">${t.pct_return >= 0 ? '+' : ''}${t.pct_return.toFixed(2)}%</td>
+                <td class="${t.pnl >= 0 ? 'text-success' : 'text-danger'}">${t.pnl >= 0 ? '+' : ''}$${t.pnl.toFixed(2)}</td>
+                <td>${t.duration_days}d</td>
+                <td><span class="opp-cat">${t.reason}</span></td>
+            </tr>
+        `).join('');
+    }
+
     function openTradingViewTradeLog(ticker, stratId) {
         if (!liveScannerData) return;
 
@@ -1167,27 +1473,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if (elTvWinRate) elTvWinRate.textContent = `${m.win_rate.toFixed(1)}%`;
         if (elTvTotalTrades) elTvTotalTrades.textContent = m.trades_count;
 
-        const trades = item.recent_trades || [];
-        if (elTvTradesTbody) {
-            if (trades.length === 0) {
-                elTvTradesTbody.innerHTML = `<tr><td colspan="10" class="text-center p-4 text-muted">No se registran operaciones históricas cerradas para este activo.</td></tr>`;
-            } else {
-                elTvTradesTbody.innerHTML = trades.map((t, idx) => `
-                    <tr>
-                        <td>#${idx + 1}</td>
-                        <td><span class="badge-signal buy">LONG</span></td>
-                        <td>${t.entry_date}</td>
-                        <td>$${t.entry_price.toFixed(2)}</td>
-                        <td>${t.exit_date}</td>
-                        <td>$${t.exit_price.toFixed(2)}</td>
-                        <td class="${t.pct_return >= 0 ? 'text-success' : 'text-danger'}">${t.pct_return >= 0 ? '+' : ''}${t.pct_return.toFixed(2)}%</td>
-                        <td class="${t.pnl >= 0 ? 'text-success' : 'text-danger'}">${t.pnl >= 0 ? '+' : ''}$${t.pnl.toFixed(2)}</td>
-                        <td>${t.duration_days}d</td>
-                        <td><span class="opp-cat">${t.reason}</span></td>
-                    </tr>
-                `).join('');
-            }
-        }
+        activeTvTradesList = (item.recent_trades || []).map(t => ({ ...t, ticker: ticker }));
+        renderTvTradesTable();
 
         if (elTvTradeLogPanel) {
             elTvTradeLogPanel.classList.remove("hidden");

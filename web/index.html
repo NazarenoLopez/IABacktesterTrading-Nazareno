@@ -132,9 +132,9 @@
                     <div class="control-group">
                         <label><i class="fa-solid fa-chess-knight"></i> Estrategia Activa:</label>
                         <div class="pill-group" id="strategy-pill-group">
-                            <button class="pill-btn active" data-strat="SS11">SS11: Macro Base Pura</button>
+                            <button class="pill-btn" data-strat="SS11">SS11: Macro Base Pura</button>
                             <button class="pill-btn" data-strat="AIS11">AIS11: Multi-IA GPU</button>
-                            <button class="pill-btn" data-strat="COMBO">Vista Combo (Ambas)</button>
+                            <button class="pill-btn active" data-strat="COMBO">Vista Combo (Ambas)</button>
                         </div>
                     </div>
 
@@ -145,9 +145,21 @@
                             <button class="pill-btn" data-univ="US">Top 250 EE.UU.</button>
                             <button class="pill-btn" data-univ="CRYPTO">Top 50 Criptos</button>
                             <button class="pill-btn" data-univ="BUY_ONLY">🚀 Oportunidades (BUY)</button>
+                            <button class="pill-btn" data-univ="POS_ONLY">💼 Posiciones Activas</button>
                         </div>
                     </div>
                 </div>
+
+                <!-- LIVE ACTIVE POSITIONS SECTION -->
+                <section class="active-positions-section">
+                    <div class="section-title-bar">
+                        <h2><i class="fa-solid fa-briefcase text-warning"></i> Posiciones Activas en Cartera</h2>
+                        <span class="count-pill" id="active-pos-count-badge">0 Posiciones Abiertas</span>
+                    </div>
+                    <div class="cards-grid" id="active-positions-cards-grid">
+                        <div class="empty-cards-notice">No hay posiciones activas en este momento.</div>
+                    </div>
+                </section>
 
                 <!-- LIVE OPPORTUNITIES GRID (HIGHLIGHTED BUY SIGNALS) -->
                 <section class="opportunities-section">
@@ -164,21 +176,26 @@
                 <!-- LIVE POSITIONS & SIGNALS TABLE -->
                 <section class="live-signals-table-section">
                     <div class="section-title-bar">
-                        <h2><i class="fa-solid fa-table-list text-indigo"></i> Monitoreo General de la Cartera (Cotizaciones en Vivo)</h2>
+                        <h2>
+                            <i class="fa-solid fa-table-list text-indigo"></i> Monitoreo General de la Cartera (Cotizaciones en Vivo)
+                            <button class="btn btn-primary" id="btn-show-all-trades" style="margin-left: 12px; font-size: 12px; padding: 6px 14px;">
+                                <i class="fa-solid fa-layer-group"></i> Ver TODOS los Trades por Fecha
+                            </button>
+                        </h2>
                         <input type="text" id="scanner-search-input" placeholder="Buscar ticker (ej: AAPL, BTC-USD, NVDA)..." class="search-input">
                     </div>
                     <div class="table-responsive">
                         <table class="live-table" id="live-scanner-table">
                             <thead>
                                 <tr>
-                                    <th>Ticker</th>
-                                    <th>Mercado</th>
-                                    <th>Precio Actual</th>
-                                    <th>Var 24h</th>
-                                    <th>Señal en Vivo</th>
-                                    <th>PnL Flotante (%)</th>
-                                    <th>Dist. Stop Loss (-15%)</th>
-                                    <th>Dist. Recup. SMA(20)</th>
+                                    <th class="scanner-sortable-th" data-sort="ticker" style="cursor:pointer; user-select:none;">Ticker <i class="fa-solid fa-sort"></i></th>
+                                    <th class="scanner-sortable-th" data-sort="category" style="cursor:pointer; user-select:none;">Mercado <i class="fa-solid fa-sort"></i></th>
+                                    <th class="scanner-sortable-th" data-sort="price" style="cursor:pointer; user-select:none;">Precio Actual <i class="fa-solid fa-sort"></i></th>
+                                    <th class="scanner-sortable-th" data-sort="change_24h" style="cursor:pointer; user-select:none;">Var 24h <i class="fa-solid fa-sort"></i></th>
+                                    <th class="scanner-sortable-th" data-sort="signal" style="cursor:pointer; user-select:none;">Señal en Vivo <i class="fa-solid fa-sort"></i></th>
+                                    <th class="scanner-sortable-th" data-sort="pnl" style="cursor:pointer; user-select:none;">PnL Flotante (%) <i class="fa-solid fa-sort"></i></th>
+                                    <th class="scanner-sortable-th" data-sort="dist_sl" style="cursor:pointer; user-select:none;">Dist. Stop Loss (-15%) <i class="fa-solid fa-sort"></i></th>
+                                    <th class="scanner-sortable-th" data-sort="dist_sma20" style="cursor:pointer; user-select:none;">Dist. Recup. SMA(20) <i class="fa-solid fa-sort"></i></th>
                                     <th>TradingView Trades</th>
                                 </tr>
                             </thead>
@@ -215,9 +232,9 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Tipo</th>
-                                    <th>Fecha Entrada</th>
+                                    <th id="th-tv-entry-date" class="sortable-th" style="cursor: pointer; user-select: none;" title="Haz clic para ordenar por fecha de entrada">Fecha Entrada <i class="fa-solid fa-sort" id="icon-tv-entry-date"></i></th>
                                     <th>Precio Entrada</th>
-                                    <th>Fecha Salida</th>
+                                    <th id="th-tv-exit-date" class="sortable-th" style="cursor: pointer; user-select: none;" title="Haz clic para ordenar por fecha de salida">Fecha Salida <i class="fa-solid fa-sort" id="icon-tv-exit-date"></i></th>
                                     <th>Precio Salida</th>
                                     <th>Resultado (%)</th>
                                     <th>Ganancia/Pérdida ($)</th>
@@ -451,16 +468,16 @@
                             <div class="table-wrapper">
                                 <table class="trades-table">
                                     <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Fecha Entrada</th>
-                                            <th>Precio Entrada</th>
-                                            <th>Fecha Salida</th>
-                                            <th>Precio Salida</th>
-                                            <th>Duración (Días)</th>
-                                            <th>Rendimiento (%)</th>
-                                            <th>Razón de Salida</th>
-                                        </tr>
+                                         <tr>
+                                             <th>#</th>
+                                             <th id="th-hist-entry-date" class="sortable-th" style="cursor: pointer; user-select: none;" title="Haz clic para ordenar por fecha de entrada">Fecha Entrada <i class="fa-solid fa-sort" id="icon-hist-entry-date"></i></th>
+                                             <th>Precio Entrada</th>
+                                             <th id="th-hist-exit-date" class="sortable-th" style="cursor: pointer; user-select: none;" title="Haz clic para ordenar por fecha de salida">Fecha Salida <i class="fa-solid fa-sort" id="icon-hist-exit-date"></i></th>
+                                             <th>Precio Salida</th>
+                                             <th>Duración (Días)</th>
+                                             <th>Rendimiento (%)</th>
+                                             <th>Razón de Salida</th>
+                                         </tr>
                                     </thead>
                                     <tbody id="trades-table-body">
                                         <!-- Dynamically generated rows -->

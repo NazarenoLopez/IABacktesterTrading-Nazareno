@@ -5,6 +5,8 @@ import json
 import traceback
 import sys
 import os
+import io
+import contextlib
 import shutil
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import backtester
@@ -80,7 +82,9 @@ def update_live_prices_loop():
 
     while True:
         try:
-            df = yf.download(TICKERS, period="1d", interval="1m", progress=False)
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf), contextlib.redirect_stderr(buf):
+                df = yf.download(TICKERS, period="1d", interval="1m", progress=False)
             if not df.empty:
                 prices = {}
                 if isinstance(df.columns, pd.MultiIndex):
@@ -224,6 +228,55 @@ class APIHandler(http.server.SimpleHTTPRequestHandler):
             self.wfile.write(json.dumps(LIVE_PRICES_CACHE).encode('utf-8'))
             return
 
+        if parsed_path.path == '/api/live-scanner':
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            try:
+                from utils.scanner_engine import run_live_scanner
+                cache_file = "data/live_scanner_cache.json"
+                qs = urllib.parse.parse_qs(parsed_path.query)
+                force_refresh = qs.get('refresh', ['false'])[0].lower() == 'true'
+
+                scanner_res = None
+                if not force_refresh and os.path.exists(cache_file):
+                    try:
+                        with open(cache_file, "r", encoding="utf-8") as f:
+                            scanner_res = json.load(f)
+                    except Exception: pass
+
+                if scanner_res is None or force_refresh:
+                    scanner_res = run_live_scanner()
+
+                self.wfile.write(json.dumps(scanner_res, ensure_ascii=False).encode('utf-8'))
+            except Exception as e:
+                print("Error in /api/live-scanner:")
+                traceback.print_exc()
+                self.wfile.write(json.dumps({"error": str(e)}).encode('utf-8'))
+            return
+
+        if parsed_path.path == '/api/hardware':
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            try:
+                from utils.scanner_engine import get_hardware_status
+                self.wfile.write(json.dumps(get_hardware_status()).encode('utf-8'))
+            except Exception as e:
+                self.wfile.write(json.dumps({"error": str(e)}).encode('utf-8'))
+            return
+
+        if parsed_path.path == '/api/universe':
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            try:
+                from utils.tickers_universe import get_universe_summary
+                self.wfile.write(json.dumps(get_universe_summary()).encode('utf-8'))
+            except Exception as e:
+                self.wfile.write(json.dumps({"error": str(e)}).encode('utf-8'))
+            return
+
         # Serve static files normally
         super().do_GET()
 
@@ -239,9 +292,22 @@ if __name__ == "__main__":
             traceback.print_exc()
         IS_LOADING = False
 
-    # Start data loading in background
+    def run_auto_scanner_loop():
+        import time
+        from utils.scanner_engine import run_live_scanner
+        print("[Auto-Scanner] Bucle de actualización automática cada 60 segundos iniciado.")
+        while True:
+            try:
+                # Runs scanner and updates live_scanner_cache.json
+                run_live_scanner()
+            except Exception as e:
+                print(f"[Auto-Scanner] Advertencia en escáner automático: {e}")
+            time.sleep(60)
+
+    # Start data loading & auto-scanner in background
     threading.Thread(target=load_data_thread, daemon=True).start()
     threading.Thread(target=update_live_prices_loop, daemon=True).start()
+    threading.Thread(target=run_auto_scanner_loop, daemon=True).start()
     
     try:
         with http.server.ThreadingHTTPServer(("", PORT), APIHandler) as httpd:

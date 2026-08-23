@@ -866,6 +866,354 @@ document.addEventListener("DOMContentLoaded", () => {
     const elStartupLoader = document.getElementById("startup-loader");
     const elLoaderStatusText = document.getElementById("loader-status-text");
     
+    // -------------------------------------------------------------------------
+    // LIVE SCANNER DASHBOARD LOGIC (SS11 & AIS11 GPU 300 TICKERS)
+    // -------------------------------------------------------------------------
+    let liveScannerData = null;
+    let selectedScannerStrategy = "SS11"; // SS11, AIS11, COMBO
+    let selectedScannerUniverse = "ALL";  // ALL, US, CRYPTO, BUY_ONLY
+
+    const elNavBtnScanner = document.getElementById("nav-btn-scanner");
+    const elNavBtnBacktester = document.getElementById("nav-btn-backtester");
+    const elScannerViewPanel = document.getElementById("scanner-view-panel");
+
+    const elGpuNameText = document.getElementById("gpu-name-text");
+    const elGpuCudaBadge = document.getElementById("gpu-cuda-badge");
+
+    const elMacroGuardBanner = document.getElementById("macro-guard-banner");
+    const elMacroIcon = document.getElementById("macro-icon");
+    const elMacroStatusTitle = document.getElementById("macro-status-title");
+    const elMacroStatusDesc = document.getElementById("macro-status-desc");
+    const elMacroStatusTag = document.getElementById("macro-status-tag");
+    const elBtnRefreshScanner = document.getElementById("btn-refresh-scanner");
+
+    const elOpportunitiesCardsGrid = document.getElementById("opportunities-cards-grid");
+    const elBuyCountBadge = document.getElementById("buy-count-badge");
+    const elLiveScannerTbody = document.getElementById("live-scanner-tbody");
+    const elScannerSearchInput = document.getElementById("scanner-search-input");
+
+    const elTvTradeLogPanel = document.getElementById("tv-trade-log-panel");
+    const elBtnCloseTvTrades = document.getElementById("btn-close-tv-trades");
+    const elSelectedTradeTicker = document.getElementById("selected-trade-ticker");
+    const elSelectedTradeStrat = document.getElementById("selected-trade-strat");
+    const elTvNetProfit = document.getElementById("tv-net-profit");
+    const elTvProfitFactor = document.getElementById("tv-profit-factor");
+    const elTvWinRate = document.getElementById("tv-win-rate");
+    const elTvTotalTrades = document.getElementById("tv-total-trades");
+    const elTvTradesTbody = document.getElementById("tv-trades-tbody");
+
+    // Top Navigation View Switcher
+    if (elNavBtnScanner && elNavBtnBacktester) {
+        elNavBtnScanner.addEventListener("click", () => {
+            elNavBtnScanner.classList.add("active");
+            elNavBtnBacktester.classList.remove("active");
+            if (elScannerViewPanel) elScannerViewPanel.classList.remove("hidden");
+            if (elDashboardState) elDashboardState.classList.add("hidden");
+            if (elNoSelectionState) elNoSelectionState.classList.add("hidden");
+        });
+
+        elNavBtnBacktester.addEventListener("click", () => {
+            elNavBtnBacktester.classList.add("active");
+            elNavBtnScanner.classList.remove("active");
+            if (elScannerViewPanel) elScannerViewPanel.classList.add("hidden");
+            if (selectedStrategyId) {
+                if (elDashboardState) elDashboardState.classList.remove("hidden");
+                if (elNoSelectionState) elNoSelectionState.classList.add("hidden");
+            } else {
+                if (elDashboardState) elDashboardState.classList.add("hidden");
+                if (elNoSelectionState) elNoSelectionState.classList.remove("hidden");
+            }
+        });
+    }
+
+    // Hardware GPU Detection
+    async function loadHardwareStatus() {
+        try {
+            const res = await fetch('/api/hardware');
+            if (res.ok) {
+                const hw = await res.json();
+                if (elGpuNameText) {
+                    if (hw.cuda_available) {
+                        elGpuNameText.textContent = `⚡ NVIDIA CUDA GPU: ${hw.device_name}`;
+                    } else {
+                        elGpuNameText.textContent = `CPU Processing (${hw.device_name})`;
+                    }
+                }
+            }
+        } catch (e) {
+            if (elGpuNameText) elGpuNameText.textContent = "Hardware Engine Ready";
+        }
+    }
+
+    // Strategy & Universe Pills Listeners
+    document.querySelectorAll("#strategy-pill-group .pill-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            document.querySelectorAll("#strategy-pill-group .pill-btn").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            selectedScannerStrategy = btn.getAttribute("data-strat");
+            renderLiveScannerData();
+        });
+    });
+
+    document.querySelectorAll("#universe-pill-group .pill-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            document.querySelectorAll("#universe-pill-group .pill-btn").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            selectedScannerUniverse = btn.getAttribute("data-univ");
+            renderLiveScannerData();
+        });
+    });
+
+    if (elBtnRefreshScanner) {
+        elBtnRefreshScanner.addEventListener("click", () => {
+            fetchLiveScanner(true);
+        });
+    }
+
+    if (elScannerSearchInput) {
+        elScannerSearchInput.addEventListener("input", () => {
+            renderLiveScannerData();
+        });
+    }
+
+    if (elBtnCloseTvTrades) {
+        elBtnCloseTvTrades.addEventListener("click", () => {
+            if (elTvTradeLogPanel) elTvTradeLogPanel.classList.add("hidden");
+        });
+    }
+
+    // Fetch Live Scanner Data from API
+    async function fetchLiveScanner(forceRefresh = false) {
+        if (elBtnRefreshScanner) {
+            elBtnRefreshScanner.disabled = true;
+            elBtnRefreshScanner.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Escaneando...`;
+        }
+
+        try {
+            const url = forceRefresh ? '/api/live-scanner?refresh=true' : '/api/live-scanner';
+            const res = await fetch(url);
+            if (res.ok) {
+                liveScannerData = await res.json();
+                renderLiveScannerData();
+            }
+        } catch (e) {
+            console.error("Error fetching live scanner:", e);
+        } finally {
+            if (elBtnRefreshScanner) {
+                elBtnRefreshScanner.disabled = false;
+                elBtnRefreshScanner.innerHTML = `<i class="fa-solid fa-rotate"></i> Escanear Cotizaciones`;
+            }
+        }
+    }
+
+    // Render Scanner Data
+    function renderLiveScannerData() {
+        if (!liveScannerData) return;
+
+        // 1. Render Macro Guard Banner
+        const mg = liveScannerData.macro_guard;
+        if (mg && elMacroGuardBanner) {
+            if (mg.is_active) {
+                elMacroGuardBanner.classList.add("danger");
+                if (elMacroIcon) elMacroIcon.className = "fa-solid fa-triangle-exclamation macro-icon text-danger";
+                if (elMacroStatusTitle) elMacroStatusTitle.textContent = "🚨 CRASH SISTÉMICO MACRO DETECTADO (SPY)";
+                if (elMacroStatusDesc) elMacroStatusDesc.textContent = `Filtro Macro activado: Caída brusca en SPY. Capital en Liquidez por ${mg.days_remaining} sesiones restantes.`;
+                if (elMacroStatusTag) elMacroStatusTag.textContent = `CRASH ACTIVO (${mg.days_remaining}d)`;
+            } else {
+                elMacroGuardBanner.classList.remove("danger");
+                if (elMacroIcon) elMacroIcon.className = "fa-solid fa-shield-halved macro-icon text-success";
+                if (elMacroStatusTitle) elMacroStatusTitle.textContent = "🟢 Filtro Macro Anti-Crash Global: MERCADO SEGURO";
+                if (elMacroStatusDesc) elMacroStatusDesc.textContent = "El índice S&P 500 se encuentra estable. Las estrategias están operando con normalidad.";
+                if (elMacroStatusTag) elMacroStatusTag.textContent = "MERCADO SEGURO (SPY OK)";
+            }
+        }
+
+        // Determine list of signals based on strategy pill
+        let list = [];
+        if (selectedScannerStrategy === "SS11") {
+            list = liveScannerData.ss11_signals || [];
+        } else if (selectedScannerStrategy === "AIS11") {
+            list = liveScannerData.ais11_signals || [];
+        } else {
+            // COMBO view
+            list = liveScannerData.ss11_signals || [];
+        }
+
+        // Apply Universe Filter
+        const searchTerm = (elScannerSearchInput ? elScannerSearchInput.value : "").trim().toUpperCase();
+        let filtered = list.filter(item => {
+            if (searchTerm && !item.ticker.toUpperCase().includes(searchTerm)) {
+                return false;
+            }
+            if (selectedScannerUniverse === "US") return item.category === "US Stock";
+            if (selectedScannerUniverse === "CRYPTO") return item.category === "Crypto";
+            if (selectedScannerUniverse === "BUY_ONLY") return item.signal === "BUY";
+            return true;
+        });
+
+        // 2. Render Opportunities Cards (BUY signals)
+        const buyItems = list.filter(item => item.signal === "BUY");
+        if (elBuyCountBadge) elBuyCountBadge.textContent = `${buyItems.length} Activos en BUY`;
+
+        if (elOpportunitiesCardsGrid) {
+            if (buyItems.length === 0) {
+                elOpportunitiesCardsGrid.innerHTML = `
+                    <div class="empty-cards-notice">
+                        <i class="fa-solid fa-shield-cat" style="font-size: 24px; margin-bottom: 8px; color: var(--text-muted); display: block;"></i>
+                        No hay señales de compra activas en este instante. El sistema está protegiendo el capital o en espera de confirmación.
+                    </div>
+                `;
+            } else {
+                elOpportunitiesCardsGrid.innerHTML = buyItems.map(item => `
+                    <div class="opp-card">
+                        <div class="opp-card-header">
+                            <span class="opp-ticker">${item.ticker}</span>
+                            <span class="opp-cat">${item.category}</span>
+                        </div>
+                        <div class="opp-price-row">
+                            <span class="opp-price">$${item.price.toFixed(item.price > 1 ? 2 : 4)}</span>
+                            <span class="opp-change ${item.change_24h >= 0 ? 'text-success' : 'text-danger'}">
+                                ${item.change_24h >= 0 ? '+' : ''}${item.change_24h.toFixed(2)}%
+                            </span>
+                        </div>
+                        <div class="opp-details-grid">
+                            <div>
+                                <span>Dist. Stop Loss (-15%)</span>
+                                <strong class="${item.dist_sl_pct >= 0 ? 'text-success' : 'text-danger'}">${item.dist_sl_pct > 0 ? '+' : ''}${item.dist_sl_pct.toFixed(1)}%</strong>
+                            </div>
+                            <div>
+                                <span>Dist. Recup. SMA(20)</span>
+                                <strong class="${item.dist_sma20_pct >= 0 ? 'text-success' : 'text-danger'}">${item.dist_sma20_pct > 0 ? '+' : ''}${item.dist_sma20_pct.toFixed(1)}%</strong>
+                            </div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+                            <span class="badge-signal buy"><i class="fa-solid fa-circle"></i> BUY</span>
+                            <button class="btn btn-secondary btn-view-trades" data-ticker="${item.ticker}" style="font-size: 11px; padding: 4px 10px;">
+                                <i class="fa-solid fa-list-check"></i> Ver Trades
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // 3. Render Live Signals Table
+        if (elLiveScannerTbody) {
+            if (filtered.length === 0) {
+                elLiveScannerTbody.innerHTML = `<tr><td colspan="9" class="text-center p-4 text-muted">No se encontraron activos para los filtros seleccionados.</td></tr>`;
+            } else {
+                elLiveScannerTbody.innerHTML = filtered.map(item => {
+                    const sigClass = item.signal.toLowerCase();
+                    const sigIcon = item.signal === 'BUY' ? 'fa-circle-dot' : (item.signal === 'HOLD' ? 'fa-lock' : (item.signal === 'SELL' ? 'fa-triangle-exclamation' : 'fa-clock'));
+                    const floatPnl = item.metrics.floating_pnl_pct || 0.0;
+                    
+                    return `
+                        <tr>
+                            <td><strong style="font-family: var(--font-mono); font-size: 14px;">${item.ticker}</strong></td>
+                            <td><span class="opp-cat">${item.category}</span></td>
+                            <td style="font-family: var(--font-mono); font-weight: 600;">$${item.price.toFixed(item.price > 1 ? 2 : 4)}</td>
+                            <td style="font-family: var(--font-mono);" class="${item.change_24h >= 0 ? 'text-success' : 'text-danger'}">
+                                ${item.change_24h >= 0 ? '+' : ''}${item.change_24h.toFixed(2)}%
+                            </td>
+                            <td>
+                                <span class="badge-signal ${sigClass}"><i class="fa-solid ${sigIcon}"></i> ${item.signal}</span>
+                            </td>
+                            <td style="font-family: var(--font-mono);" class="${floatPnl >= 0 ? 'text-success' : 'text-danger'}">
+                                ${item.metrics.is_currently_in_position ? `${floatPnl >= 0 ? '+' : ''}${floatPnl.toFixed(2)}%` : '<span class="text-muted">-</span>'}
+                            </td>
+                            <td style="font-family: var(--font-mono);" class="${item.dist_sl_pct >= 0 ? 'text-success' : 'text-danger'}">
+                                ${item.dist_sl_pct > 0 ? '+' : ''}${item.dist_sl_pct.toFixed(1)}%
+                            </td>
+                            <td style="font-family: var(--font-mono);" class="${item.dist_sma20_pct >= 0 ? 'text-success' : 'text-danger'}">
+                                ${item.dist_sma20_pct > 0 ? '+' : ''}${item.dist_sma20_pct.toFixed(1)}%
+                            </td>
+                            <td>
+                                <button class="btn btn-secondary btn-view-trades" data-ticker="${item.ticker}" style="font-size: 11px; padding: 4px 10px;">
+                                    <i class="fa-solid fa-list-check"></i> Pine Trades
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+        }
+
+        // Attach event listeners for "Ver Trades" buttons
+        document.querySelectorAll(".btn-view-trades").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const tk = btn.getAttribute("data-ticker");
+                openTradingViewTradeLog(tk, selectedScannerStrategy);
+            });
+        });
+    }
+
+    // Open TradingView Trade Log Modal/Section
+    function openTradingViewTradeLog(ticker, stratId) {
+        if (!liveScannerData) return;
+
+        let list = (stratId === "AIS11") ? liveScannerData.ais11_signals : liveScannerData.ss11_signals;
+        const item = (list || []).find(x => x.ticker === ticker);
+        if (!item) return;
+
+        if (elSelectedTradeTicker) elSelectedTradeTicker.textContent = ticker;
+        if (elSelectedTradeStrat) elSelectedTradeStrat.textContent = (stratId === "AIS11") ? "AIS11: Multi-IA GPU" : "SS11: Macro Base Pura";
+
+        const m = item.metrics;
+        if (elTvNetProfit) {
+            elTvNetProfit.textContent = `$${m.net_profit_usd.toFixed(2)}`;
+            elTvNetProfit.className = `val ${m.net_profit_usd >= 0 ? 'text-success' : 'text-danger'}`;
+        }
+        if (elTvProfitFactor) elTvProfitFactor.textContent = m.profit_factor.toFixed(2);
+        if (elTvWinRate) elTvWinRate.textContent = `${m.win_rate.toFixed(1)}%`;
+        if (elTvTotalTrades) elTvTotalTrades.textContent = m.trades_count;
+
+        const trades = item.recent_trades || [];
+        if (elTvTradesTbody) {
+            if (trades.length === 0) {
+                elTvTradesTbody.innerHTML = `<tr><td colspan="10" class="text-center p-4 text-muted">No se registran operaciones históricas cerradas para este activo.</td></tr>`;
+            } else {
+                elTvTradesTbody.innerHTML = trades.map((t, idx) => `
+                    <tr>
+                        <td>#${idx + 1}</td>
+                        <td><span class="badge-signal buy">LONG</span></td>
+                        <td>${t.entry_date}</td>
+                        <td>$${t.entry_price.toFixed(2)}</td>
+                        <td>${t.exit_date}</td>
+                        <td>$${t.exit_price.toFixed(2)}</td>
+                        <td class="${t.pct_return >= 0 ? 'text-success' : 'text-danger'}">${t.pct_return >= 0 ? '+' : ''}${t.pct_return.toFixed(2)}%</td>
+                        <td class="${t.pnl >= 0 ? 'text-success' : 'text-danger'}">${t.pnl >= 0 ? '+' : ''}$${t.pnl.toFixed(2)}</td>
+                        <td>${t.duration_days}d</td>
+                        <td><span class="opp-cat">${t.reason}</span></td>
+                    </tr>
+                `).join('');
+            }
+        }
+
+        if (elTvTradeLogPanel) {
+            elTvTradeLogPanel.classList.remove("hidden");
+            elTvTradeLogPanel.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+
+    // Load Hardware Status & Initial Scanner Data
+    loadHardwareStatus();
+    fetchLiveScanner(false);
+
+    // Bucle de refresco automático de 60 segundos
+    const elAutoTimerBadge = document.getElementById("auto-timer-badge");
+    let autoRefreshCountdown = 60;
+
+    setInterval(() => {
+        autoRefreshCountdown--;
+        if (autoRefreshCountdown <= 0) {
+            autoRefreshCountdown = 60;
+            fetchLiveScanner(false);
+        }
+        if (elAutoTimerBadge) {
+            elAutoTimerBadge.innerHTML = `<i class="fa-solid fa-clock"></i> Auto (${autoRefreshCountdown}s)`;
+        }
+    }, 1000);
+
     async function checkServerStatus() {
         try {
             const res = await fetch('/api/status');

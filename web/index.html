@@ -97,6 +97,143 @@
         <!-- MAIN PANEL: Strategy Details & Visualization -->
         <main class="main-content">
             
+            <!-- TOP VIEW SWITCHER NAVBAR -->
+            <div class="top-nav-bar">
+                <div class="nav-tabs">
+                    <button class="nav-tab-btn active" id="nav-btn-scanner"><i class="fa-solid fa-bolt text-warning"></i> Escáner en Vivo SS11 & AIS11 GPU</button>
+                    <button class="nav-tab-btn" id="nav-btn-backtester"><i class="fa-solid fa-chart-line text-indigo"></i> Probador & Rankings Históricos</button>
+                </div>
+                <div class="hardware-badge-container">
+                    <span class="gpu-badge" id="gpu-cuda-badge"><i class="fa-solid fa-microchip"></i> <span id="gpu-name-text">NVIDIA CUDA: Detectando...</span></span>
+                </div>
+            </div>
+
+            <!-- LIVE SCANNER PANEL SECTION -->
+            <div id="scanner-view-panel" class="scanner-container">
+                
+                <!-- MACRO GUARD STATUS BANNER -->
+                <div class="macro-banner" id="macro-guard-banner">
+                    <div class="macro-banner-info">
+                        <i class="fa-solid fa-shield-halved macro-icon" id="macro-icon"></i>
+                        <div>
+                            <h3 id="macro-status-title">Detección de Crash Sistémico Macro (SPY)</h3>
+                            <p id="macro-status-desc">Monitoreando cotizaciones del S&P 500 en tiempo real para activar el seguro anti-crash...</p>
+                        </div>
+                    </div>
+                    <div class="macro-actions">
+                        <span class="auto-timer-badge" id="auto-timer-badge"><i class="fa-solid fa-clock"></i> Auto (1m)</span>
+                        <span class="macro-tag" id="macro-status-tag">Comprobando SPY...</span>
+                        <button class="btn btn-primary" id="btn-refresh-scanner"><i class="fa-solid fa-rotate"></i> Escanear Cotizaciones</button>
+                    </div>
+                </div>
+
+                <!-- SCANNER CONTROLS & FILTERS -->
+                <div class="scanner-controls-bar">
+                    <div class="control-group">
+                        <label><i class="fa-solid fa-chess-knight"></i> Estrategia Activa:</label>
+                        <div class="pill-group" id="strategy-pill-group">
+                            <button class="pill-btn active" data-strat="SS11">SS11: Macro Base Pura</button>
+                            <button class="pill-btn" data-strat="AIS11">AIS11: Multi-IA GPU</button>
+                            <button class="pill-btn" data-strat="COMBO">Vista Combo (Ambas)</button>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label><i class="fa-solid fa-globe"></i> Universo de Activos (300):</label>
+                        <div class="pill-group" id="universe-pill-group">
+                            <button class="pill-btn active" data-univ="ALL">Todos (300)</button>
+                            <button class="pill-btn" data-univ="US">Top 250 EE.UU.</button>
+                            <button class="pill-btn" data-univ="CRYPTO">Top 50 Criptos</button>
+                            <button class="pill-btn" data-univ="BUY_ONLY">🚀 Oportunidades (BUY)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LIVE OPPORTUNITIES GRID (HIGHLIGHTED BUY SIGNALS) -->
+                <section class="opportunities-section">
+                    <div class="section-title-bar">
+                        <h2><i class="fa-solid fa-rocket text-success"></i> Oportunidades de Compra Detectadas</h2>
+                        <span class="count-pill" id="buy-count-badge">0 Activos en BUY</span>
+                    </div>
+                    <div class="cards-grid" id="opportunities-cards-grid">
+                        <!-- Cards loaded dynamically -->
+                        <div class="empty-cards-notice">Haga clic en "Escanear Cotizaciones" para obtener las señales vivas del mercado.</div>
+                    </div>
+                </section>
+
+                <!-- LIVE POSITIONS & SIGNALS TABLE -->
+                <section class="live-signals-table-section">
+                    <div class="section-title-bar">
+                        <h2><i class="fa-solid fa-table-list text-indigo"></i> Monitoreo General de la Cartera (Cotizaciones en Vivo)</h2>
+                        <input type="text" id="scanner-search-input" placeholder="Buscar ticker (ej: AAPL, BTC-USD, NVDA)..." class="search-input">
+                    </div>
+                    <div class="table-responsive">
+                        <table class="live-table" id="live-scanner-table">
+                            <thead>
+                                <tr>
+                                    <th>Ticker</th>
+                                    <th>Mercado</th>
+                                    <th>Precio Actual</th>
+                                    <th>Var 24h</th>
+                                    <th>Señal en Vivo</th>
+                                    <th>PnL Flotante (%)</th>
+                                    <th>Dist. Stop Loss (-15%)</th>
+                                    <th>Dist. Recup. SMA(20)</th>
+                                    <th>TradingView Trades</th>
+                                </tr>
+                            </thead>
+                            <tbody id="live-scanner-tbody">
+                                <tr><td colspan="9" class="text-center p-4">Cargando escáner en vivo...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- TRADINGVIEW STYLE TRADE LOG MODAL / SECTION -->
+                <section class="tv-trade-log-section hidden" id="tv-trade-log-panel">
+                    <div class="panel-header">
+                        <div class="panel-title">
+                            <i class="fa-solid fa-list-check text-warning"></i>
+                            <div>
+                                <h3>Probador de Estrategias Estilo TradingView (Pine Script Log)</h3>
+                                <p>Historial detallado de operaciones de entrada/salida para <strong id="selected-trade-ticker">AAPL</strong> con la estrategia <strong id="selected-trade-strat">SS11</strong></p>
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary" id="btn-close-tv-trades"><i class="fa-solid fa-xmark"></i> Cerrar Historial</button>
+                    </div>
+
+                    <div class="tv-summary-metrics-grid">
+                        <div class="tv-card"><span class="lbl">Ganancia Neta</span><strong id="tv-net-profit" class="val text-success">$0.00</strong></div>
+                        <div class="tv-card"><span class="lbl">Factor de Beneficio</span><strong id="tv-profit-factor" class="val">0.00</strong></div>
+                        <div class="tv-card"><span class="lbl">Tasa de Acierto</span><strong id="tv-win-rate" class="val">0.0%</strong></div>
+                        <div class="tv-card"><span class="lbl">Operaciones Totales</span><strong id="tv-total-trades" class="val">0</strong></div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="tv-trades-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Tipo</th>
+                                    <th>Fecha Entrada</th>
+                                    <th>Precio Entrada</th>
+                                    <th>Fecha Salida</th>
+                                    <th>Precio Salida</th>
+                                    <th>Resultado (%)</th>
+                                    <th>Ganancia/Pérdida ($)</th>
+                                    <th>Duración (Días)</th>
+                                    <th>Razón de Salida</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tv-trades-tbody">
+                                <!-- Loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+            </div>
+
             <!-- Global Dashboard Loader/State -->
             <div id="no-selection-state" class="state-panel hidden">
                 <i class="fa-solid fa-arrow-left pulse-icon"></i>
@@ -104,7 +241,7 @@
                 <p>Elige cualquiera de las estrategias del panel lateral para inspeccionar su rendimiento histórico de 30 años, comparar su curva de equidad contra Buy & Hold, ver el reporte por ticker y descargar el código en Pine Script v5.</p>
             </div>
 
-            <div id="dashboard-state">
+            <div id="dashboard-state" class="hidden">
                 
                 <!-- STRATEGY GENERAL HEADER -->
                 <section class="strategy-header-panel">

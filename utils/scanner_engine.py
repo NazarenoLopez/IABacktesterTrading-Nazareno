@@ -63,6 +63,23 @@ def clean_nans(obj):
         return [clean_nans(v) for v in obj]
     return obj
 
+def smart_round_price(val):
+    if val is None or np.isnan(val) or np.isinf(val):
+        return 0.0
+    val = float(val)
+    if val == 0.0:
+        return 0.0
+    abs_val = abs(val)
+    if abs_val >= 100:
+        return round(val, 2)
+    elif abs_val >= 1:
+        return round(val, 4)
+    elif abs_val >= 0.0001:
+        return round(val, 6)
+    else:
+        return round(val, 8)
+
+
 # -------------------------------------------------------------------------
 # Descarga y Caché de Datos de Mercado
 # -------------------------------------------------------------------------
@@ -141,7 +158,12 @@ def fetch_ticker_data(tickers=None, cache_expire=1800):
             continue
 
         if not isinstance(df.index, pd.DatetimeIndex):
-            df.index = pd.to_datetime(df.index)
+            df.index = pd.to_datetime(df.index, errors='coerce')
+        df = df[df.index.notna()]
+        if 'Close' in df.columns and 'Open' in df.columns:
+            df = df[(df['Close'] > 0) & (df['Open'] > 0)]
+        if len(df) < 30:
+            continue
 
         # Indicadores Básicos
         c = df['Close']
@@ -246,7 +268,7 @@ def simulate_strategy_trades(df, signals_long, signals_exit, stop_loss_pct=-15.0
                 if signals_long[i-1]:
                     can_enter = True
 
-        if can_enter:
+        if can_enter and opens[i] > 0.0:
             pos = (cash * (1.0 - commission)) / opens[i]
             cash = 0.0
             in_pos = True
@@ -256,12 +278,12 @@ def simulate_strategy_trades(df, signals_long, signals_exit, stop_loss_pct=-15.0
             revenue = pos * opens[i] * (1.0 - commission)
             cost    = pos * entry_price / (1.0 - commission)
             pnl     = revenue - cost
-            pct_ret = (revenue / cost - 1.0) * 100.0
+            pct_ret = (revenue / cost - 1.0) * 100.0 if cost > 0 else 0.0
             trades.append({
                 "entry_date":   _fmt_d(dates[entry_idx]),
-                "entry_price":  round(float(entry_price), 2),
+                "entry_price":  smart_round_price(entry_price),
                 "exit_date":    _fmt_d(dates[i]),
-                "exit_price":   round(float(opens[i]), 2),
+                "exit_price":   smart_round_price(opens[i]),
                 "pct_return":   round(float(pct_ret), 2),
                 "pnl":          round(float(pnl), 2),
                 "reason":       "Stop Loss -15%" if hit_stop_loss else "Macro Crash Exit",
@@ -287,7 +309,7 @@ def simulate_strategy_trades(df, signals_long, signals_exit, stop_loss_pct=-15.0
         cost = pos * entry_price / (1.0 - commission)
         current_val = pos * latest_close * (1.0 - commission)
         floating_pnl_usd = current_val - cost
-        floating_pnl_pct = (current_val / cost - 1.0) * 100.0
+        floating_pnl_pct = (current_val / cost - 1.0) * 100.0 if cost > 0 else 0.0
 
         tomorrow_hit_sl = False
         if stop_loss_pct is not None:
@@ -301,9 +323,9 @@ def simulate_strategy_trades(df, signals_long, signals_exit, stop_loss_pct=-15.0
 
         trades.append({
             "entry_date":   _fmt_d(dates[entry_idx]),
-            "entry_price":  round(float(entry_price), 2),
+            "entry_price":  smart_round_price(entry_price),
             "exit_date":    "EN CURSO",
-            "exit_price":   round(float(latest_close), 2),
+            "exit_price":   smart_round_price(latest_close),
             "pct_return":   round(float(floating_pnl_pct), 2),
             "pnl":          round(float(floating_pnl_usd), 2),
             "reason":       "Posición Activa",
@@ -341,7 +363,7 @@ def simulate_strategy_trades(df, signals_long, signals_exit, stop_loss_pct=-15.0
         "profit_factor": round(profit_factor, 2),
         "net_profit_usd": round(total_net_profit, 2),
         "is_currently_in_position": in_pos,
-        "entry_price": round(entry_price, 2) if in_pos else None,
+        "entry_price": smart_round_price(entry_price) if in_pos else None,
         "floating_pnl_pct": round(floating_pnl_pct, 2) if in_pos else 0.0,
         "in_sl_recovery": in_sl_recovery
     }
@@ -418,7 +440,7 @@ def run_live_scanner(tickers=None):
         )
 
         dist_sl = -15.0
-        if ss11_met['is_currently_in_position'] and ss11_met['entry_price']:
+        if ss11_met['is_currently_in_position'] and ss11_met.get('entry_price') and ss11_met['entry_price'] > 0:
             dist_sl = ((latest_close / ss11_met['entry_price']) - 1.0) * 100.0 - (-15.0)
 
         dist_sma20 = ((latest_close / latest_sma20) - 1.0) * 100.0
@@ -426,7 +448,7 @@ def run_live_scanner(tickers=None):
         results["ss11_signals"].append({
             "ticker": ticker,
             "category": category,
-            "price": round(latest_close, 2 if latest_close > 1 else 4),
+            "price": smart_round_price(latest_close),
             "change_24h": round(change_24h, 2),
             "signal": ss11_sig,
             "metrics": ss11_met,
@@ -461,7 +483,7 @@ def run_live_scanner(tickers=None):
         )
 
         dist_sl_ais = -15.0
-        if ais11_met['is_currently_in_position'] and ais11_met['entry_price']:
+        if ais11_met['is_currently_in_position'] and ais11_met.get('entry_price') and ais11_met['entry_price'] > 0:
             dist_sl_ais = ((latest_close / ais11_met['entry_price']) - 1.0) * 100.0 - (-15.0)
 
         dist_sma20_ais = ((latest_close / latest_sma20) - 1.0) * 100.0
@@ -469,7 +491,7 @@ def run_live_scanner(tickers=None):
         results["ais11_signals"].append({
             "ticker": ticker,
             "category": category,
-            "price": round(latest_close, 2 if latest_close > 1 else 4),
+            "price": smart_round_price(latest_close),
             "change_24h": round(change_24h, 2),
             "ai_score": round(latest_score, 1),
             "signal": ais11_sig,

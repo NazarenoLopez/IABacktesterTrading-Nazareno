@@ -132,6 +132,27 @@ def send_telegram_message(text, chat_id=None, parse_mode="HTML"):
 # -------------------------------------------------------------------------
 # Formateadores de Mensajes
 # -------------------------------------------------------------------------
+def format_price_telegram(price):
+    if price is None:
+        return "$0.00"
+    try:
+        p = float(price)
+        if p == 0:
+            return "$0.00"
+        abs_p = abs(p)
+        if abs_p >= 100:
+            return f"${p:,.2f}"
+        elif abs_p >= 1:
+            return f"${p:.2f}"
+        elif abs_p >= 0.01:
+            return f"${p:.4f}"
+        elif abs_p >= 0.0001:
+            return f"${p:.6f}"
+        else:
+            return f"${p:.8f}".rstrip('0').rstrip('.')
+    except (ValueError, TypeError):
+        return f"${price}"
+
 def format_active_positions_message(scanner_data, top_n=10):
     if not scanner_data:
         return "⚠️ No hay datos del escáner disponible."
@@ -183,9 +204,9 @@ def format_active_positions_message(scanner_data, top_n=10):
         for pos in ss11_active[:top_n]:
             pnl_icon = "🟢" if pos["pnl_pct"] >= 0 else "🔴"
             pnl_sign = "+" if pos["pnl_pct"] >= 0 else ""
-            entry_p = f"${pos['entry_price']:.2f}" if pos['entry_price'] > 1 else f"${pos['entry_price']:.4f}"
-            curr_p = f"${pos['price']:.2f}" if pos['price'] > 1 else f"${pos['price']:.4f}"
-            msg.append(f" • <b>{pos['ticker']}</b> (${curr_p}) | Entr: {entry_p} | PnL: {pnl_icon} <b>{pnl_sign}{pos['pnl_pct']:.2f}%</b> | SL: <code>{pos['dist_sl']:+.1f}%</code>")
+            entry_p = format_price_telegram(pos['entry_price'])
+            curr_p = format_price_telegram(pos['price'])
+            msg.append(f" • <b>{pos['ticker']}</b> ({curr_p}) | Entr: {entry_p} | PnL: {pnl_icon} <b>{pnl_sign}{pos['pnl_pct']:.2f}%</b> | SL: <code>{pos['dist_sl']:+.1f}%</code>")
         msg.append("")
 
     if ais11_active:
@@ -193,9 +214,9 @@ def format_active_positions_message(scanner_data, top_n=10):
         for pos in ais11_active[:top_n]:
             pnl_icon = "🟢" if pos["pnl_pct"] >= 0 else "🔴"
             pnl_sign = "+" if pos["pnl_pct"] >= 0 else ""
-            entry_p = f"${pos['entry_price']:.2f}" if pos['entry_price'] > 1 else f"${pos['entry_price']:.4f}"
-            curr_p = f"${pos['price']:.2f}" if pos['price'] > 1 else f"${pos['price']:.4f}"
-            msg.append(f" • <b>{pos['ticker']}</b> (${curr_p}) | Entr: {entry_p} | PnL: {pnl_icon} <b>{pnl_sign}{pos['pnl_pct']:.2f}%</b> | Score IA: <code>{pos['ai_score']:.1f}</code>")
+            entry_p = format_price_telegram(pos['entry_price'])
+            curr_p = format_price_telegram(pos['price'])
+            msg.append(f" • <b>{pos['ticker']}</b> ({curr_p}) | Entr: {entry_p} | PnL: {pnl_icon} <b>{pnl_sign}{pos['pnl_pct']:.2f}%</b> | Score IA: <code>{pos['ai_score']:.1f}</code>")
         msg.append("")
 
     return "\n".join(msg)
@@ -217,13 +238,13 @@ def format_scanner_summary_message(scanner_data, top_n=10):
     if ss11_buys:
         msg.append(f"<b>🟢 TOP {min(len(ss11_buys), top_n)} OPORTUNIDADES BUY (SS11 Macro):</b>")
         for b in ss11_buys[:top_n]:
-            msg.append(f" • <b>{b['ticker']}</b> (${b['price']}) ➔ Var 24h: <b>{b['change_24h']:+.2f}%</b>")
+            msg.append(f" • <b>{b['ticker']}</b> ({format_price_telegram(b['price'])}) ➔ Var 24h: <b>{b['change_24h']:+.2f}%</b>")
         msg.append("")
 
     if ais11_buys:
         msg.append(f"<b>🧠 TOP {min(len(ais11_buys), top_n)} OPORTUNIDADES BUY (AIS11 Multi-IA):</b>")
         for b in ais11_buys[:top_n]:
-            msg.append(f" • <b>{b['ticker']}</b> (${b['price']}) ➔ Score IA: <b>{b.get('ai_score', 50):.1f}/100</b>")
+            msg.append(f" • <b>{b['ticker']}</b> ({format_price_telegram(b['price'])}) ➔ Score IA: <b>{b.get('ai_score', 50):.1f}/100</b>")
         msg.append("")
 
     if not ss11_buys and not ais11_buys:
@@ -255,7 +276,7 @@ def format_single_strategy_buys_message(scanner_data, strategy_code="SS11", top_
         tk = item["ticker"]
         cat = item.get("category", "N/A")
         price = item["price"]
-        p_str = f"${price:.2f}" if price > 1 else f"${price:.4f}"
+        p_str = format_price_telegram(price)
         var_24h = item.get("change_24h", 0.0)
 
         if strategy_code.upper() == "SS11":
@@ -308,19 +329,18 @@ def check_and_notify_trades(scanner_data):
                 f"🚀 <b>NUEVA SEÑAL DE ENTRADA (BUY)</b>\n"
                 f"• <b>Activo:</b> {tk} ({item.get('category', 'N/A')})\n"
                 f"• <b>Estrategia:</b> SS11 Macro Base Pura\n"
-                f"• <b>Precio Actual:</b> ${item['price']}\n"
+                f"• <b>Precio Actual:</b> {format_price_telegram(item['price'])}\n"
                 f"• <b>Variación 24h:</b> {item['change_24h']:+.2f}%\n"
                 f"• <b>Dist. Recup SMA20:</b> {item.get('dist_sma20_pct', 0.0):+.1f}%"
             )
-
         # Detectar Cierre de Posición / Salida (SELL)
-        if prev_in_pos and not in_pos:
+        elif prev_in_pos and not in_pos:
             notifications.append(
                 f"🛑 <b>SALIDA / CIERRE DE POSICIÓN (SELL)</b>\n"
                 f"• <b>Activo:</b> {tk}\n"
                 f"• <b>Estrategia:</b> SS11 Macro Base Pura\n"
-                f"• <b>Precio de Salida:</b> ${item['price']}\n"
-                f"• <b>Motivo:</b> Cambio de señal a {sig} / Salida a Liquidez"
+                f"• <b>Precio de Salida:</b> {format_price_telegram(item['price'])}\n"
+                f"• <b>Motivo:</b> Salida de posición / Cambio a {sig}"
             )
 
     # Procesar AIS11
@@ -342,17 +362,16 @@ def check_and_notify_trades(scanner_data):
                 f"🧠 <b>NUEVA SEÑAL DE ENTRADA MULTI-IA (BUY)</b>\n"
                 f"• <b>Activo:</b> {tk} ({item.get('category', 'N/A')})\n"
                 f"• <b>Estrategia:</b> AIS11 Multi-IA GPU Master\n"
-                f"• <b>Precio Actual:</b> ${item['price']}\n"
+                f"• <b>Precio Actual:</b> {format_price_telegram(item['price'])}\n"
                 f"• <b>Score de IA:</b> <b>{item.get('ai_score', 50):.1f}/100</b>\n"
                 f"• <b>Variación 24h:</b> {item['change_24h']:+.2f}%"
             )
-
-        if prev_in_pos and not in_pos:
+        elif prev_in_pos and not in_pos:
             notifications.append(
                 f"🛑 <b>SALIDA DE POSICIÓN IA (SELL)</b>\n"
                 f"• <b>Activo:</b> {tk}\n"
                 f"• <b>Estrategia:</b> AIS11 Multi-IA GPU Master\n"
-                f"• <b>Precio de Salida:</b> ${item['price']}\n"
+                f"• <b>Precio de Salida:</b> {format_price_telegram(item['price'])}\n"
                 f"• <b>Score de IA Actual:</b> {item.get('ai_score', 50):.1f}/100"
             )
 

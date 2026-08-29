@@ -11,6 +11,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Dom Elements
     const elTickerFilter = document.getElementById("ticker-filter");
+
+    // Dynamic Price Formatter for micro-crypto and stocks
+    function formatPrice(price) {
+        if (price === null || price === undefined || isNaN(price)) return "$0.00";
+        const p = parseFloat(price);
+        if (p === 0) return "$0.00";
+        const absP = Math.abs(p);
+        if (absP >= 100) return "$" + p.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        if (absP >= 1) return "$" + p.toFixed(2);
+        if (absP >= 0.01) return "$" + p.toFixed(4);
+        if (absP >= 0.0001) return "$" + p.toFixed(6);
+        return "$" + p.toFixed(8).replace(/0+$/, '').replace(/\.$/, '');
+    }
     const elStrategyList = document.getElementById("strategy-list");
     const elStrategyCount = document.getElementById("strategy-count");
     const elNoSelectionState = document.getElementById("no-selection-state");
@@ -816,9 +829,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 <tr>
                     <td>#${idx + 1}</td>
                     <td>${trade.entry_date}</td>
-                    <td>$${trade.entry_price.toFixed(2)}</td>
+                    <td>${formatPrice(trade.entry_price)}</td>
                     <td>${trade.exit_date}</td>
-                    <td>$${trade.exit_price.toFixed(2)}</td>
+                    <td>${formatPrice(trade.exit_price)}</td>
                     <td>${trade.duration_days} días</td>
                     <td class="${retClass} font-bold">${retPrefix}${trade.pct_return.toFixed(2)}%</td>
                     <td><span style="font-size:11px;opacity:0.8;">${trade.reason}</span></td>
@@ -897,7 +910,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     const oldPrice = parseFloat(cell.getAttribute('data-last-price'));
                     
                     if (newPrice !== oldPrice) {
-                        cell.innerHTML = `$${newPrice.toFixed(2)}`;
+                        cell.innerHTML = formatPrice(newPrice);
                         cell.setAttribute('data-last-price', newPrice);
                         
                         // Flash red or green
@@ -1146,8 +1159,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 elActivePositionsCardsGrid.innerHTML = activePosItems.map(item => {
                     const met = item.metrics || {};
                     const floatPnl = met.floating_pnl_pct || 0.0;
-                    const entryP = met.entry_price ? met.entry_price.toFixed(met.entry_price > 1 ? 2 : 4) : (item.price ? item.price.toFixed(item.price > 1 ? 2 : 4) : "0.00");
-                    const currP = item.price ? item.price.toFixed(item.price > 1 ? 2 : 4) : "0.00";
+                    const entryP = met.entry_price ? formatPrice(met.entry_price) : formatPrice(item.price);
+                    const currP = formatPrice(item.price);
                     const stratTag = item.strat_label ? `<span class="badge" style="background:rgba(255,255,255,0.1); margin-right:4px;">${item.strat_label}</span>` : '';
                     const distSlVal = (item.dist_sl_pct !== undefined && item.dist_sl_pct !== null) ? item.dist_sl_pct : -15.0;
                     
@@ -1160,7 +1173,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             <div class="opp-price-row">
                                 <div>
                                     <span style="font-size: 11px; color: var(--text-muted); display: block;">Entrada ➔ Actual</span>
-                                    <span class="opp-price">$${entryP} ➔ $${currP}</span>
+                                    <span class="opp-price">${entryP} ➔ ${currP}</span>
                                 </div>
                                 <div class="text-right">
                                     <span style="font-size: 11px; color: var(--text-muted); display: block;">PnL Flotante</span>
@@ -1271,7 +1284,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                 <span class="opp-cat">${stratTag}${item.category}</span>
                             </div>
                             <div class="opp-price-row">
-                                <span class="opp-price">$${item.price ? item.price.toFixed(item.price > 1 ? 2 : 4) : '0.00'}</span>
+                                <span class="opp-price">${formatPrice(item.price)}</span>
                                 <span class="opp-change ${(item.change_24h || 0) >= 0 ? 'text-success' : 'text-danger'}">
                                     ${(item.change_24h || 0) >= 0 ? '+' : ''}${(item.change_24h || 0).toFixed(2)}%
                                 </span>
@@ -1318,7 +1331,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         <tr>
                             <td><strong style="font-family: var(--font-mono); font-size: 14px;">${item.ticker}</strong></td>
                             <td><span class="opp-cat">${item.category}</span></td>
-                            <td style="font-family: var(--font-mono); font-weight: 600;">$${item.price.toFixed(item.price > 1 ? 2 : 4)}</td>
+                            <td style="font-family: var(--font-mono); font-weight: 600;">${formatPrice(item.price)}</td>
                             <td style="font-family: var(--font-mono);" class="${item.change_24h >= 0 ? 'text-success' : 'text-danger'}">
                                 ${item.change_24h >= 0 ? '+' : ''}${item.change_24h.toFixed(2)}%
                             </td>
@@ -1443,11 +1456,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 <td>#${idx + 1}</td>
                 <td><strong style="font-family: var(--font-mono); font-size: 13px; color: var(--text-bright);">${t.ticker || 'LONG'}</strong></td>
                 <td>${t.entry_date}</td>
-                <td>$${t.entry_price.toFixed(2)}</td>
+                <td>${formatPrice(t.entry_price)}</td>
                 <td>${t.exit_date}</td>
-                <td>$${t.exit_price.toFixed(2)}</td>
+                <td>${formatPrice(t.exit_price)}</td>
                 <td class="${t.pct_return >= 0 ? 'text-success' : 'text-danger'}">${t.pct_return >= 0 ? '+' : ''}${t.pct_return.toFixed(2)}%</td>
-                <td class="${t.pnl >= 0 ? 'text-success' : 'text-danger'}">${t.pnl >= 0 ? '+' : ''}$${t.pnl.toFixed(2)}</td>
+                <td class="${t.pnl >= 0 ? 'text-success' : 'text-danger'}">${t.pnl >= 0 ? '+' : ''}$${t.pnl.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
                 <td>${t.duration_days}d</td>
                 <td><span class="opp-cat">${t.reason}</span></td>
             </tr>
@@ -1466,7 +1479,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const m = item.metrics;
         if (elTvNetProfit) {
-            elTvNetProfit.textContent = `$${m.net_profit_usd.toFixed(2)}`;
+            elTvNetProfit.textContent = `$${m.net_profit_usd.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
             elTvNetProfit.className = `val ${m.net_profit_usd >= 0 ? 'text-success' : 'text-danger'}`;
         }
         if (elTvProfitFactor) elTvProfitFactor.textContent = m.profit_factor.toFixed(2);

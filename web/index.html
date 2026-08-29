@@ -156,8 +156,24 @@
                         <h2><i class="fa-solid fa-briefcase text-warning"></i> Posiciones Activas en Cartera</h2>
                         <span class="count-pill" id="active-pos-count-badge">0 Posiciones Abiertas</span>
                     </div>
-                    <div class="cards-grid" id="active-positions-cards-grid">
-                        <div class="empty-cards-notice">No hay posiciones activas en este momento.</div>
+                    <div class="table-responsive">
+                        <table class="live-table positions-table" id="active-positions-table">
+                            <thead>
+                                <tr>
+                                    <th class="pos-sortable-th" data-sort="ticker" style="cursor:pointer; user-select:none;">Ticker <i class="fa-solid fa-sort"></i></th>
+                                    <th class="pos-sortable-th" data-sort="category" style="cursor:pointer; user-select:none;">Mercado / Estrategia <i class="fa-solid fa-sort"></i></th>
+                                    <th class="pos-sortable-th" data-sort="entry_price" style="cursor:pointer; user-select:none;">Precio Entrada <i class="fa-solid fa-sort"></i></th>
+                                    <th class="pos-sortable-th" data-sort="price" style="cursor:pointer; user-select:none;">Precio Actual <i class="fa-solid fa-sort"></i></th>
+                                    <th class="pos-sortable-th" data-sort="pnl" style="cursor:pointer; user-select:none;">PnL Flotante (%) <i class="fa-solid fa-sort"></i></th>
+                                    <th class="pos-sortable-th" data-sort="dist_sl" style="cursor:pointer; user-select:none;">Dist. Stop Loss (-15%) <i class="fa-solid fa-sort"></i></th>
+                                    <th class="pos-sortable-th" data-sort="signal" style="cursor:pointer; user-select:none;">Estado <i class="fa-solid fa-sort"></i></th>
+                                    <th style="text-align: center;">Historial / Trades</th>
+                                </tr>
+                            </thead>
+                            <tbody id="active-positions-tbody">
+                                <tr><td colspan="8" class="text-center p-4 text-muted">No hay posiciones activas en este momento.</td></tr>
+                            </tbody>
+                        </table>
                     </div>
                 </section>
 
@@ -231,14 +247,14 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Tipo</th>
-                                    <th id="th-tv-entry-date" class="sortable-th" style="cursor: pointer; user-select: none;" title="Haz clic para ordenar por fecha de entrada">Fecha Entrada <i class="fa-solid fa-sort" id="icon-tv-entry-date"></i></th>
+                                    <th class="tv-sortable-th" data-sort="ticker" style="cursor: pointer; user-select: none;" title="Ordenar por Ticker">Ticker <i class="fa-solid fa-sort"></i></th>
+                                    <th class="tv-sortable-th" data-sort="entry_date" style="cursor: pointer; user-select: none;" title="Ordenar por Fecha de Entrada">Fecha Entrada <i class="fa-solid fa-sort"></i></th>
                                     <th>Precio Entrada</th>
-                                    <th id="th-tv-exit-date" class="sortable-th" style="cursor: pointer; user-select: none;" title="Haz clic para ordenar por fecha de salida">Fecha Salida <i class="fa-solid fa-sort" id="icon-tv-exit-date"></i></th>
+                                    <th class="tv-sortable-th" data-sort="exit_date" style="cursor: pointer; user-select: none;" title="Ordenar por Fecha de Salida">Fecha Salida <i class="fa-solid fa-sort"></i></th>
                                     <th>Precio Salida</th>
-                                    <th>Resultado (%)</th>
-                                    <th>Ganancia/Pérdida ($)</th>
-                                    <th>Duración (Días)</th>
+                                    <th class="tv-sortable-th" data-sort="pct_return" style="cursor: pointer; user-select: none;" title="Ordenar por Resultado %">Resultado (%) <i class="fa-solid fa-sort"></i></th>
+                                    <th class="tv-sortable-th" data-sort="pnl" style="cursor: pointer; user-select: none;" title="Ordenar por PnL $">Ganancia/Pérdida ($) <i class="fa-solid fa-sort"></i></th>
+                                    <th class="tv-sortable-th" data-sort="duration_days" style="cursor: pointer; user-select: none;" title="Ordenar por Duración">Duración (Días) <i class="fa-solid fa-sort"></i></th>
                                     <th>Razón de Salida</th>
                                 </tr>
                             </thead>

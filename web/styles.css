@@ -1199,21 +1199,48 @@ tr:hover td {
     box-shadow: 0 0 10px rgba(92, 96, 245, 0.4);
 }
 
-/* Active Positions Section & Cards */
+/* Active Positions Section & List Table */
 .active-positions-section {
     display: flex;
     flex-direction: column;
     gap: 16px;
 }
 
-.position-active-card {
-    border-color: rgba(245, 158, 11, 0.5) !important;
-    background: linear-gradient(135deg, rgba(30, 27, 46, 0.9), rgba(20, 22, 38, 0.9)) !important;
+.positions-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    background: rgba(18, 20, 32, 0.6);
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(245, 158, 11, 0.25);
 }
 
-.position-active-card:hover {
-    border-color: rgba(245, 158, 11, 0.8) !important;
-    transform: translateY(-2px);
+.positions-table th {
+    background: rgba(30, 27, 46, 0.9);
+    color: #f59e0b;
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(245, 158, 11, 0.3);
+    transition: background 0.2s ease;
+}
+
+.positions-table th:hover {
+    background: rgba(245, 158, 11, 0.15);
+}
+
+.positions-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.positions-table tbody tr {
+    transition: background 0.2s ease;
+}
+
+.positions-table tbody tr:hover {
+    background: rgba(245, 158, 11, 0.08);
 }
 
 #active-pos-count-badge {
@@ -1365,9 +1392,9 @@ tr:hover td {
 }
 
 .badge-signal.hold {
-    background: rgba(59, 130, 246, 0.2);
-    border: 1px solid #3b82f6;
-    color: #3b82f6;
+    background: rgba(245, 158, 11, 0.2);
+    border: 1px solid #f59e0b;
+    color: #f59e0b;
 }
 
 .badge-signal.sell {
@@ -1468,6 +1495,12 @@ tr:hover td {
     text-align: left;
     font-weight: 600;
     border-bottom: 1px solid var(--border-color);
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.tv-trades-table th.tv-sortable-th:hover {
+    background: rgba(245, 158, 11, 0.15);
+    color: #f59e0b;
 }
 
 .tv-trades-table td {

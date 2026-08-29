@@ -944,6 +944,13 @@ document.addEventListener("DOMContentLoaded", () => {
     let selectedScannerStrategy = "COMBO"; // SS11, AIS11, COMBO
     let selectedScannerUniverse = "ALL";  // ALL, US, CRYPTO, BUY_ONLY
 
+    // Table sorting states
+    let posSortKey = "pnl";
+    let posSortDir = "DESC";
+
+    let scannerSortKey = "ticker";
+    let scannerSortDir = "ASC";
+
     const elNavBtnScanner = document.getElementById("nav-btn-scanner");
     const elNavBtnBacktester = document.getElementById("nav-btn-backtester");
     const elScannerViewPanel = document.getElementById("scanner-view-panel");
@@ -960,7 +967,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const elOpportunitiesCardsGrid = document.getElementById("opportunities-cards-grid");
     const elBuyCountBadge = document.getElementById("buy-count-badge");
-    const elActivePositionsCardsGrid = document.getElementById("active-positions-cards-grid");
+    const elActivePositionsTbody = document.getElementById("active-positions-tbody");
     const elActivePosCountBadge = document.getElementById("active-pos-count-badge");
     const elLiveScannerTbody = document.getElementById("live-scanner-tbody");
     const elScannerSearchInput = document.getElementById("scanner-search-input");
@@ -1048,6 +1055,33 @@ document.addEventListener("DOMContentLoaded", () => {
             renderLiveScannerData();
         });
     }
+
+    // Sort Headers Event Listeners
+    document.querySelectorAll(".pos-sortable-th").forEach(th => {
+        th.addEventListener("click", () => {
+            const key = th.getAttribute("data-sort");
+            if (posSortKey === key) {
+                posSortDir = posSortDir === "ASC" ? "DESC" : "ASC";
+            } else {
+                posSortKey = key;
+                posSortDir = (key === "ticker" || key === "category" || key === "signal") ? "ASC" : "DESC";
+            }
+            renderLiveScannerData();
+        });
+    });
+
+    document.querySelectorAll(".scanner-sortable-th").forEach(th => {
+        th.addEventListener("click", () => {
+            const key = th.getAttribute("data-sort");
+            if (scannerSortKey === key) {
+                scannerSortDir = scannerSortDir === "ASC" ? "DESC" : "ASC";
+            } else {
+                scannerSortKey = key;
+                scannerSortDir = (key === "ticker" || key === "category" || key === "signal") ? "ASC" : "DESC";
+            }
+            renderLiveScannerData();
+        });
+    });
 
     if (elBtnCloseTvTrades) {
         elBtnCloseTvTrades.addEventListener("click", () => {
@@ -1137,7 +1171,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const searchTerm = (elScannerSearchInput ? elScannerSearchInput.value : "").trim().toUpperCase();
 
-        // 2. Render Active Positions Cards (se filtran por mercado/búsqueda, independientemente de si la pestaña Oportunidades BUY está marcada)
+        // 2. Render Active Positions Table (sortable list view)
         const activePosItems = list.filter(item => {
             if (searchTerm && !item.ticker.toUpperCase().includes(searchTerm)) return false;
             if (selectedScannerUniverse === "US" && item.category !== "US Stock") return false;
@@ -1147,58 +1181,115 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (elActivePosCountBadge) elActivePosCountBadge.textContent = `${activePosItems.length} Posiciones Abiertas`;
 
-        if (elActivePositionsCardsGrid) {
+        // Sort Active Positions
+        activePosItems.sort((a, b) => {
+            let valA, valB;
+            if (posSortKey === "ticker") {
+                valA = a.ticker || ""; valB = b.ticker || "";
+                return posSortDir === "ASC" ? valA.localeCompare(valB) : valB.localeCompare(valA);
+            } else if (posSortKey === "category") {
+                valA = (a.strat_label || "") + (a.category || "");
+                valB = (b.strat_label || "") + (b.category || "");
+                return posSortDir === "ASC" ? valA.localeCompare(valB) : valB.localeCompare(valA);
+            } else if (posSortKey === "entry_price") {
+                valA = a.metrics && a.metrics.entry_price ? a.metrics.entry_price : a.price;
+                valB = b.metrics && b.metrics.entry_price ? b.metrics.entry_price : b.price;
+            } else if (posSortKey === "price") {
+                valA = a.price || 0; valB = b.price || 0;
+            } else if (posSortKey === "pnl") {
+                valA = (a.metrics && a.metrics.floating_pnl_pct !== undefined) ? a.metrics.floating_pnl_pct : -999;
+                valB = (b.metrics && b.metrics.floating_pnl_pct !== undefined) ? b.metrics.floating_pnl_pct : -999;
+            } else if (posSortKey === "dist_sl") {
+                valA = (a.dist_sl_pct !== undefined && a.dist_sl_pct !== null) ? a.dist_sl_pct : -15.0;
+                valB = (b.dist_sl_pct !== undefined && b.dist_sl_pct !== null) ? b.dist_sl_pct : -15.0;
+            } else if (posSortKey === "signal") {
+                valA = a.signal || ""; valB = b.signal || "";
+                return posSortDir === "ASC" ? valA.localeCompare(valB) : valB.localeCompare(valA);
+            } else {
+                valA = 0; valB = 0;
+            }
+            return posSortDir === "ASC" ? (valA - valB) : (valB - valA);
+        });
+
+        // Update Active Positions Header Icons
+        document.querySelectorAll(".pos-sortable-th").forEach(th => {
+            const key = th.getAttribute("data-sort");
+            const icon = th.querySelector("i");
+            if (icon) {
+                if (posSortKey === key) {
+                    icon.className = posSortDir === "ASC" ? "fa-solid fa-sort-up text-warning" : "fa-solid fa-sort-down text-warning";
+                } else {
+                    icon.className = "fa-solid fa-sort";
+                }
+            }
+        });
+
+        if (elActivePositionsTbody) {
             if (activePosItems.length === 0) {
-                elActivePositionsCardsGrid.innerHTML = `
-                    <div class="empty-cards-notice">
-                        <i class="fa-solid fa-folder-open" style="font-size: 24px; margin-bottom: 8px; color: var(--text-muted); display: block;"></i>
-                        No hay posiciones actualmente abiertas para los filtros seleccionados (${selectedScannerStrategy}).
-                    </div>
+                elActivePositionsTbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="text-center p-4 text-muted">
+                            <i class="fa-solid fa-folder-open" style="font-size: 18px; margin-right: 8px; color: var(--text-muted);"></i>
+                            No hay posiciones actualmente abiertas para los filtros seleccionados (${selectedScannerStrategy}).
+                        </td>
+                    </tr>
                 `;
             } else {
-                elActivePositionsCardsGrid.innerHTML = activePosItems.map(item => {
+                elActivePositionsTbody.innerHTML = activePosItems.map(item => {
                     const met = item.metrics || {};
                     const floatPnl = met.floating_pnl_pct || 0.0;
                     const entryP = met.entry_price ? formatPrice(met.entry_price) : formatPrice(item.price);
                     const currP = formatPrice(item.price);
-                    const stratTag = item.strat_label ? `<span class="badge" style="background:rgba(255,255,255,0.1); margin-right:4px;">${item.strat_label}</span>` : '';
+                    const stratTag = item.strat_label ? `<span class="badge" style="background:rgba(255,255,255,0.1); margin-right:6px;">${item.strat_label}</span>` : '';
                     const distSlVal = (item.dist_sl_pct !== undefined && item.dist_sl_pct !== null) ? item.dist_sl_pct : -15.0;
-                    
+
+                    // Color code badge for active position
+                    let sigBadgeClass = 'hold';
+                    let sigBadgeIcon = 'fa-lock';
+                    let sigBadgeText = item.signal || 'HOLD';
+
+                    if (item.signal === 'BUY') {
+                        sigBadgeClass = 'buy';
+                        sigBadgeIcon = 'fa-circle-dot';
+                    } else if (item.signal === 'SELL') {
+                        sigBadgeClass = 'sell';
+                        sigBadgeIcon = 'fa-triangle-exclamation';
+                    } else {
+                        // Position in hold: Green if in profit, Red if in loss!
+                        if (floatPnl >= 0) {
+                            sigBadgeClass = 'buy';
+                            sigBadgeIcon = 'fa-circle-check';
+                        } else {
+                            sigBadgeClass = 'sell';
+                            sigBadgeIcon = 'fa-shield-halved';
+                        }
+                    }
+
                     return `
-                        <div class="opp-card position-active-card">
-                            <div class="opp-card-header">
-                                <span class="opp-ticker"><i class="fa-solid fa-briefcase text-warning"></i> ${item.ticker}</span>
-                                <span class="opp-cat">${stratTag}${item.category}</span>
-                            </div>
-                            <div class="opp-price-row">
-                                <div>
-                                    <span style="font-size: 11px; color: var(--text-muted); display: block;">Entrada ➔ Actual</span>
-                                    <span class="opp-price">${entryP} ➔ ${currP}</span>
-                                </div>
-                                <div class="text-right">
-                                    <span style="font-size: 11px; color: var(--text-muted); display: block;">PnL Flotante</span>
-                                    <span class="opp-change ${floatPnl >= 0 ? 'text-success' : 'text-danger'}" style="font-weight: 700;">
-                                        ${floatPnl >= 0 ? '+' : ''}${floatPnl.toFixed(2)}%
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="opp-details-grid">
-                                <div>
-                                    <span>Dist. Stop Loss (-15%)</span>
-                                    <strong class="${distSlVal >= 0 ? 'text-success' : 'text-danger'}">${distSlVal > 0 ? '+' : ''}${distSlVal.toFixed(1)}%</strong>
-                                </div>
-                                <div>
-                                    <span>Estado en Vivo</span>
-                                    <strong class="text-warning">${item.signal}</strong>
-                                </div>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px;">
-                                <span class="badge-signal hold"><i class="fa-solid fa-lock"></i> POSICIÓN ACTIVA</span>
-                                <button class="btn btn-secondary btn-view-trades" data-ticker="${item.ticker}" style="font-size: 11px; padding: 4px 10px;">
-                                    <i class="fa-solid fa-list-check"></i> Ver Trades
+                        <tr>
+                            <td>
+                                <strong style="font-family: var(--font-mono); font-size: 14px; color: #ffffff;">
+                                    <i class="fa-solid fa-briefcase text-warning" style="font-size:11px; margin-right:6px;"></i>${item.ticker}
+                                </strong>
+                            </td>
+                            <td><span class="opp-cat">${stratTag}${item.category}</span></td>
+                            <td style="font-family: var(--font-mono); font-weight: 600;">${entryP}</td>
+                            <td style="font-family: var(--font-mono); font-weight: 600;">${currP}</td>
+                            <td style="font-family: var(--font-mono); font-weight: 700;" class="${floatPnl >= 0 ? 'text-success' : 'text-danger'}">
+                                ${floatPnl >= 0 ? '+' : ''}${floatPnl.toFixed(2)}%
+                            </td>
+                            <td style="font-family: var(--font-mono);" class="${distSlVal >= 0 ? 'text-success' : 'text-danger'}">
+                                ${distSlVal > 0 ? '+' : ''}${distSlVal.toFixed(1)}%
+                            </td>
+                            <td>
+                                <span class="badge-signal ${sigBadgeClass}"><i class="fa-solid ${sigBadgeIcon}"></i> ${sigBadgeText}</span>
+                            </td>
+                            <td style="text-align: center;">
+                                <button class="btn btn-secondary btn-view-trades" data-ticker="${item.ticker}" style="font-size: 11px; padding: 4px 12px;">
+                                    <i class="fa-solid fa-list-check text-warning"></i> Ver Trades
                                 </button>
-                            </div>
-                        </div>
+                            </td>
+                        </tr>
                     `;
                 }).join('');
             }
@@ -1213,11 +1304,54 @@ document.addEventListener("DOMContentLoaded", () => {
             if (selectedScannerUniverse === "CRYPTO" && item.category !== "Crypto") return false;
             if (selectedScannerUniverse === "BUY_ONLY") {
                 if (buyCount > 0) return item.signal === "BUY";
-                // Si no hay BUY estrictos hoy, mostrar candidatos no-posicionados ordenados por score
                 return !item.metrics || !item.metrics.is_currently_in_position;
             }
             if (selectedScannerUniverse === "POS_ONLY" && (!item.metrics || !item.metrics.is_currently_in_position)) return false;
             return true;
+        });
+
+        // Sort Live Scanner Table
+        filtered.sort((a, b) => {
+            let valA, valB;
+            if (scannerSortKey === "ticker") {
+                valA = a.ticker || ""; valB = b.ticker || "";
+                return scannerSortDir === "ASC" ? valA.localeCompare(valB) : valB.localeCompare(valA);
+            } else if (scannerSortKey === "category") {
+                valA = a.category || ""; valB = b.category || "";
+                return scannerSortDir === "ASC" ? valA.localeCompare(valB) : valB.localeCompare(valA);
+            } else if (scannerSortKey === "price") {
+                valA = a.price || 0; valB = b.price || 0;
+            } else if (scannerSortKey === "change_24h") {
+                valA = a.change_24h || 0; valB = b.change_24h || 0;
+            } else if (scannerSortKey === "signal") {
+                valA = a.signal || ""; valB = b.signal || "";
+                return scannerSortDir === "ASC" ? valA.localeCompare(valB) : valB.localeCompare(valA);
+            } else if (scannerSortKey === "pnl") {
+                valA = (a.metrics && a.metrics.floating_pnl_pct !== undefined) ? a.metrics.floating_pnl_pct : -999;
+                valB = (b.metrics && b.metrics.floating_pnl_pct !== undefined) ? b.metrics.floating_pnl_pct : -999;
+            } else if (scannerSortKey === "dist_sl") {
+                valA = (a.dist_sl_pct !== undefined && a.dist_sl_pct !== null) ? a.dist_sl_pct : -15.0;
+                valB = (b.dist_sl_pct !== undefined && b.dist_sl_pct !== null) ? b.dist_sl_pct : -15.0;
+            } else if (scannerSortKey === "dist_sma20") {
+                valA = (a.dist_sma20_pct !== undefined && a.dist_sma20_pct !== null) ? a.dist_sma20_pct : 0.0;
+                valB = (b.dist_sma20_pct !== undefined && b.dist_sma20_pct !== null) ? b.dist_sma20_pct : 0.0;
+            } else {
+                valA = 0; valB = 0;
+            }
+            return scannerSortDir === "ASC" ? (valA - valB) : (valB - valA);
+        });
+
+        // Update Scanner Table Header Icons
+        document.querySelectorAll(".scanner-sortable-th").forEach(th => {
+            const key = th.getAttribute("data-sort");
+            const icon = th.querySelector("i");
+            if (icon) {
+                if (scannerSortKey === key) {
+                    icon.className = scannerSortDir === "ASC" ? "fa-solid fa-sort-up text-indigo" : "fa-solid fa-sort-down text-indigo";
+                } else {
+                    icon.className = "fa-solid fa-sort";
+                }
+            }
         });
 
         // 3. Render Opportunities Cards (BUY signals or Top Candidates if BUY count is 0)
@@ -1233,7 +1367,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (buyItems.length === 0) {
             isShowingCandidates = true;
-            // Obtener top candidatos ordenados por Score de IA o Momentum
             const candidatesPool = list.filter(item => {
                 if (searchTerm && !item.ticker.toUpperCase().includes(searchTerm)) return false;
                 if (selectedScannerUniverse === "US" && item.category !== "US Stock") return false;
@@ -1292,7 +1425,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             <div class="opp-details-grid">
                                 <div>
                                     <span>${scoreText}</span>
-                                    <strong class="text-indigo">${item.signal}</strong>
+                                    <strong class="${item.signal === 'BUY' ? 'text-success' : (item.signal === 'SELL' ? 'text-danger' : 'text-warning')}">${item.signal}</strong>
                                 </div>
                                 <div>
                                     <span>Dist. Stop Loss (-15%)</span>
@@ -1311,7 +1444,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-        // 3. Render Live Signals Table
+        // 4. Render Live Signals Table
         if (elLiveScannerTbody) {
             if (filtered.length === 0) {
                 let msg = "No se encontraron activos para los filtros seleccionados.";
@@ -1372,32 +1505,19 @@ document.addEventListener("DOMContentLoaded", () => {
     let tvTradesSortDir = "DESC"; // DESC = más reciente primero, ASC = más antiguo primero
     let activeTvTradesList = [];
 
-    const elThTvEntryDate = document.getElementById("th-tv-entry-date");
-    const elThTvExitDate = document.getElementById("th-tv-exit-date");
-
-    if (elThTvEntryDate) {
-        elThTvEntryDate.addEventListener("click", () => {
-            if (tvTradesSortKey === "entry_date") {
-                tvTradesSortDir = (tvTradesSortDir === "DESC") ? "ASC" : "DESC";
+    // Header click listeners for all sortable columns in TV Trades table
+    document.querySelectorAll(".tv-sortable-th").forEach(th => {
+        th.addEventListener("click", () => {
+            const key = th.getAttribute("data-sort");
+            if (tvTradesSortKey === key) {
+                tvTradesSortDir = tvTradesSortDir === "ASC" ? "DESC" : "ASC";
             } else {
-                tvTradesSortKey = "entry_date";
-                tvTradesSortDir = "DESC";
+                tvTradesSortKey = key;
+                tvTradesSortDir = (key === "ticker") ? "ASC" : "DESC";
             }
             renderTvTradesTable();
         });
-    }
-
-    if (elThTvExitDate) {
-        elThTvExitDate.addEventListener("click", () => {
-            if (tvTradesSortKey === "exit_date") {
-                tvTradesSortDir = (tvTradesSortDir === "DESC") ? "ASC" : "DESC";
-            } else {
-                tvTradesSortKey = "exit_date";
-                tvTradesSortDir = "DESC";
-            }
-            renderTvTradesTable();
-        });
-    }
+    });
 
     // Botón para ver TODOS los trades globales de la cartera por fecha
     const elBtnShowAllTrades = document.getElementById("btn-show-all-trades");
@@ -1440,16 +1560,44 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const sorted = [...activeTvTradesList].sort((a, b) => {
-            let valA = new Date(a[tvTradesSortKey] === "EN CURSO" ? "2099-12-31" : (a[tvTradesSortKey] || "1970-01-01")).getTime();
-            let valB = new Date(b[tvTradesSortKey] === "EN CURSO" ? "2099-12-31" : (b[tvTradesSortKey] || "1970-01-01")).getTime();
-            return tvTradesSortDir === "DESC" ? (valB - valA) : (valA - valB);
+            let valA, valB;
+            if (tvTradesSortKey === "entry_date" || tvTradesSortKey === "exit_date") {
+                let strA = a[tvTradesSortKey] === "EN CURSO" ? "2099-12-31" : (a[tvTradesSortKey] || "1970-01-01");
+                let strB = b[tvTradesSortKey] === "EN CURSO" ? "2099-12-31" : (b[tvTradesSortKey] || "1970-01-01");
+                valA = new Date(strA).getTime();
+                valB = new Date(strB).getTime();
+                if (isNaN(valA)) valA = 0;
+                if (isNaN(valB)) valB = 0;
+            } else if (tvTradesSortKey === "ticker") {
+                valA = a.ticker || ""; valB = b.ticker || "";
+                return tvTradesSortDir === "ASC" ? valA.localeCompare(valB) : valB.localeCompare(valA);
+            } else if (tvTradesSortKey === "pct_return") {
+                valA = a.pct_return !== undefined ? a.pct_return : -999;
+                valB = b.pct_return !== undefined ? b.pct_return : -999;
+            } else if (tvTradesSortKey === "pnl") {
+                valA = a.pnl !== undefined ? a.pnl : -999;
+                valB = b.pnl !== undefined ? b.pnl : -999;
+            } else if (tvTradesSortKey === "duration_days") {
+                valA = a.duration_days !== undefined ? a.duration_days : 0;
+                valB = b.duration_days !== undefined ? b.duration_days : 0;
+            } else {
+                valA = 0; valB = 0;
+            }
+            return tvTradesSortDir === "ASC" ? (valA - valB) : (valB - valA);
         });
 
-        // Actualizar iconos de cabecera
-        const iconEntry = document.getElementById("icon-tv-entry-date");
-        const iconExit = document.getElementById("icon-tv-exit-date");
-        if (iconEntry) iconEntry.className = tvTradesSortKey === "entry_date" ? (tvTradesSortDir === "DESC" ? "fa-solid fa-sort-down text-warning" : "fa-solid fa-sort-up text-warning") : "fa-solid fa-sort";
-        if (iconExit) iconExit.className = tvTradesSortKey === "exit_date" ? (tvTradesSortDir === "DESC" ? "fa-solid fa-sort-down text-warning" : "fa-solid fa-sort-up text-warning") : "fa-solid fa-sort";
+        // Update header sort icons
+        document.querySelectorAll(".tv-sortable-th").forEach(th => {
+            const key = th.getAttribute("data-sort");
+            const icon = th.querySelector("i");
+            if (icon) {
+                if (tvTradesSortKey === key) {
+                    icon.className = tvTradesSortDir === "ASC" ? "fa-solid fa-sort-up text-warning" : "fa-solid fa-sort-down text-warning";
+                } else {
+                    icon.className = "fa-solid fa-sort";
+                }
+            }
+        });
 
         elTvTradesTbody.innerHTML = sorted.map((t, idx) => `
             <tr>

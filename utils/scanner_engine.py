@@ -318,6 +318,8 @@ def simulate_strategy_trades(df, signals_long, signals_exit, stop_loss_pct=-15.0
 
         if signals_exit[-1] or tomorrow_hit_sl:
             live_signal = "SELL"
+        elif entry_idx == (n - 1):
+            live_signal = "BUY"
         else:
             live_signal = "HOLD"
 

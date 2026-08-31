@@ -290,6 +290,33 @@ def format_single_strategy_buys_message(scanner_data, strategy_code="SS11", top_
 
     return "\n".join(msg)
 
+def format_candidates_message(scanner_data, top_n=6):
+    if not scanner_data:
+        return "⚠️ No hay datos del escáner disponible."
+
+    ais11_waits = [s for s in scanner_data.get("ais11_signals", []) if s.get("signal") == "WAIT"]
+    ais11_waits.sort(key=lambda x: -x.get("ai_score", 0.0))
+
+    msg = ["⏳ <b>TOP PRÓXIMOS CANDIDATOS (EN ESPERA - WAIT)</b>"]
+    msg.append("<i>Activos con mayor Score de IA listos para próxima entrada:</i>\n")
+
+    if not ais11_waits:
+        msg.append("ℹ️ <i>Sin candidatos en espera disponibles.</i>")
+        return "\n".join(msg)
+
+    for idx, item in enumerate(ais11_waits[:top_n], 1):
+        tk = item["ticker"]
+        cat = item.get("category", "N/A")
+        price = item["price"]
+        p_str = format_price_telegram(price)
+        score = item.get("ai_score", 50.0)
+        var_24h = item.get("change_24h", 0.0)
+
+        msg.append(f" • <b>Candidato #{idx}: {tk}</b> ({cat}) | Precio: {p_str}")
+        msg.append(f"   └ Score IA: <b>{score:.1f}/100</b> | Var 24h: <code>{var_24h:+.2f}%</code>\n")
+
+    return "\n".join(msg)
+
 # -------------------------------------------------------------------------
 # Verificación y Alertas de Notificaciones de Trades
 # -------------------------------------------------------------------------
@@ -324,14 +351,20 @@ def check_and_notify_trades(scanner_data):
         prev_in_pos = prev.get("in_pos", False)
 
         # Detectar Nueva Entrada (BUY)
-        if sig == "BUY" and prev_sig != "BUY":
+        trades = item.get("recent_trades", [])
+        last_trade = trades[-1] if trades else None
+        is_same_day_entry = (last_trade and last_trade.get("is_open") and last_trade.get("duration_days", 99) == 0)
+
+        if (sig == "BUY" and prev_sig != "BUY") or (is_same_day_entry and prev_sig != "BUY"):
+            current_state[key]["signal"] = "BUY"
+            entry_p_str = format_price_telegram(met.get("entry_price", item["price"]))
             notifications.append(
-                f"🚀 <b>NUEVA SEÑAL DE ENTRADA (BUY)</b>\n"
+                f"🚀 <b>COMPRA EJECUTADA (TRADE ABIERTO)</b>\n"
                 f"• <b>Activo:</b> {tk} ({item.get('category', 'N/A')})\n"
                 f"• <b>Estrategia:</b> SS11 Macro Base Pura\n"
+                f"• <b>Precio de Entrada:</b> {entry_p_str}\n"
                 f"• <b>Precio Actual:</b> {format_price_telegram(item['price'])}\n"
-                f"• <b>Variación 24h:</b> {item['change_24h']:+.2f}%\n"
-                f"• <b>Dist. Recup SMA20:</b> {item.get('dist_sma20_pct', 0.0):+.1f}%"
+                f"• <b>Estado:</b> Posición Activa En Curso"
             )
         # Detectar Cierre de Posición / Salida (SELL)
         elif prev_in_pos and not in_pos:
@@ -357,14 +390,20 @@ def check_and_notify_trades(scanner_data):
         prev_sig = prev.get("signal")
         prev_in_pos = prev.get("in_pos", False)
 
-        if sig == "BUY" and prev_sig != "BUY":
+        trades = item.get("recent_trades", [])
+        last_trade = trades[-1] if trades else None
+        is_same_day_entry = (last_trade and last_trade.get("is_open") and last_trade.get("duration_days", 99) == 0)
+
+        if (sig == "BUY" and prev_sig != "BUY") or (is_same_day_entry and prev_sig != "BUY"):
+            current_state[key]["signal"] = "BUY"
+            entry_p_str = format_price_telegram(met.get("entry_price", item["price"]))
             notifications.append(
-                f"🧠 <b>NUEVA SEÑAL DE ENTRADA MULTI-IA (BUY)</b>\n"
+                f"🧠 <b>COMPRA MULTI-IA EJECUTADA (TRADE ABIERTO)</b>\n"
                 f"• <b>Activo:</b> {tk} ({item.get('category', 'N/A')})\n"
                 f"• <b>Estrategia:</b> AIS11 Multi-IA GPU Master\n"
+                f"• <b>Precio de Entrada:</b> {entry_p_str}\n"
                 f"• <b>Precio Actual:</b> {format_price_telegram(item['price'])}\n"
-                f"• <b>Score de IA:</b> <b>{item.get('ai_score', 50):.1f}/100</b>\n"
-                f"• <b>Variación 24h:</b> {item['change_24h']:+.2f}%"
+                f"• <b>Score de IA:</b> <b>{item.get('ai_score', 50):.1f}/100</b>"
             )
         elif prev_in_pos and not in_pos:
             notifications.append(
@@ -438,6 +477,7 @@ def start_telegram_bot_listener():
                                 "✅ Tu Chat ID ha sido registrado exitosamente para recibir <b>alertas automáticas de trades</b>.\n\n"
                                 "<b>Comandos disponibles:</b>\n"
                                 "• /posiciones - Ver posiciones activas agrupadas por estrategia\n"
+                                "• /candidatos - Ver Top Próximos Candidatos en Espera (WAIT)\n"
                                 "• /top10 - Ver Top 10 mejores oportunidades BUY de ambas estrategias\n"
                                 "• /ss11 - Ver oportunidades BUY de la estrategia SS11 Macro únicamente\n"
                                 "• /ais11 - Ver oportunidades BUY de la estrategia AIS11 Multi-IA únicamente\n"
@@ -463,6 +503,23 @@ def start_telegram_bot_listener():
                                 send_telegram_message(reply, chat_id=chat_id)
                             except Exception as e:
                                 send_telegram_message(f"❌ Error al consultar posiciones: {e}", chat_id=chat_id)
+
+                        elif cmd in ["/candidatos", "/proximos", "/watchlist", "/candidato"]:
+                            send_telegram_message("⏳ Consultando Top Próximos Candidatos en Espera...", chat_id=chat_id)
+                            try:
+                                cache_file = os.path.join(BASE_DIR, "data", "live_scanner_cache.json")
+                                scanner_data = None
+                                if os.path.exists(cache_file):
+                                    with open(cache_file, "r", encoding="utf-8") as f:
+                                        scanner_data = json.load(f)
+                                else:
+                                    from utils.scanner_engine import run_live_scanner
+                                    scanner_data = run_live_scanner()
+
+                                reply = format_candidates_message(scanner_data, top_n=6)
+                                send_telegram_message(reply, chat_id=chat_id)
+                            except Exception as e:
+                                send_telegram_message(f"❌ Error al consultar candidatos: {e}", chat_id=chat_id)
 
                         elif cmd in ["/top10", "/top", "/oportunidades"]:
                             send_telegram_message("🔍 Consultando Top 10 oportunidades por estrategia...", chat_id=chat_id)

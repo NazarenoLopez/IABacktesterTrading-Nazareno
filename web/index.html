@@ -151,57 +151,78 @@
                 </div>
 
                 <!-- LIVE ACTIVE POSITIONS SECTION -->
-                <section class="active-positions-section">
-                    <div class="section-title-bar">
-                        <h2><i class="fa-solid fa-briefcase text-warning"></i> Posiciones Activas en Cartera</h2>
-                        <span class="count-pill" id="active-pos-count-badge">0 Posiciones Abiertas</span>
+                <section class="active-positions-section" id="sec-active-positions">
+                    <div class="section-title-bar collapsible-header" data-collapse-target="active-positions-body">
+                        <h2>
+                            <i class="fa-solid fa-chevron-down collapse-icon"></i>
+                            <i class="fa-solid fa-briefcase text-warning"></i> Posiciones Activas en Cartera
+                        </h2>
+                        <div class="title-right-group">
+                            <span class="count-pill" id="active-pos-count-badge">0 Posiciones Abiertas</span>
+                            <span class="collapse-hint"><i class="fa-solid fa-compress"></i> Colapsar</span>
+                        </div>
                     </div>
-                    <div class="table-responsive">
-                        <table class="live-table positions-table" id="active-positions-table">
-                            <thead>
-                                <tr>
-                                    <th class="pos-sortable-th" data-sort="ticker" style="cursor:pointer; user-select:none;">Ticker <i class="fa-solid fa-sort"></i></th>
-                                    <th class="pos-sortable-th" data-sort="category" style="cursor:pointer; user-select:none;">Mercado / Estrategia <i class="fa-solid fa-sort"></i></th>
-                                    <th class="pos-sortable-th" data-sort="entry_price" style="cursor:pointer; user-select:none;">Precio Entrada <i class="fa-solid fa-sort"></i></th>
-                                    <th class="pos-sortable-th" data-sort="price" style="cursor:pointer; user-select:none;">Precio Actual <i class="fa-solid fa-sort"></i></th>
-                                    <th class="pos-sortable-th" data-sort="pnl" style="cursor:pointer; user-select:none;">PnL Flotante (%) <i class="fa-solid fa-sort"></i></th>
-                                    <th class="pos-sortable-th" data-sort="dist_sl" style="cursor:pointer; user-select:none;">Dist. Stop Loss (-15%) <i class="fa-solid fa-sort"></i></th>
-                                    <th class="pos-sortable-th" data-sort="signal" style="cursor:pointer; user-select:none;">Estado <i class="fa-solid fa-sort"></i></th>
-                                    <th style="text-align: center;">Historial / Trades</th>
-                                </tr>
-                            </thead>
-                            <tbody id="active-positions-tbody">
-                                <tr><td colspan="8" class="text-center p-4 text-muted">No hay posiciones activas en este momento.</td></tr>
-                            </tbody>
-                        </table>
+                    <div class="collapsible-body" id="active-positions-body">
+                        <div class="table-responsive">
+                            <table class="live-table positions-table" id="active-positions-table">
+                                <thead>
+                                    <tr>
+                                        <th class="pos-sortable-th" data-sort="ticker" style="cursor:pointer; user-select:none;">Ticker <i class="fa-solid fa-sort"></i></th>
+                                        <th class="pos-sortable-th" data-sort="category" style="cursor:pointer; user-select:none;">Mercado / Estrategia <i class="fa-solid fa-sort"></i></th>
+                                        <th class="pos-sortable-th" data-sort="entry_price" style="cursor:pointer; user-select:none;">Precio Entrada <i class="fa-solid fa-sort"></i></th>
+                                        <th class="pos-sortable-th" data-sort="price" style="cursor:pointer; user-select:none;">Precio Actual <i class="fa-solid fa-sort"></i></th>
+                                        <th class="pos-sortable-th" data-sort="pnl" style="cursor:pointer; user-select:none;">PnL Flotante (%) <i class="fa-solid fa-sort"></i></th>
+                                        <th class="pos-sortable-th" data-sort="dist_sl" style="cursor:pointer; user-select:none;">Dist. Stop Loss (-15%) <i class="fa-solid fa-sort"></i></th>
+                                        <th class="pos-sortable-th" data-sort="signal" style="cursor:pointer; user-select:none;">Estado <i class="fa-solid fa-sort"></i></th>
+                                        <th style="text-align: center;">Historial / Trades</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="active-positions-tbody">
+                                    <tr><td colspan="8" class="text-center p-4 text-muted">No hay posiciones activas en este momento.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </section>
 
                 <!-- LIVE OPPORTUNITIES GRID (HIGHLIGHTED BUY SIGNALS) -->
-                <section class="opportunities-section">
-                    <div class="section-title-bar">
-                        <h2><i class="fa-solid fa-rocket text-success"></i> Oportunidades de Compra Detectadas</h2>
-                        <span class="count-pill" id="buy-count-badge">0 Activos en BUY</span>
+                <section class="opportunities-section" id="sec-opportunities">
+                    <div class="section-title-bar collapsible-header" data-collapse-target="opportunities-body">
+                        <h2>
+                            <i class="fa-solid fa-chevron-down collapse-icon"></i>
+                            <i class="fa-solid fa-rocket text-success"></i> Oportunidades de Compra Detectadas
+                        </h2>
+                        <div class="title-right-group">
+                            <span class="count-pill" id="buy-count-badge">0 Activos en BUY</span>
+                            <span class="collapse-hint"><i class="fa-solid fa-compress"></i> Colapsar</span>
+                        </div>
                     </div>
-                    <div class="cards-grid" id="opportunities-cards-grid">
-                        <!-- Cards loaded dynamically -->
-                        <div class="empty-cards-notice">Haga clic en "Escanear Cotizaciones" para obtener las señales vivas del mercado.</div>
+                    <div class="collapsible-body" id="opportunities-body">
+                        <div class="cards-grid" id="opportunities-cards-grid">
+                            <!-- Cards loaded dynamically -->
+                            <div class="empty-cards-notice">Haga clic en "Escanear Cotizaciones" para obtener las señales vivas del mercado.</div>
+                        </div>
                     </div>
                 </section>
 
                 <!-- LIVE POSITIONS & SIGNALS TABLE -->
-                <section class="live-signals-table-section">
-                    <div class="section-title-bar">
+                <section class="live-signals-table-section" id="sec-live-signals">
+                    <div class="section-title-bar collapsible-header" data-collapse-target="live-signals-body">
                         <h2>
+                            <i class="fa-solid fa-chevron-down collapse-icon"></i>
                             <i class="fa-solid fa-table-list text-indigo"></i> Monitoreo General de la Cartera (Cotizaciones en Vivo)
                             <button class="btn btn-primary" id="btn-show-all-trades" style="margin-left: 12px; font-size: 12px; padding: 6px 14px;">
                                 <i class="fa-solid fa-layer-group"></i> Ver TODOS los Trades por Fecha
                             </button>
                         </h2>
-                        <input type="text" id="scanner-search-input" placeholder="Buscar ticker (ej: AAPL, BTC-USD, NVDA)..." class="search-input">
+                        <div class="title-right-group">
+                            <input type="text" id="scanner-search-input" placeholder="Buscar ticker (ej: AAPL, BTC-USD, NVDA)..." class="search-input">
+                            <span class="collapse-hint"><i class="fa-solid fa-compress"></i> Colapsar</span>
+                        </div>
                     </div>
-                    <div class="table-responsive">
-                        <table class="live-table" id="live-scanner-table">
+                    <div class="collapsible-body" id="live-signals-body">
+                        <div class="table-responsive">
+                            <table class="live-table" id="live-scanner-table">
                             <thead>
                                 <tr>
                                     <th class="scanner-sortable-th" data-sort="ticker" style="cursor:pointer; user-select:none;">Ticker <i class="fa-solid fa-sort"></i></th>
@@ -220,6 +241,7 @@
                             </tbody>
                         </table>
                     </div>
+                </div>
                 </section>
 
                 <!-- TRADINGVIEW STYLE TRADE LOG MODAL / SECTION -->

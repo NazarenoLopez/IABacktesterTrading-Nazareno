@@ -1262,6 +1262,65 @@ tr:hover td {
     align-items: center;
 }
 
+.collapsible-header {
+    cursor: pointer;
+    user-select: none;
+    padding: 8px 12px;
+    margin: -8px -12px;
+    border-radius: 8px;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.collapsible-header:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.collapse-icon {
+    font-size: 14px;
+    color: var(--text-muted);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-right: 2px;
+}
+
+.title-right-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.collapse-hint {
+    font-size: 11px;
+    color: var(--text-muted);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.collapsible-header:hover .collapse-hint {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.collapsible-body {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 1;
+}
+
+.collapsible-header.is-collapsed .collapse-icon {
+    transform: rotate(-90deg);
+}
+
+.collapsible-header.is-collapsed + .collapsible-body {
+    display: none !important;
+}
+
 .section-title-bar h2 {
     font-size: 18px;
     font-weight: 700;

@@ -1643,6 +1643,52 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // -------------------------------------------------------------------------
+    // Collapsible Sections Handler
+    // -------------------------------------------------------------------------
+    function initCollapsibleSections() {
+        document.querySelectorAll(".collapsible-header").forEach(header => {
+            const targetId = header.getAttribute("data-collapse-target");
+            if (!targetId) return;
+
+            const targetBody = document.getElementById(targetId);
+            const hintSpan = header.querySelector(".collapse-hint");
+
+            // Restore saved preference from localStorage
+            const storageKey = `collapse_state_${targetId}`;
+            const isCollapsedSaved = localStorage.getItem(storageKey) === "true";
+
+            if (isCollapsedSaved && targetBody) {
+                header.classList.add("is-collapsed");
+                if (targetBody) targetBody.style.display = "none";
+                if (hintSpan) hintSpan.innerHTML = `<i class="fa-solid fa-expand"></i> Expandir`;
+            }
+
+            header.addEventListener("click", (e) => {
+                // Ignore clicks on buttons, inputs or links inside the header
+                if (e.target.closest("button") || e.target.closest("input") || e.target.closest("a")) {
+                    return;
+                }
+
+                const isCurrentlyCollapsed = header.classList.contains("is-collapsed");
+
+                if (isCurrentlyCollapsed) {
+                    header.classList.remove("is-collapsed");
+                    if (targetBody) targetBody.style.display = "";
+                    if (hintSpan) hintSpan.innerHTML = `<i class="fa-solid fa-compress"></i> Colapsar`;
+                    localStorage.setItem(storageKey, "false");
+                } else {
+                    header.classList.add("is-collapsed");
+                    if (targetBody) targetBody.style.display = "none";
+                    if (hintSpan) hintSpan.innerHTML = `<i class="fa-solid fa-expand"></i> Expandir`;
+                    localStorage.setItem(storageKey, "true");
+                }
+            });
+        });
+    }
+
+    initCollapsibleSections();
+
     // Load Hardware Status & Initial Scanner Data
     loadHardwareStatus();
     fetchLiveScanner(false);

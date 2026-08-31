@@ -8,6 +8,7 @@ import os
 import io
 import contextlib
 import shutil
+from datetime import datetime
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import backtester
 import threading

@@ -333,6 +333,18 @@ def check_and_notify_trades(scanner_data):
         except Exception:
             saved_state = {}
 
+    latest_market_date = None
+    if os.path.exists(os.path.join(BASE_DIR, ".data_cache", "SPY.csv")):
+        try:
+            import pandas as pd
+            df_spy = pd.read_csv(os.path.join(BASE_DIR, ".data_cache", "SPY.csv"))
+            dates = df_spy.iloc[:, 0].dropna()
+            if not dates.empty:
+                latest_market_date = str(dates.iloc[-1])[:10]
+        except Exception: pass
+    if not latest_market_date:
+        latest_market_date = datetime.now().strftime("%Y-%m-%d")
+
     current_state = {}
     notifications = []
 
@@ -353,18 +365,18 @@ def check_and_notify_trades(scanner_data):
         # Detectar Nueva Entrada (BUY)
         trades = item.get("recent_trades", [])
         last_trade = trades[-1] if trades else None
-        is_same_day_entry = (last_trade and last_trade.get("is_open") and last_trade.get("duration_days", 99) == 0)
+        is_today_entry = (last_trade and last_trade.get("is_open") and last_trade.get("entry_date") == latest_market_date)
 
-        if (sig == "BUY" and prev_sig != "BUY") or (is_same_day_entry and prev_sig != "BUY"):
+        if (sig == "BUY" and prev_sig != "BUY") or (is_today_entry and prev_sig != "BUY"):
             current_state[key]["signal"] = "BUY"
             entry_p_str = format_price_telegram(met.get("entry_price", item["price"]))
             notifications.append(
-                f"🚀 <b>COMPRA EJECUTADA (TRADE ABIERTO)</b>\n"
+                f"🚀 <b>NUEVA SEÑAL DE COMPRA (BUY)</b>\n"
                 f"• <b>Activo:</b> {tk} ({item.get('category', 'N/A')})\n"
                 f"• <b>Estrategia:</b> SS11 Macro Base Pura\n"
-                f"• <b>Precio de Entrada:</b> {entry_p_str}\n"
+                f"• <b>Precio de Entrada Sugerido:</b> {entry_p_str}\n"
                 f"• <b>Precio Actual:</b> {format_price_telegram(item['price'])}\n"
-                f"• <b>Estado:</b> Posición Activa En Curso"
+                f"• <b>Acción Recomendada:</b> Oportunidad de Compra (LONG)"
             )
         # Detectar Cierre de Posición / Salida (SELL)
         elif prev_in_pos and not in_pos:
@@ -392,18 +404,19 @@ def check_and_notify_trades(scanner_data):
 
         trades = item.get("recent_trades", [])
         last_trade = trades[-1] if trades else None
-        is_same_day_entry = (last_trade and last_trade.get("is_open") and last_trade.get("duration_days", 99) == 0)
+        is_today_entry = (last_trade and last_trade.get("is_open") and last_trade.get("entry_date") == latest_market_date)
 
-        if (sig == "BUY" and prev_sig != "BUY") or (is_same_day_entry and prev_sig != "BUY"):
+        if (sig == "BUY" and prev_sig != "BUY") or (is_today_entry and prev_sig != "BUY"):
             current_state[key]["signal"] = "BUY"
             entry_p_str = format_price_telegram(met.get("entry_price", item["price"]))
             notifications.append(
-                f"🧠 <b>COMPRA MULTI-IA EJECUTADA (TRADE ABIERTO)</b>\n"
+                f"🧠 <b>NUEVA SEÑAL MULTI-IA DE COMPRA (BUY)</b>\n"
                 f"• <b>Activo:</b> {tk} ({item.get('category', 'N/A')})\n"
                 f"• <b>Estrategia:</b> AIS11 Multi-IA GPU Master\n"
-                f"• <b>Precio de Entrada:</b> {entry_p_str}\n"
+                f"• <b>Precio de Entrada Sugerido:</b> {entry_p_str}\n"
                 f"• <b>Precio Actual:</b> {format_price_telegram(item['price'])}\n"
-                f"• <b>Score de IA:</b> <b>{item.get('ai_score', 50):.1f}/100</b>"
+                f"• <b>Score de IA:</b> <b>{item.get('ai_score', 50):.1f}/100</b>\n"
+                f"• <b>Acción Recomendada:</b> Oportunidad de Compra (LONG)"
             )
         elif prev_in_pos and not in_pos:
             notifications.append(

@@ -1240,7 +1240,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     const floatPnl = met.floating_pnl_pct || 0.0;
                     const entryP = met.entry_price ? formatPrice(met.entry_price) : formatPrice(item.price);
                     const currP = formatPrice(item.price);
-                    const stratTag = item.strat_label ? `<span class="badge" style="background:rgba(255,255,255,0.1); margin-right:6px;">${item.strat_label}</span>` : '';
+                    const stratTag = item.strat_label === "AIS11"
+                        ? `<span class="badge-strat ais11"><i class="fa-solid fa-microchip"></i>AIS11</span>`
+                        : `<span class="badge-strat ss11"><i class="fa-solid fa-chess-knight"></i>SS11</span>`;
                     const distSlVal = (item.dist_sl_pct !== undefined && item.dist_sl_pct !== null) ? item.dist_sl_pct : -15.0;
 
                     // Color code badge for active position
@@ -1285,7 +1287,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                 <span class="badge-signal ${sigBadgeClass}"><i class="fa-solid ${sigBadgeIcon}"></i> ${sigBadgeText}</span>
                             </td>
                             <td style="text-align: center;">
-                                <button class="btn btn-secondary btn-view-trades" data-ticker="${item.ticker}" style="font-size: 11px; padding: 4px 12px;">
+                                <button class="btn btn-secondary btn-view-trades" data-ticker="${item.ticker}" data-strat="${item.strat_label || selectedScannerStrategy}" style="font-size: 11px; padding: 4px 12px;">
                                     <i class="fa-solid fa-list-check text-warning"></i> Ver Trades
                                 </button>
                             </td>
@@ -1317,7 +1319,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 valA = a.ticker || ""; valB = b.ticker || "";
                 return scannerSortDir === "ASC" ? valA.localeCompare(valB) : valB.localeCompare(valA);
             } else if (scannerSortKey === "category") {
-                valA = a.category || ""; valB = b.category || "";
+                valA = (a.strat_label || "") + (a.category || "");
+                valB = (b.strat_label || "") + (b.category || "");
                 return scannerSortDir === "ASC" ? valA.localeCompare(valB) : valB.localeCompare(valA);
             } else if (scannerSortKey === "price") {
                 valA = a.price || 0; valB = b.price || 0;
@@ -1401,7 +1404,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 `;
             } else {
                 elOpportunitiesCardsGrid.innerHTML = displayOppItems.map((item, idx) => {
-                    const stratTag = item.strat_label ? `<span class="badge" style="background:rgba(255,255,255,0.1); margin-right:4px;">${item.strat_label}</span>` : '';
+                    const stratTag = item.strat_label === "AIS11"
+                        ? `<span class="badge-strat ais11"><i class="fa-solid fa-microchip"></i>AIS11</span>`
+                        : `<span class="badge-strat ss11"><i class="fa-solid fa-chess-knight"></i>SS11</span>`;
                     const badgeHtml = isShowingCandidates 
                         ? `<span class="badge-signal wait" style="background:rgba(92,96,245,0.2); color:#a5b4fc;"><i class="fa-solid fa-fire text-indigo"></i> CANDIDATO #${idx + 1}</span>`
                         : `<span class="badge-signal buy"><i class="fa-solid fa-circle"></i> BUY</span>`;
@@ -1434,7 +1439,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             </div>
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px;">
                                 ${badgeHtml}
-                                <button class="btn btn-secondary btn-view-trades" data-ticker="${item.ticker}" style="font-size: 11px; padding: 4px 10px;">
+                                <button class="btn btn-secondary btn-view-trades" data-ticker="${item.ticker}" data-strat="${item.strat_label || selectedScannerStrategy}" style="font-size: 11px; padding: 4px 10px;">
                                     <i class="fa-solid fa-list-check"></i> Ver Trades
                                 </button>
                             </div>
@@ -1458,12 +1463,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 elLiveScannerTbody.innerHTML = filtered.map(item => {
                     const sigClass = item.signal.toLowerCase();
                     const sigIcon = item.signal === 'BUY' ? 'fa-circle-dot' : (item.signal === 'HOLD' ? 'fa-lock' : (item.signal === 'SELL' ? 'fa-triangle-exclamation' : 'fa-clock'));
-                    const floatPnl = item.metrics.floating_pnl_pct || 0.0;
+                    const floatPnl = (item.metrics && item.metrics.floating_pnl_pct !== undefined) ? item.metrics.floating_pnl_pct : 0.0;
+                    const stratTag = item.strat_label === "AIS11"
+                        ? `<span class="badge-strat ais11"><i class="fa-solid fa-microchip"></i>AIS11</span>`
+                        : `<span class="badge-strat ss11"><i class="fa-solid fa-chess-knight"></i>SS11</span>`;
                     
                     return `
                         <tr>
                             <td><strong style="font-family: var(--font-mono); font-size: 14px;">${item.ticker}</strong></td>
-                            <td><span class="opp-cat">${item.category}</span></td>
+                            <td><span class="opp-cat">${stratTag}${item.category}</span></td>
                             <td style="font-family: var(--font-mono); font-weight: 600;">${formatPrice(item.price)}</td>
                             <td style="font-family: var(--font-mono);" class="${item.change_24h >= 0 ? 'text-success' : 'text-danger'}">
                                 ${item.change_24h >= 0 ? '+' : ''}${item.change_24h.toFixed(2)}%
@@ -1472,7 +1480,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                 <span class="badge-signal ${sigClass}"><i class="fa-solid ${sigIcon}"></i> ${item.signal}</span>
                             </td>
                             <td style="font-family: var(--font-mono);" class="${floatPnl >= 0 ? 'text-success' : 'text-danger'}">
-                                ${item.metrics.is_currently_in_position ? `${floatPnl >= 0 ? '+' : ''}${floatPnl.toFixed(2)}%` : '<span class="text-muted">-</span>'}
+                                ${(item.metrics && item.metrics.is_currently_in_position) ? `${floatPnl >= 0 ? '+' : ''}${floatPnl.toFixed(2)}%` : '<span class="text-muted">-</span>'}
                             </td>
                             <td style="font-family: var(--font-mono);" class="${item.dist_sl_pct >= 0 ? 'text-success' : 'text-danger'}">
                                 ${item.dist_sl_pct > 0 ? '+' : ''}${item.dist_sl_pct.toFixed(1)}%
@@ -1481,7 +1489,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                 ${item.dist_sma20_pct > 0 ? '+' : ''}${item.dist_sma20_pct.toFixed(1)}%
                             </td>
                             <td>
-                                <button class="btn btn-secondary btn-view-trades" data-ticker="${item.ticker}" style="font-size: 11px; padding: 4px 10px;">
+                                <button class="btn btn-secondary btn-view-trades" data-ticker="${item.ticker}" data-strat="${item.strat_label || selectedScannerStrategy}" style="font-size: 11px; padding: 4px 10px;">
                                     <i class="fa-solid fa-list-check"></i> Pine Trades
                                 </button>
                             </td>
@@ -1495,7 +1503,8 @@ document.addEventListener("DOMContentLoaded", () => {
         document.querySelectorAll(".btn-view-trades").forEach(btn => {
             btn.addEventListener("click", () => {
                 const tk = btn.getAttribute("data-ticker");
-                openTradingViewTradeLog(tk, selectedScannerStrategy);
+                const strat = btn.getAttribute("data-strat") || selectedScannerStrategy;
+                openTradingViewTradeLog(tk, strat);
             });
         });
     }
@@ -1618,12 +1627,17 @@ document.addEventListener("DOMContentLoaded", () => {
     function openTradingViewTradeLog(ticker, stratId) {
         if (!liveScannerData) return;
 
-        let list = (stratId === "AIS11") ? liveScannerData.ais11_signals : liveScannerData.ss11_signals;
+        let effectiveStrat = stratId;
+        if (!effectiveStrat || effectiveStrat === "COMBO") {
+            effectiveStrat = "SS11";
+        }
+
+        let list = (effectiveStrat === "AIS11") ? liveScannerData.ais11_signals : liveScannerData.ss11_signals;
         const item = (list || []).find(x => x.ticker === ticker);
         if (!item) return;
 
         if (elSelectedTradeTicker) elSelectedTradeTicker.textContent = ticker;
-        if (elSelectedTradeStrat) elSelectedTradeStrat.textContent = (stratId === "AIS11") ? "AIS11: Multi-IA GPU" : "SS11: Macro Base Pura";
+        if (elSelectedTradeStrat) elSelectedTradeStrat.textContent = (effectiveStrat === "AIS11") ? "AIS11: Multi-IA GPU" : "SS11: Macro Base Pura";
 
         const m = item.metrics;
         if (elTvNetProfit) {

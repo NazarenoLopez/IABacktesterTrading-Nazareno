@@ -1548,6 +1548,24 @@ document.addEventListener("DOMContentLoaded", () => {
             if (elSelectedTradeTicker) elSelectedTradeTicker.textContent = `TODOS LOS ACTIVOS (${allTrades.length} Trades)`;
             if (elSelectedTradeStrat) elSelectedTradeStrat.textContent = (selectedScannerStrategy === "AIS11") ? "AIS11: Multi-IA GPU" : "SS11: Macro Base Pura";
 
+            // Calcular métricas globales consolidadas para todos los trades
+            const closedTrades = allTrades.filter(t => !t.is_open && t.exit_date !== "EN CURSO");
+            const totalClosed = closedTrades.length;
+            const wins = closedTrades.filter(t => (t.pnl || 0) > 0);
+            const winRate = totalClosed > 0 ? (wins.length / totalClosed) * 100 : 0;
+            const totalNetProfit = closedTrades.reduce((acc, t) => acc + (Number(t.pnl) || 0), 0);
+            const gains = closedTrades.filter(t => (t.pnl || 0) > 0).reduce((acc, t) => acc + Number(t.pnl), 0);
+            const losses = closedTrades.filter(t => (t.pnl || 0) < 0).reduce((acc, t) => acc + Math.abs(Number(t.pnl)), 0);
+            const profitFactor = losses > 0 ? (gains / losses) : (gains > 0 ? 99.0 : 1.0);
+
+            if (elTvNetProfit) {
+                elTvNetProfit.textContent = `$${totalNetProfit.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                elTvNetProfit.className = `val ${totalNetProfit >= 0 ? 'text-success' : 'text-danger'}`;
+            }
+            if (elTvProfitFactor) elTvProfitFactor.textContent = profitFactor.toFixed(2);
+            if (elTvWinRate) elTvWinRate.textContent = `${winRate.toFixed(1)}%`;
+            if (elTvTotalTrades) elTvTotalTrades.textContent = totalClosed;
+
             activeTvTradesList = allTrades;
             tvTradesSortKey = "entry_date";
             tvTradesSortDir = "DESC";

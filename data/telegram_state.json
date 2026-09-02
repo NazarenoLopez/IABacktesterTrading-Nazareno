@@ -1,233 +1,21 @@
 {
-  "SS11_APTV": {
-    "signal": "BUY",
-    "in_pos": true
-  },
   "SS11_STX-USD": {
     "signal": "BUY",
-    "in_pos": true
-  },
-  "SS11_VICI": {
-    "signal": "BUY",
-    "in_pos": true
-  },
-  "SS11_MCD": {
-    "signal": "BUY",
-    "in_pos": true
-  },
-  "SS11_FIL-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_EIX": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_SEI-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_HPQ": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_MINA-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_TIA-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_ADM": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_CVS": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_CTVA": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_DE": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_REGN": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_HUM": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_QNT-USD": {
-    "signal": "HOLD",
     "in_pos": true
   },
   "SS11_APH": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_COP": {
+  "SS11_DELL": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_ICP-USD": {
+  "SS11_NU": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_ALGO-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_AAPL": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_SHIB-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_MPC": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_CI": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_GILD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_MCK": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_CVX": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_EOG": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_LTC-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_COR": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_XOM": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_CEG": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_JNJ": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_AMGN": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_MANA-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_TGT": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_UNH": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_WELL": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_MATIC-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_OP-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_MO": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_AON": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_MRK": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_AXS-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_ABBV": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_EBAY": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_AAVE-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_FANG": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_OXY": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_SYY": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_MSI": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_PGR": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_DVN": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_META": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_RSG": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_WMT": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_SPGI": {
+  "SS11_SAND-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -239,11 +27,87 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_VLO": {
+  "SS11_ALGO-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_PG": {
+  "SS11_PYPL": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_SEI-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_KAVA-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_OP-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_UAL": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_LCID": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_CEG": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_REGN": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_HOOD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_DE": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_NVDA": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_SHIB-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_ORCL": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_GPN": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_FIL-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_EOS-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_NXPI": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_CMG": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_FITB": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_GEV": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -251,15 +115,135 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_C": {
+  "SS11_USB": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_KR": {
+  "SS11_CTVA": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_ED": {
+  "SS11_COF": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_META": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_LUV": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_MU": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_MLM": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_NFLX": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_APP": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_FLOW-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_SYF": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_PRU": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_DAL": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_HAL": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_WIF-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_F": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_HPQ": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_IQV": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_MET": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_PNC": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_KMB": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_QCOM": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_FCX": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_BKNG": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_MCK": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_MCHP": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_ROK": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_AXP": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_LULU": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_MATIC-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_SLB": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_CAT": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_DIS": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -267,59 +251,35 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_VZ": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_D": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_ACGL": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_AEP": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_T": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_DUK": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_WM": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
   "SS11_PFE": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_ROST": {
+  "SS11_EBAY": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_LLY": {
+  "SS11_COR": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_XEL": {
+  "SS11_VMC": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_EXC": {
+  "SS11_UBER": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_WMB": {
+  "SS11_BA": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_CRM": {
+  "SS11_V": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_HUM": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -327,19 +287,103 @@
     "signal": "HOLD",
     "in_pos": true
   },
+  "SS11_AWK": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_MTB": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_JNJ": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_SHOP": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_DHR": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_AON": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_C": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_MDLZ": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_TMO": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_RBLX": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_AAL": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_ADA-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_MA": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_INTC": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_STT": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_MRK": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_WST": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_EL": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_VLO": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
   "SS11_BMY": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_XTZ-USD": {
+  "SS11_AMGN": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_O": {
+  "SS11_MANA-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_SO": {
+  "SS11_MINA-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_MPC": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_PG": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -347,7 +391,99 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_CB": {
+  "SS11_ADM": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_WTW": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_AJG": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_EMR": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_RUNE-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_UNH": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_BALL": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_KLAC": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_SMCI": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_COP": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_KEYS": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_XTZ-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_ISRG": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_BNB-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_ROST": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_ABBV": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_GOOGL": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_TRV": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_DD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_BSX": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_FISV": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_BRK-B": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_TXN": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_QNT-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -355,15 +491,195 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_WEC": {
+  "SS11_SBUX": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_STZ": {
+  "SS11_LTC-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_GEV": {
+  "SS11_PEP": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_CL": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_AEP": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_AXS-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_KR": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_RIVN": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_PM": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_EOG": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_APTV": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_SHW": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_PGR": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_MS": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_JPM": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_CVX": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_ADI": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_AIG": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_OTIS": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_ICP-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_EXC": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_ODFL": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_NKE": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_SNPS": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_ETC-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_KO": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_DLR": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_VICI": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_TSLA": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_SO": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_O": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_BDX": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_FLOKI-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_CB": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_GEHC": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_GS": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_WMT": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_DUK": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_SE": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_IBM": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_FANG": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_DOGE-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_HIG": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_ETN": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_AMZN": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_ARM": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_LLY": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_PLUG": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -383,395 +699,11 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_GWW": {
+  "SS11_MO": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_AJG": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_THETA-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_PM": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_SBUX": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_APP": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_HAL": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_FTM-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_AVGO": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_HIG": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_HCA": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_CL": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_GIS": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_JPM": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_NFLX": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_BALL": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_BRK-B": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_CHD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_PEP": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_CCI": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_PRU": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_AVAX-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_WIF-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_RENDER-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_COST": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_KMI": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_BSX": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_TJX": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_PYPL": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_BDX": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_UBER": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_TRV": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_CTAS": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_INTC": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_USB": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_SYF": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_AWK": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_KAVA-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_NU": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_AIG": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_FET-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_CSCO": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_BCH-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_F": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_WST": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_SE": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_MDLZ": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_OTIS": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_KO": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_FDX": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_MET": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_GM": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_KMB": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_MTB": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_ADA-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_YUM": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_ETC-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_FLOKI-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_AZO": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_ACN": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_PNC": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_ADP": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_LINK-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_TT": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_ORLY": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_NEO-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_EOS-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_XLM-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_NXPI": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_JUP-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_DXCM": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_BA": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_ECL": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_IBM": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_KEYS": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_MS": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_IQV": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_GPN": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_FAST": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_GEHC": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_WTW": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_MSFT": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_DIS": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_RTX": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_HOOD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_DLR": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_NOC": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_NEAR-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_GOOGL": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_BONK-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_PAYX": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_PCAR": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_PSA": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_TDG": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_HLT": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_CMG": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_GE": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_MA": {
+  "SS11_ED": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -779,47 +711,63 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_FITB": {
+  "SS11_DVN": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_BNB-USD": {
+  "SS11_AAPL": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_COF": {
+  "SS11_MCD": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_DOGE-USD": {
+  "SS11_ENPH": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_ROP": {
+  "SS11_OXY": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_RBLX": {
+  "SS11_CI": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_NVDA": {
+  "SS11_WMB": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_SMCI": {
+  "SS11_LOW": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_EFX": {
+  "SS11_CSX": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_CPRT": {
+  "SS11_CHD": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_ROK": {
+  "SS11_ECL": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_XRP-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_FTM-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_HLT": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_VZ": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -827,47 +775,51 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_HON": {
+  "SS11_TDG": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_BKNG": {
+  "SS11_T": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_V": {
+  "SS11_GILD": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_FLOW-USD": {
+  "SS11_RMD": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_AXP": {
+  "SS11_ACN": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_DD": {
+  "SS11_TIA-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_AMZN": {
+  "SS11_XOM": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_LULU": {
+  "SS11_TGT": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_STT": {
+  "SS11_CSCO": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_MCO": {
+  "SS11_TT": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_SYK": {
+  "SS11_PCAR": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_PH": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -875,11 +827,207 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_ISRG": {
+  "SS11_UNP": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_XRP-USD": {
+  "SS11_WM": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_RSG": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_CVS": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_HD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_EFX": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_U": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_KMI": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_SOL-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_ACGL": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_MAR": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_SYY": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_WEC": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_CRM": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_GE": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_DXCM": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_D": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_YUM": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_XEL": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_PSA": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_DOV": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_AMD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_AVAX-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_INTU": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_ROP": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_CCI": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_LRCX": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_AVGO": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_NEAR-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_XLM-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_THETA-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_BCH-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_WELL": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_AMAT": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_AAVE-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_ADP": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_TWLO": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_PATH": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_MSFT": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_GM": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_INJ-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_MCO": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_CPRT": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_STZ": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_GLW": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_RENDER-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_LINK-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_URI": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_COIN": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_AZO": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_ORLY": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -891,171 +1039,35 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_DAL": {
+  "SS11_COST": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_ADI": {
+  "SS11_GIS": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_MAR": {
+  "SS11_FET-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_GLW": {
+  "SS11_CTAS": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_DOV": {
+  "SS11_NEO-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_LUV": {
+  "SS11_PAYX": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_EL": {
+  "SS11_TJX": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_QCOM": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_LOW": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_RUNE-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_GS": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_ADBE": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_CAT": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_AMD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_BLK": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_NKE": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_ENPH": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_HD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_SAND-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_KLAC": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_SHW": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_MU": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_MLM": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_TMO": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_INJ-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_ETN": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_MCHP": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_PH": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_U": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_PATH": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_TXN": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_ARM": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_TWLO": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_LMT": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_FISV": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_DHR": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_UAL": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_SOL-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_EMR": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_TSLA": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_PLUG": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_RIVN": {
+  "SS11_SYK": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -1063,119 +1075,27 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_UNP": {
+  "SS11_FAST": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_NOW": {
+  "SS11_NOC": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_PLTR": {
+  "SS11_HON": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_SNOW": {
+  "SS11_BLK": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_AAL": {
+  "SS11_GWW": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_CSX": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_AMAT": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_RMD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_VMC": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_LRCX": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_INTU": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_MDB": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_FCX": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_URI": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_SLB": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_GRT-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_SHOP": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_ORCL": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_PANW": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_FTNT": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_ZS": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_DDOG": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_SNPS": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_COIN": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_LCID": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_NET": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_ODFL": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_DELL": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_CRWD": {
+  "SS11_SPGI": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -1183,11 +1103,103 @@
     "signal": "HOLD",
     "in_pos": true
   },
+  "SS11_RTX": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_ADBE": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_LMT": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_MSI": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_FDX": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_BONK-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_HCA": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_ZS": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_NOW": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_SNOW": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_NET": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_FTNT": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_GRT-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_JUP-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_CRWD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_PLTR": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_EIX": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_DDOG": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_PANW": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_MDB": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
   "SS11_UNI-USD": {
     "signal": "SELL",
     "in_pos": true
   },
+  "AIS11_NU": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "AIS11_BRK-B": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
   "AIS11_C": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "AIS11_V": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -1199,7 +1211,7 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "AIS11_BRK-B": {
+  "AIS11_KO": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -1207,27 +1219,11 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "AIS11_NU": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "AIS11_KO": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "AIS11_V": {
-    "signal": "HOLD",
-    "in_pos": true
+  "AIS11_APH": {
+    "signal": "WAIT",
+    "in_pos": false
   },
   "AIS11_FIL-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_MINA-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_RBLX": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -1235,135 +1231,11 @@
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_MDB": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_PANW": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
   "AIS11_DE": {
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_SLB": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_CVX": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_MPC": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_CTVA": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_ADM": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_MATIC-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_ADBE": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_DVN": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_ZS": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_COP": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_OXY": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_VLO": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_ACN": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_HAL": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_CVS": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_TIA-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_AAPL": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_WMT": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_NOW": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_AAVE-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_BKR": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_LULU": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_HPQ": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_FTNT": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_SHIB-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_CRM": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_EOG": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_GIS": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_QNT-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_WFC": {
+  "AIS11_MINA-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -1371,35 +1243,55 @@
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_QCOM": {
+  "AIS11_CTVA": {
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_FET-USD": {
+  "AIS11_TIA-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_FANG": {
+  "AIS11_ALGO-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_DXCM": {
+  "AIS11_ADM": {
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_SNOW": {
+  "AIS11_HPQ": {
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_LTC-USD": {
+  "AIS11_DELL": {
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_META": {
+  "AIS11_RBLX": {
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_NFLX": {
+  "AIS11_KAVA-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_QNT-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_MPC": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_COP": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_ICP-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_SLB": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -1407,43 +1299,23 @@
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_GILD": {
+  "AIS11_VLO": {
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_SNPS": {
+  "AIS11_CVX": {
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_APP": {
+  "AIS11_WFC": {
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_APH": {
+  "AIS11_MATIC-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_MCK": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_ROP": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_NEAR-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_AXS-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_HUM": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_WMB": {
+  "AIS11_CVS": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -1455,67 +1327,43 @@
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_PG": {
+  "AIS11_WIF-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_PFE": {
+  "AIS11_NUE": {
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_SPGI": {
+  "AIS11_AXS-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_ADP": {
+  "AIS11_SAND-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_CI": {
+  "AIS11_EOS-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_MSI": {
+  "AIS11_MCK": {
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_IBM": {
+  "AIS11_HAL": {
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_T": {
+  "AIS11_BKR": {
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_MO": {
+  "AIS11_DVN": {
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_PAYX": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_KAVA-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_TSLA": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_JNJ": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_CMG": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_RSG": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_CCI": {
+  "AIS11_LTC-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -1523,7 +1371,71 @@
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_VZ": {
+  "AIS11_JNJ": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_PFE": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_BSX": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_CMG": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_AAVE-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_ADA-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_NVDA": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_PG": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_QCOM": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_EOG": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_SHIB-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_NEAR-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_WMT": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_MO": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_OXY": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_FET-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_META": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -1531,15 +1443,47 @@
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_KMI": {
+  "AIS11_HOOD": {
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_NET": {
+  "AIS11_TSLA": {
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_VRTX": {
+  "AIS11_MU": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_MANA-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_XTZ-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_BAC": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_NXPI": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_KR": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_T": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_APP": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_HUM": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -1547,7 +1491,227 @@
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_TWLO": {
+  "AIS11_CI": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_F": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_PYPL": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_AAPL": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_VZ": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_PGR": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_VRTX": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_AJG": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_MRK": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_ABBV": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_ISRG": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_AMGN": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_RSG": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_WMB": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_KMI": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_FANG": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_SEDG": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_UNH": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_NFLX": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_ETC-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_DIS": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_BMY": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_ED": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_AVAX-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_THETA-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_JPM": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_PEP": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_INTC": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_GILD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_WM": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_USB": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_ALL": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_IQV": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_AEP": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_RENDER-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_FLOW-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_CRM": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_CB": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_DXCM": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_ROST": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_CCI": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_GIS": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_YUM": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_BNB-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_BCH-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_ACN": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_SCHW": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_MET": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_BALL": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_FLOKI-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_MDLZ": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_COF": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_AZO": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_EXC": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_HIG": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_GPN": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -1575,547 +1739,11 @@
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_ALGO-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_INTU": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_MU": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_BSX": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_TGT": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_JPM": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_BAC": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_ISRG": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_WELL": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_AEP": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_NUE": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_ED": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_AMZN": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_AVGO": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_AMGN": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_WM": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_CPRT": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_NKE": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_PGR": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_GM": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_F": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_D": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_KEYS": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_ICP-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_BCH-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_SCHW": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_BMY": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_KR": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_PATH": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_THETA-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_MANA-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_UNH": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_ABBV": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
   "AIS11_DUK": {
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_AJG": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_AZO": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_IQV": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_WEC": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_BTC-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_FTM-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_MS": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_FISV": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_CB": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_AIG": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_IDXX": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_ALL": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_SYY": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_EXC": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_BONK-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_GOOGL": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_COST": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_PEP": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_NXPI": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_BDX": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_YUM": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_DDOG": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_ETH-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_BNB-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_ORLY": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_SO": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_VICI": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_RMD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_SEDG": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_AVAX-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_MRK": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_TRV": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_GWW": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_ACGL": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_BALL": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_HIG": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_CSCO": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_MDLZ": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_SBUX": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_MET": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_XEL": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_EFX": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_LINK-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_LLY": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_CTAS": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_USB": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_OTIS": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_WTW": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_XLM-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_TJX": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_CL": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_COF": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_PRU": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_RENDER-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_WIF-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_MA": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_PNC": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_ROST": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_KMB": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_STZ": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_DIS": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_BA": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_HCA": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_APTV": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_NOC": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_STT": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_GPN": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_EOS-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_XTZ-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_NEO-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_INTC": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_TXN": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_RTX": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_PLTR": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_FDX": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_ROK": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_WST": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_CHD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_XRP-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_ADA-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_AMD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_PM": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_AXP": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_GS": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_ECL": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_SYK": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_BLK": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_LMT": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_MCO": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_FITB": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_DHR": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_SYF": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_MTB": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_GEHC": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_ETC-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_SAND-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_UBER": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_TDG": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_DD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_DOGE-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_HD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_PSA": {
+  "AIS11_MCHP": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -2123,27 +1751,363 @@
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_NVDA": {
+  "AIS11_XLM-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_HON": {
+  "AIS11_NEO-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_FAST": {
+  "AIS11_AVGO": {
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_GLW": {
+  "AIS11_BA": {
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_EL": {
+  "AIS11_PNC": {
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_FLOKI-USD": {
+  "AIS11_BDX": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_WELL": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_PRU": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_DOGE-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_LINK-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_MA": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_COST": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_UBER": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_SBUX": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_AIG": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_KMB": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_D": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_ACGL": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_LULU": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_VICI": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_WEC": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_WTW": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_BTC-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_SPGI": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_SO": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_APTV": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_TRV": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_SYY": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_MTB": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_FITB": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_PATH": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_XRP-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_ORLY": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_CL": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_OTIS": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_WST": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_AXP": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_ADP": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_FISV": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_IDXX": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_KEYS": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_ETH-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_FTM-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_LLY": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_INTU": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_MS": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_PM": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_BKNG": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_ADI": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_MSI": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_ROP": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_GM": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_TGT": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_STZ": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_AMD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_KLAC": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_CPRT": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_ROK": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_STT": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_ECL": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_PAYX": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_SYF": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_MLM": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_RMD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_UAL": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_COIN": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_TJX": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_XEL": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_SOL-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_CSCO": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_NKE": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_GOOGL": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_DHR": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_TDG": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_GWW": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_GEHC": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_EFX": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_BONK-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_IBM": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_CTAS": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_CHD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_LUV": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_RIVN": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_HD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_CAT": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_GS": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_SYK": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_PSA": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_ORCL": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_ADBE": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -2155,15 +2119,11 @@
     "signal": "WAIT",
     "in_pos": false
   },
+  "AIS11_GEV": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
   "AIS11_TMO": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_CAT": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_ADI": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -2171,87 +2131,7 @@
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_DLR": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
   "AIS11_VMC": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_MLM": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_SHW": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_ITW": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_MCHP": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_AAL": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_SE": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_SOL-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_CRWD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_GEV": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_HOOD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_CSX": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_BKNG": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_UNP": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_CDNS": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_HLT": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_ANET": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_ODFL": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_URI": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_ARM": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -2259,71 +2139,7 @@
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_MAR": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_EMR": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_ORCL": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_ETN": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_KLAC": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_UAL": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_SHOP": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_GRT-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_LRCX": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_DOV": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_LUV": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_COIN": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_INJ-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_ENPH": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_RIVN": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_AMAT": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_AON": {
+  "AIS11_MCO": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -2331,7 +2147,47 @@
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_U": {
+  "AIS11_SHW": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_NOC": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_AAL": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_AMZN": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_HCA": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_HLT": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_DLR": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_DD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_TXN": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_ITW": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_FDX": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -2339,7 +2195,51 @@
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_PH": {
+  "AIS11_INJ-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_EL": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_SE": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_RTX": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_BLK": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_AON": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_NOW": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_LMT": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_EMR": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_CSX": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_URI": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_UNP": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -2347,11 +2247,23 @@
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_FLOW-USD": {
+  "AIS11_MAR": {
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_DELL": {
+  "AIS11_GLW": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_ETN": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_PH": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_TWLO": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -2359,15 +2271,103 @@
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_PYPL": {
+  "AIS11_FAST": {
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_JUP-USD": {
+  "AIS11_ODFL": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_DOV": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_U": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_HON": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_CRWD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_SNOW": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_GRT-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_ANET": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_SHOP": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_ZS": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_ARM": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_AMAT": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_PLTR": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_LRCX": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_ENPH": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_SNPS": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_FTNT": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_CDNS": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_NET": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_PANW": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_DDOG": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_MDB": {
     "signal": "WAIT",
     "in_pos": false
   },
   "AIS11_EIX": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_JUP-USD": {
     "signal": "WAIT",
     "in_pos": false
   },

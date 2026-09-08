@@ -7,17 +7,18 @@ echo.
 echo Este proceso tomara varios minutos. Asegurate de no cerrar la ventana.
 echo.
 
-where uv >nul 2>nul
-if %errorlevel% equ 0 (
-    echo [INFO] Detectado 'uv'.
-    set PYTHON_CMD=uv run python
-) else (
-    echo [INFO] Detectado entorno estandar. Activando .venv...
-    if exist ".venv\Scripts\activate.bat" (
-        call .venv\Scripts\activate.bat
-    )
-    set PYTHON_CMD=python
-)
+if exist ".venv\Scripts\activate.bat" goto ACTIVATE_VENV
+
+echo [INFO] Usando entorno Python global...
+set PYTHON_CMD=python
+goto START_UPDATE
+
+:ACTIVATE_VENV
+echo [INFO] Activando entorno virtual local .venv con soporte GPU...
+call .venv\Scripts\activate.bat
+set PYTHON_CMD=.venv\Scripts\python.exe
+
+:START_UPDATE
 
 echo [INFO] Configurando cache de datos en 1 hora para evitar re-descargas...
 set YF_CACHE_SECONDS=3600

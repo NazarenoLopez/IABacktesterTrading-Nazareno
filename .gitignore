@@ -28,11 +28,12 @@ Thumbs.db
 
 # Documentación interna
 docs/
-data/minirocket_gpu_signals.json
-data/minirocket_gpu_signals.json
-data/minirocket_signals.json
-data/results.json
-data/timesfm_signals.json
-data/tspulse_multi_signals.json
-data/tspulse_signals.json
-data/xgboost_stack_signals.json
+# Cachés, señales generadas y estados dinámicos en data/
+data/*_signals*.json
+data/live_scanner_cache.json
+data/results*.json
+data/telegram_state.json
+
+.data_cache/
+.data
+

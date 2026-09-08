@@ -5,7 +5,10 @@ import json
 import traceback
 import sys
 import os
+import io
+import contextlib
 import shutil
+from datetime import datetime
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import backtester
 import threading
@@ -61,6 +64,12 @@ def run_ai_update_background():
         result_dict = backtester.run_all(commission=0.004)
         with open("data/results.json", "w", encoding="utf-8") as f:
             json.dump(result_dict, f, indent=2, ensure_ascii=False)
+
+        now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        try:
+            with open("data/ai_last_updated.json", "w", encoding="utf-8") as f:
+                json.dump({"last_updated": now_str}, f, indent=2)
+        except Exception: pass
             
     except Exception as e:
         AI_STATUS["error"] = str(e)
@@ -68,6 +77,45 @@ def run_ai_update_background():
     finally:
         AI_STATUS["is_running"] = False
         AI_STATUS["step_name"] = "Completado"
+
+LIVE_PRICES_CACHE = {}
+
+def update_live_prices_loop():
+    global LIVE_PRICES_CACHE
+    import time
+    import yfinance as yf
+    import pandas as pd
+    from backtester import TICKERS
+
+    while True:
+        try:
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf), contextlib.redirect_stderr(buf):
+                df = yf.download(TICKERS, period="1d", interval="1m", progress=False)
+            if not df.empty:
+                prices = {}
+                if isinstance(df.columns, pd.MultiIndex):
+                    if 'Close' in df.columns:
+                        close_df = df['Close']
+                        valid_df = close_df.dropna(how='all')
+                        if not valid_df.empty:
+                            last_row = valid_df.iloc[-1]
+                            for tk in TICKERS:
+                                if tk in last_row and pd.notna(last_row[tk]):
+                                    prices[tk] = float(last_row[tk])
+                else:
+                    if 'Close' in df.columns:
+                        valid_s = df['Close'].dropna()
+                        if not valid_s.empty:
+                            last_val = valid_s.iloc[-1]
+                            if pd.notna(last_val):
+                                for tk in TICKERS:
+                                    prices[tk] = float(last_val)
+                if prices:
+                    LIVE_PRICES_CACHE = prices
+        except Exception:
+            pass
+        time.sleep(15)
 
 class APIHandler(http.server.SimpleHTTPRequestHandler):
     def end_headers(self):
@@ -122,6 +170,20 @@ class APIHandler(http.server.SimpleHTTPRequestHandler):
             elif last_ai_date and last_market_date and last_ai_date < last_market_date:
                 status_code = "outdated"
                 
+            last_updated_time = None
+            if os.path.exists("data/ai_last_updated.json"):
+                try:
+                    with open("data/ai_last_updated.json", "r") as f:
+                        last_updated_time = json.load(f).get("last_updated")
+                except Exception: pass
+            
+            if not last_updated_time:
+                for target_file in ["data/xgboost_stack_signals.json", "data/minirocket_gpu_signals.json", "data/results.json"]:
+                    if os.path.exists(target_file):
+                        mtime = os.path.getmtime(target_file)
+                        last_updated_time = datetime.fromtimestamp(mtime).strftime("%Y-%m-%d %H:%M:%S")
+                        break
+
             res = {
                 "status": status_code,
                 "is_running": AI_STATUS["is_running"],
@@ -130,6 +192,7 @@ class APIHandler(http.server.SimpleHTTPRequestHandler):
                 "step_name": AI_STATUS["step_name"],
                 "last_ai_date": last_ai_date or "Desconocido",
                 "latest_market_date": last_market_date or "Desconocido",
+                "last_updated_time": last_updated_time or "Desconocido",
                 "error": AI_STATUS["error"]
             }
             self.wfile.write(json.dumps(res).encode('utf-8'))
@@ -181,34 +244,98 @@ class APIHandler(http.server.SimpleHTTPRequestHandler):
             return
             
         if parsed_path.path == '/api/live-prices':
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps(LIVE_PRICES_CACHE).encode('utf-8'))
+            return
+
+        if parsed_path.path == '/api/live-scanner':
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
             try:
-                import yfinance as yf
-                import pandas as pd
-                from backtester import TICKERS
-                
-                # Fetch only 1 day, 1 minute interval to be lightning fast
-                df = yf.download(TICKERS, period="1d", interval="1m", progress=False)
-                prices = {}
-                
-                if isinstance(df.columns, pd.MultiIndex):
-                    # MultiIndex: (PriceType, Ticker)
-                    # Get the last row of 'Close'
-                    last_row = df['Close'].iloc[-1]
-                    for tk in TICKERS:
-                        prices[tk] = float(last_row[tk])
-                else:
-                    # Single ticker or flat index (shouldn't happen with 18 tickers but fallback)
-                    for tk in TICKERS:
-                        prices[tk] = float(df['Close'].iloc[-1])
-                        
-                self.send_response(200)
-                self.send_header('Content-type', 'application/json')
-                self.end_headers()
-                self.wfile.write(json.dumps(prices).encode('utf-8'))
+                from utils.scanner_engine import run_live_scanner
+                cache_file = "data/live_scanner_cache.json"
+                qs = urllib.parse.parse_qs(parsed_path.query)
+                force_refresh = qs.get('refresh', ['false'])[0].lower() == 'true'
+
+                scanner_res = None
+                if not force_refresh and os.path.exists(cache_file):
+                    try:
+                        with open(cache_file, "r", encoding="utf-8") as f:
+                            scanner_res = json.load(f)
+                    except Exception: pass
+
+                if scanner_res is None or force_refresh:
+                    scanner_res = run_live_scanner()
+
+                from utils.scanner_engine import clean_nans
+                scanner_res = clean_nans(scanner_res)
+
+                self.wfile.write(json.dumps(scanner_res, ensure_ascii=False).encode('utf-8'))
             except Exception as e:
-                self.send_response(500)
-                self.send_header('Content-type', 'application/json')
-                self.end_headers()
+                print("Error in /api/live-scanner:")
+                traceback.print_exc()
+                self.wfile.write(json.dumps({"error": str(e)}).encode('utf-8'))
+            return
+
+        if parsed_path.path == '/api/hardware':
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            try:
+                from utils.scanner_engine import get_hardware_status
+                self.wfile.write(json.dumps(get_hardware_status()).encode('utf-8'))
+            except Exception as e:
+                self.wfile.write(json.dumps({"error": str(e)}).encode('utf-8'))
+            return
+
+        if parsed_path.path == '/api/universe':
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            try:
+                from utils.tickers_universe import get_universe_summary
+                self.wfile.write(json.dumps(get_universe_summary()).encode('utf-8'))
+            except Exception as e:
+                self.wfile.write(json.dumps({"error": str(e)}).encode('utf-8'))
+            return
+
+        if parsed_path.path == '/api/active-positions':
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            try:
+                cache_file = "data/live_scanner_cache.json"
+                scanner_res = None
+                if os.path.exists(cache_file):
+                    with open(cache_file, "r", encoding="utf-8") as f:
+                        scanner_res = json.load(f)
+                else:
+                    from utils.scanner_engine import run_live_scanner
+                    scanner_res = run_live_scanner()
+
+                actives = []
+                for strat_key in ["ss11_signals", "ais11_signals"]:
+                    strat_label = "SS11 (Macro)" if strat_key == "ss11_signals" else "AIS11 (Multi-IA)"
+                    for item in scanner_res.get(strat_key, []):
+                        met = item.get("metrics", {})
+                        if met.get("is_currently_in_position"):
+                            actives.append({
+                                "ticker": item["ticker"],
+                                "strategy": strat_label,
+                                "category": item.get("category", "N/A"),
+                                "price": item["price"],
+                                "entry_price": met.get("entry_price", item["price"]),
+                                "pnl_pct": met.get("floating_pnl_pct", 0.0),
+                                "dist_sl": item.get("dist_sl_pct", 0.0),
+                                "dist_sma20": item.get("dist_sma20_pct", 0.0),
+                                "signal": item.get("signal", "HOLD"),
+                                "recent_trades": item.get("recent_trades", [])
+                            })
+                self.wfile.write(json.dumps({"positions": actives, "count": len(actives)}, ensure_ascii=False).encode('utf-8'))
+            except Exception as e:
                 self.wfile.write(json.dumps({"error": str(e)}).encode('utf-8'))
             return
 
@@ -216,6 +343,14 @@ class APIHandler(http.server.SimpleHTTPRequestHandler):
         super().do_GET()
 
 if __name__ == "__main__":
+    # Cargar variables de entorno de .env
+    try:
+        from utils.telegram_bot import load_dotenv_file, launch_bot_background
+        load_dotenv_file()
+        launch_bot_background()
+    except Exception as e:
+        print(f"[Server] Advertencia al iniciar bot de Telegram: {e}")
+
     def load_data_thread():
         global IS_LOADING
         print("Pre-loading Yahoo Finance data into memory cache...")
@@ -227,9 +362,41 @@ if __name__ == "__main__":
             traceback.print_exc()
         IS_LOADING = False
 
-    # Start data loading in background
+    def run_auto_scanner_loop():
+        import time
+        from utils.scanner_engine import run_live_scanner
+        print("[Auto-Scanner] Bucle de actualización automática cada 60 segundos iniciado.")
+        while True:
+            try:
+                # Runs scanner and updates live_scanner_cache.json
+                run_live_scanner()
+            except Exception as e:
+                print(f"[Auto-Scanner] Advertencia en escáner automático: {e}")
+            time.sleep(60)
+
+    def run_daily_timer_loop():
+        import time
+        print("[Timer-Scheduler] Temporizador de IA iniciado: primer ejecución en 18 horas, luego cada 24 horas.")
+        time.sleep(18 * 3600)
+        while True:
+            try:
+                if not AI_STATUS["is_running"]:
+                    print("\n[Timer-Scheduler] ⏰ Iniciando actualización automática de IA (intervalo 24hs)...")
+                    threading.Thread(target=run_ai_update_background, daemon=True).start()
+            except Exception as e:
+                print(f"[Timer-Scheduler] Advertencia en temporizador: {e}")
+            time.sleep(24 * 3600)
+
+    # Start data loading & auto-scanner in background
     threading.Thread(target=load_data_thread, daemon=True).start()
+    threading.Thread(target=update_live_prices_loop, daemon=True).start()
+    threading.Thread(target=run_auto_scanner_loop, daemon=True).start()
+    threading.Thread(target=run_daily_timer_loop, daemon=True).start()
     
-    with socketserver.TCPServer(("", PORT), APIHandler) as httpd:
-        print(f"Serving at port {PORT}. Web Dashboard available at http://localhost:{PORT}")
-        httpd.serve_forever()
+    try:
+        with http.server.ThreadingHTTPServer(("", PORT), APIHandler) as httpd:
+            print(f"Serving at port {PORT}. Web Dashboard available at http://localhost:{PORT}")
+            httpd.serve_forever()
+    except KeyboardInterrupt:
+        print("\n[Server] Servidor detenido por el usuario.")
+

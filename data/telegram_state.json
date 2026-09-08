@@ -159,15 +159,15 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_XRP-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
   "SS11_BNB-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
   "SS11_XEL": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_XRP-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -451,10 +451,6 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_ETH-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
   "SS11_SYY": {
     "signal": "HOLD",
     "in_pos": true
@@ -464,6 +460,10 @@
     "in_pos": true
   },
   "SS11_T": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_ETH-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -539,10 +539,6 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_SOL-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
   "SS11_AMZN": {
     "signal": "HOLD",
     "in_pos": true
@@ -604,6 +600,10 @@
     "in_pos": true
   },
   "SS11_HCA": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_SOL-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -1187,6 +1187,18 @@
     "signal": "SELL",
     "in_pos": true
   },
+  "AIS11_NU": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "AIS11_XOM": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "AIS11_KO": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
   "AIS11_C": {
     "signal": "HOLD",
     "in_pos": true
@@ -1195,23 +1207,11 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "AIS11_KO": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "AIS11_NU": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "AIS11_MSFT": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
   "AIS11_O": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "AIS11_XOM": {
+  "AIS11_MSFT": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -1643,10 +1643,6 @@
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_XRP-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
   "AIS11_GOOGL": {
     "signal": "WAIT",
     "in_pos": false
@@ -1683,6 +1679,10 @@
     "signal": "WAIT",
     "in_pos": false
   },
+  "AIS11_XRP-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
   "AIS11_THETA-USD": {
     "signal": "WAIT",
     "in_pos": false
@@ -1715,10 +1715,6 @@
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_ETH-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
   "AIS11_DOGE-USD": {
     "signal": "WAIT",
     "in_pos": false
@@ -1747,7 +1743,7 @@
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_SOL-USD": {
+  "AIS11_ETH-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -1792,6 +1788,10 @@
     "in_pos": false
   },
   "AIS11_UAL": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_SOL-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -2064,10 +2064,6 @@
     "in_pos": false
   },
   "AIS11_MRK": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_MCD": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -2372,6 +2368,10 @@
     "in_pos": false
   },
   "AIS11_PATH": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_MCD": {
     "signal": "WAIT",
     "in_pos": false
   }

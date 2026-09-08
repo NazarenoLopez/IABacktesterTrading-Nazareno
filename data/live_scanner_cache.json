@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-08 18:45:56",
+  "timestamp": "2026-09-08 18:50:03",
   "hardware": {
     "cuda_available": true,
     "device_name": "NVIDIA GeForce RTX 2060 SUPER",
@@ -326,7 +326,7 @@
         "trades_count": 3,
         "win_rate": 66.7,
         "profit_factor": 2.5,
-        "net_profit_usd": 2434.0,
+        "net_profit_usd": 2433.99,
         "is_currently_in_position": true,
         "entry_price": 42.0208,
         "floating_pnl_pct": 291.79,
@@ -352,7 +352,7 @@
           "exit_date": "2022-09-14",
           "exit_price": 29.8361,
           "pct_return": 1.41,
-          "pnl": 117.93,
+          "pnl": 117.92,
           "reason": "Macro Crash Exit",
           "duration_days": 91,
           "is_open": false
@@ -374,7 +374,7 @@
           "exit_date": "EN CURSO",
           "exit_price": 165.96,
           "pct_return": 291.79,
-          "pnl": 36281.69,
+          "pnl": 36281.67,
           "reason": "Posición Activa",
           "duration_days": 502,
           "is_open": true
@@ -695,7 +695,7 @@
         "trades_count": 3,
         "win_rate": 33.3,
         "profit_factor": 1.19,
-        "net_profit_usd": 347.63,
+        "net_profit_usd": 347.64,
         "is_currently_in_position": true,
         "entry_price": 47.2668,
         "floating_pnl_pct": 24.52,
@@ -706,7 +706,7 @@
       "recent_trades": [
         {
           "entry_date": "2021-09-10",
-          "entry_price": 46.2599,
+          "entry_price": 46.26,
           "exit_date": "2022-09-14",
           "exit_price": 57.0133,
           "pct_return": 22.26,
@@ -719,9 +719,9 @@
           "entry_date": "2022-09-26",
           "entry_price": 53.3784,
           "exit_date": "2025-04-04",
-          "exit_price": 53.7547,
+          "exit_price": 53.7548,
           "pct_return": -0.1,
-          "pnl": -12.1,
+          "pnl": -12.09,
           "reason": "Macro Crash Exit",
           "duration_days": 921,
           "is_open": false
@@ -1383,7 +1383,7 @@
           "exit_date": "EN CURSO",
           "exit_price": 382.85,
           "pct_return": 239.94,
-          "pnl": 51034.51,
+          "pnl": 51034.5,
           "reason": "Posición Activa",
           "duration_days": 502,
           "is_open": true
@@ -1454,7 +1454,7 @@
         "trades_count": 1,
         "win_rate": 100.0,
         "profit_factor": 99.0,
-        "net_profit_usd": 9948.8,
+        "net_profit_usd": 9948.81,
         "is_currently_in_position": true,
         "entry_price": 341.57,
         "floating_pnl_pct": 182.1,
@@ -1469,7 +1469,7 @@
           "exit_date": "2025-04-04",
           "exit_price": 276.2,
           "pct_return": 99.49,
-          "pnl": 9948.8,
+          "pnl": 9948.81,
           "reason": "Macro Crash Exit",
           "duration_days": 372,
           "is_open": false
@@ -2022,7 +2022,7 @@
           "exit_date": "EN CURSO",
           "exit_price": 397.77,
           "pct_return": 199.92,
-          "pnl": 49861.22,
+          "pnl": 49861.21,
           "reason": "Posición Activa",
           "duration_days": 502,
           "is_open": true
@@ -2347,7 +2347,7 @@
           "exit_date": "EN CURSO",
           "exit_price": 533.88,
           "pct_return": 499.2,
-          "pnl": 89751.37,
+          "pnl": 89751.4,
           "reason": "Posición Activa",
           "duration_days": 502,
           "is_open": true
@@ -2778,86 +2778,10 @@
       ]
     },
     {
-      "ticker": "XRP-USD",
-      "category": "Crypto",
-      "price": 1.4204,
-      "change_24h": 1.62,
-      "signal": "HOLD",
-      "metrics": {
-        "trades_count": 25,
-        "win_rate": 28.0,
-        "profit_factor": 0.98,
-        "net_profit_usd": -267.22,
-        "is_currently_in_position": true,
-        "entry_price": 1.0386,
-        "floating_pnl_pct": 35.67,
-        "in_sl_recovery": true
-      },
-      "dist_sl_pct": 51.76,
-      "dist_sma20_pct": 0.67,
-      "recent_trades": [
-        {
-          "entry_date": "2025-04-21",
-          "entry_price": 2.077,
-          "exit_date": "2025-04-22",
-          "exit_price": 2.0855,
-          "pct_return": -0.39,
-          "pnl": -66.5,
-          "reason": "Macro Crash Exit",
-          "duration_days": 1,
-          "is_open": false
-        },
-        {
-          "entry_date": "2025-04-23",
-          "entry_price": 2.2155,
-          "exit_date": "2025-12-18",
-          "exit_price": 1.8618,
-          "pct_return": -16.63,
-          "pnl": -2806.04,
-          "reason": "Stop Loss -15%",
-          "duration_days": 239,
-          "is_open": false
-        },
-        {
-          "entry_date": "2025-12-19",
-          "entry_price": 1.8078,
-          "exit_date": "2026-02-05",
-          "exit_price": 1.5105,
-          "pct_return": -17.11,
-          "pnl": -2406.94,
-          "reason": "Stop Loss -15%",
-          "duration_days": 48,
-          "is_open": false
-        },
-        {
-          "entry_date": "2026-02-06",
-          "entry_price": 1.2135,
-          "exit_date": "2026-08-08",
-          "exit_price": 1.0212,
-          "pct_return": -16.52,
-          "pnl": -1925.47,
-          "reason": "Stop Loss -15%",
-          "duration_days": 183,
-          "is_open": false
-        },
-        {
-          "entry_date": "2026-08-09",
-          "entry_price": 1.0386,
-          "exit_date": "EN CURSO",
-          "exit_price": 1.4204,
-          "pct_return": 35.67,
-          "pnl": 3471.42,
-          "reason": "Posición Activa",
-          "duration_days": 30,
-          "is_open": true
-        }
-      ]
-    },
-    {
       "ticker": "BNB-USD",
       "category": "Crypto",
-      "price": 751.77,
-      "change_24h": 1.59,
+      "price": 752.13,
+      "change_24h": 1.64,
       "signal": "HOLD",
       "metrics": {
         "trades_count": 21,
@@ -2866,11 +2790,11 @@
         "net_profit_usd": 300.04,
         "is_currently_in_position": true,
         "entry_price": 618.83,
-        "floating_pnl_pct": 20.51,
+        "floating_pnl_pct": 20.57,
         "in_sl_recovery": true
       },
-      "dist_sl_pct": 36.48,
-      "dist_sma20_pct": 6.3,
+      "dist_sl_pct": 36.54,
+      "dist_sma20_pct": 6.34,
       "recent_trades": [
         {
           "entry_date": "2025-04-15",
@@ -2920,9 +2844,9 @@
           "entry_date": "2025-04-23",
           "entry_price": 618.83,
           "exit_date": "EN CURSO",
-          "exit_price": 751.77,
-          "pct_return": 20.51,
-          "pnl": 2112.86,
+          "exit_price": 752.13,
+          "pct_return": 20.57,
+          "pnl": 2118.81,
           "reason": "Posición Activa",
           "duration_days": 503,
           "is_open": true
@@ -3001,6 +2925,82 @@
           "pnl": 1544.03,
           "reason": "Posición Activa",
           "duration_days": 502,
+          "is_open": true
+        }
+      ]
+    },
+    {
+      "ticker": "XRP-USD",
+      "category": "Crypto",
+      "price": 1.4185,
+      "change_24h": 1.48,
+      "signal": "HOLD",
+      "metrics": {
+        "trades_count": 25,
+        "win_rate": 28.0,
+        "profit_factor": 0.98,
+        "net_profit_usd": -267.22,
+        "is_currently_in_position": true,
+        "entry_price": 1.0386,
+        "floating_pnl_pct": 35.49,
+        "in_sl_recovery": true
+      },
+      "dist_sl_pct": 51.58,
+      "dist_sma20_pct": 0.54,
+      "recent_trades": [
+        {
+          "entry_date": "2025-04-21",
+          "entry_price": 2.077,
+          "exit_date": "2025-04-22",
+          "exit_price": 2.0855,
+          "pct_return": -0.39,
+          "pnl": -66.5,
+          "reason": "Macro Crash Exit",
+          "duration_days": 1,
+          "is_open": false
+        },
+        {
+          "entry_date": "2025-04-23",
+          "entry_price": 2.2155,
+          "exit_date": "2025-12-18",
+          "exit_price": 1.8618,
+          "pct_return": -16.63,
+          "pnl": -2806.04,
+          "reason": "Stop Loss -15%",
+          "duration_days": 239,
+          "is_open": false
+        },
+        {
+          "entry_date": "2025-12-19",
+          "entry_price": 1.8078,
+          "exit_date": "2026-02-05",
+          "exit_price": 1.5105,
+          "pct_return": -17.11,
+          "pnl": -2406.94,
+          "reason": "Stop Loss -15%",
+          "duration_days": 48,
+          "is_open": false
+        },
+        {
+          "entry_date": "2026-02-06",
+          "entry_price": 1.2135,
+          "exit_date": "2026-08-08",
+          "exit_price": 1.0212,
+          "pct_return": -16.52,
+          "pnl": -1925.47,
+          "reason": "Stop Loss -15%",
+          "duration_days": 183,
+          "is_open": false
+        },
+        {
+          "entry_date": "2026-08-09",
+          "entry_price": 1.0386,
+          "exit_date": "EN CURSO",
+          "exit_price": 1.4185,
+          "pct_return": 35.49,
+          "pnl": 3453.76,
+          "reason": "Posición Activa",
+          "duration_days": 30,
           "is_open": true
         }
       ]
@@ -3232,7 +3232,7 @@
         "trades_count": 5,
         "win_rate": 20.0,
         "profit_factor": 1.01,
-        "net_profit_usd": 57.54,
+        "net_profit_usd": 57.55,
         "is_currently_in_position": true,
         "entry_price": 65.648,
         "floating_pnl_pct": 58.05,
@@ -3254,7 +3254,7 @@
         },
         {
           "entry_date": "2022-03-10",
-          "entry_price": 48.8827,
+          "entry_price": 48.8828,
           "exit_date": "2022-05-19",
           "exit_price": 41.1382,
           "pct_return": -16.51,
@@ -3280,7 +3280,7 @@
           "exit_date": "2025-04-04",
           "exit_price": 63.4127,
           "pct_return": 77.11,
-          "pnl": 4378.99,
+          "pnl": 4379.0,
           "reason": "Macro Crash Exit",
           "duration_days": 921,
           "is_open": false
@@ -3590,7 +3590,7 @@
         "trades_count": 3,
         "win_rate": 33.3,
         "profit_factor": 2.25,
-        "net_profit_usd": 8868.46,
+        "net_profit_usd": 8868.47,
         "is_currently_in_position": true,
         "entry_price": 39.0208,
         "floating_pnl_pct": 54.19,
@@ -3605,7 +3605,7 @@
           "exit_date": "2022-09-14",
           "exit_price": 62.2964,
           "pct_return": 159.42,
-          "pnl": 15942.26,
+          "pnl": 15942.27,
           "reason": "Macro Crash Exit",
           "duration_days": 369,
           "is_open": false
@@ -3855,7 +3855,7 @@
           "exit_date": "EN CURSO",
           "exit_price": 194.74,
           "pct_return": 22.69,
-          "pnl": 2159.24,
+          "pnl": 2159.23,
           "reason": "Posición Activa",
           "duration_days": 502,
           "is_open": true
@@ -4614,7 +4614,7 @@
           "exit_date": "EN CURSO",
           "exit_price": 43.95,
           "pct_return": -1.35,
-          "pnl": -208.22,
+          "pnl": -208.21,
           "reason": "Posición Activa",
           "duration_days": 502,
           "is_open": true
@@ -4631,7 +4631,7 @@
         "trades_count": 4,
         "win_rate": 25.0,
         "profit_factor": 1.54,
-        "net_profit_usd": 5661.88,
+        "net_profit_usd": 5661.9,
         "is_currently_in_position": true,
         "entry_price": 30.4783,
         "floating_pnl_pct": 57.53,
@@ -4646,7 +4646,7 @@
           "exit_date": "2022-09-14",
           "exit_price": 60.2732,
           "pct_return": 162.26,
-          "pnl": 16225.54,
+          "pnl": 16225.55,
           "reason": "Macro Crash Exit",
           "duration_days": 369,
           "is_open": false
@@ -4657,7 +4657,7 @@
           "exit_date": "2023-03-16",
           "exit_price": 39.5464,
           "pct_return": -20.09,
-          "pnl": -5268.68,
+          "pnl": -5268.67,
           "reason": "Stop Loss -15%",
           "duration_days": 171,
           "is_open": false
@@ -4837,7 +4837,7 @@
         "trades_count": 2,
         "win_rate": 100.0,
         "profit_factor": 99.0,
-        "net_profit_usd": 10603.73,
+        "net_profit_usd": 10603.74,
         "is_currently_in_position": true,
         "entry_price": 35.2821,
         "floating_pnl_pct": 79.72,
@@ -4852,7 +4852,7 @@
           "exit_date": "2022-09-14",
           "exit_price": 22.7851,
           "pct_return": 6.3,
-          "pnl": 629.98,
+          "pnl": 629.99,
           "reason": "Macro Crash Exit",
           "duration_days": 369,
           "is_open": false
@@ -5248,7 +5248,7 @@
         "trades_count": 5,
         "win_rate": 40.0,
         "profit_factor": 0.67,
-        "net_profit_usd": -1511.54,
+        "net_profit_usd": -1511.55,
         "is_currently_in_position": true,
         "entry_price": 49.7342,
         "floating_pnl_pct": 32.08,
@@ -5270,7 +5270,7 @@
         },
         {
           "entry_date": "2022-10-11",
-          "entry_price": 52.9685,
+          "entry_price": 52.9686,
           "exit_date": "2023-03-13",
           "exit_price": 44.8092,
           "pct_return": -16.08,
@@ -5454,7 +5454,7 @@
         "trades_count": 4,
         "win_rate": 50.0,
         "profit_factor": 3.74,
-        "net_profit_usd": 8487.38,
+        "net_profit_usd": 8487.37,
         "is_currently_in_position": true,
         "entry_price": 606.29,
         "floating_pnl_pct": 66.1,
@@ -5469,7 +5469,7 @@
           "exit_date": "2022-05-10",
           "exit_price": 280.37,
           "pct_return": -16.59,
-          "pnl": -1659.02,
+          "pnl": -1659.03,
           "reason": "Stop Loss -15%",
           "duration_days": 242,
           "is_open": false
@@ -5530,7 +5530,7 @@
         "trades_count": 2,
         "win_rate": 50.0,
         "profit_factor": 10.71,
-        "net_profit_usd": 11457.58,
+        "net_profit_usd": 11457.57,
         "is_currently_in_position": true,
         "entry_price": 143.59,
         "floating_pnl_pct": 63.9,
@@ -5543,7 +5543,7 @@
           "entry_date": "2021-09-10",
           "entry_price": 76.6388,
           "exit_date": "2022-09-14",
-          "exit_price": 68.14,
+          "exit_price": 68.1401,
           "pct_return": -11.8,
           "pnl": -1179.92,
           "reason": "Macro Crash Exit",
@@ -5556,7 +5556,7 @@
           "exit_date": "2025-04-04",
           "exit_price": 148.74,
           "pct_return": 143.28,
-          "pnl": 12637.5,
+          "pnl": 12637.49,
           "reason": "Macro Crash Exit",
           "duration_days": 921,
           "is_open": false
@@ -6072,7 +6072,7 @@
         "trades_count": 2,
         "win_rate": 100.0,
         "profit_factor": 99.0,
-        "net_profit_usd": 14335.76,
+        "net_profit_usd": 14335.74,
         "is_currently_in_position": true,
         "entry_price": 131.85,
         "floating_pnl_pct": 50.22,
@@ -6083,11 +6083,11 @@
       "recent_trades": [
         {
           "entry_date": "2021-09-10",
-          "entry_price": 62.6151,
+          "entry_price": 62.6152,
           "exit_date": "2022-09-14",
           "exit_price": 117.17,
           "pct_return": 85.64,
-          "pnl": 8563.69,
+          "pnl": 8563.68,
           "reason": "Macro Crash Exit",
           "duration_days": 369,
           "is_open": false
@@ -6098,7 +6098,7 @@
           "exit_date": "2025-04-04",
           "exit_price": 129.06,
           "pct_return": 31.09,
-          "pnl": 5772.07,
+          "pnl": 5772.06,
           "reason": "Macro Crash Exit",
           "duration_days": 921,
           "is_open": false
@@ -6538,7 +6538,7 @@
         "trades_count": 2,
         "win_rate": 100.0,
         "profit_factor": 99.0,
-        "net_profit_usd": 36033.8,
+        "net_profit_usd": 36033.77,
         "is_currently_in_position": true,
         "entry_price": 207.87,
         "floating_pnl_pct": 42.72,
@@ -6553,7 +6553,7 @@
           "exit_date": "2022-09-14",
           "exit_price": 83.7794,
           "pct_return": 110.84,
-          "pnl": 11083.74,
+          "pnl": 11083.73,
           "reason": "Macro Crash Exit",
           "duration_days": 237,
           "is_open": false
@@ -6564,7 +6564,7 @@
           "exit_date": "2025-04-04",
           "exit_price": 178.61,
           "pct_return": 118.34,
-          "pnl": 24950.06,
+          "pnl": 24950.04,
           "reason": "Macro Crash Exit",
           "duration_days": 921,
           "is_open": false
@@ -6603,7 +6603,7 @@
       "recent_trades": [
         {
           "entry_date": "2021-09-10",
-          "entry_price": 95.8471,
+          "entry_price": 95.847,
           "exit_date": "2022-09-14",
           "exit_price": 98.8078,
           "pct_return": 2.27,
@@ -7286,7 +7286,7 @@
         "trades_count": 3,
         "win_rate": 33.3,
         "profit_factor": 0.77,
-        "net_profit_usd": -1334.42,
+        "net_profit_usd": -1334.41,
         "is_currently_in_position": true,
         "entry_price": 45.761,
         "floating_pnl_pct": 83.18,
@@ -7301,7 +7301,7 @@
           "exit_date": "2022-09-14",
           "exit_price": 76.1606,
           "pct_return": 45.4,
-          "pnl": 4540.46,
+          "pnl": 4540.47,
           "reason": "Macro Crash Exit",
           "duration_days": 369,
           "is_open": false
@@ -7351,7 +7351,7 @@
         "trades_count": 3,
         "win_rate": 66.7,
         "profit_factor": 1.98,
-        "net_profit_usd": 1685.47,
+        "net_profit_usd": 1685.48,
         "is_currently_in_position": true,
         "entry_price": 282.01,
         "floating_pnl_pct": 6.09,
@@ -7366,7 +7366,7 @@
           "exit_date": "2022-09-14",
           "exit_price": 281.68,
           "pct_return": 7.22,
-          "pnl": 722.41,
+          "pnl": 722.42,
           "reason": "Macro Crash Exit",
           "duration_days": 369,
           "is_open": false
@@ -7399,7 +7399,7 @@
           "exit_date": "EN CURSO",
           "exit_price": 301.6,
           "pct_return": 6.09,
-          "pnl": 711.89,
+          "pnl": 711.88,
           "reason": "Posición Activa",
           "duration_days": 502,
           "is_open": true
@@ -7568,7 +7568,7 @@
         "trades_count": 3,
         "win_rate": 33.3,
         "profit_factor": 0.89,
-        "net_profit_usd": -231.57,
+        "net_profit_usd": -231.56,
         "is_currently_in_position": true,
         "entry_price": 77.6475,
         "floating_pnl_pct": 67.77,
@@ -7603,9 +7603,9 @@
           "entry_date": "2022-09-26",
           "entry_price": 58.417,
           "exit_date": "2025-04-04",
-          "exit_price": 73.0735,
+          "exit_price": 73.0736,
           "pct_return": 24.09,
-          "pnl": 1896.42,
+          "pnl": 1896.43,
           "reason": "Macro Crash Exit",
           "duration_days": 921,
           "is_open": false
@@ -7616,7 +7616,7 @@
           "exit_date": "EN CURSO",
           "exit_price": 131.32,
           "pct_return": 67.77,
-          "pnl": 6620.37,
+          "pnl": 6620.36,
           "reason": "Posición Activa",
           "duration_days": 502,
           "is_open": true
@@ -7633,7 +7633,7 @@
         "trades_count": 6,
         "win_rate": 33.3,
         "profit_factor": 0.57,
-        "net_profit_usd": -2499.15,
+        "net_profit_usd": -2499.16,
         "is_currently_in_position": true,
         "entry_price": 122.89,
         "floating_pnl_pct": 13.32,
@@ -7648,7 +7648,7 @@
           "exit_date": "2022-09-14",
           "exit_price": 138.65,
           "pct_return": 13.92,
-          "pnl": 958.41,
+          "pnl": 958.4,
           "reason": "Macro Crash Exit",
           "duration_days": 85,
           "is_open": false
@@ -7776,82 +7776,6 @@
       ]
     },
     {
-      "ticker": "ETH-USD",
-      "category": "Crypto",
-      "price": 2484.7,
-      "change_24h": -0.25,
-      "signal": "HOLD",
-      "metrics": {
-        "trades_count": 22,
-        "win_rate": 31.8,
-        "profit_factor": 0.32,
-        "net_profit_usd": -6103.57,
-        "is_currently_in_position": true,
-        "entry_price": 1757.2,
-        "floating_pnl_pct": 40.27,
-        "in_sl_recovery": true
-      },
-      "dist_sl_pct": 56.4,
-      "dist_sma20_pct": 1.0,
-      "recent_trades": [
-        {
-          "entry_date": "2025-04-15",
-          "entry_price": 1622.77,
-          "exit_date": "2025-04-16",
-          "exit_price": 1589.03,
-          "pct_return": -2.86,
-          "pnl": -116.04,
-          "reason": "Macro Crash Exit",
-          "duration_days": 1,
-          "is_open": false
-        },
-        {
-          "entry_date": "2025-04-17",
-          "entry_price": 1578.01,
-          "exit_date": "2025-04-18",
-          "exit_price": 1582.4,
-          "pct_return": -0.52,
-          "pnl": -20.6,
-          "reason": "Macro Crash Exit",
-          "duration_days": 1,
-          "is_open": false
-        },
-        {
-          "entry_date": "2025-04-19",
-          "entry_price": 1588.97,
-          "exit_date": "2025-04-20",
-          "exit_price": 1612.97,
-          "pct_return": 0.7,
-          "pnl": 27.42,
-          "reason": "Macro Crash Exit",
-          "duration_days": 1,
-          "is_open": false
-        },
-        {
-          "entry_date": "2025-04-21",
-          "entry_price": 1587.46,
-          "exit_date": "2025-04-22",
-          "exit_price": 1579.82,
-          "pct_return": -1.28,
-          "pnl": -50.37,
-          "reason": "Macro Crash Exit",
-          "duration_days": 1,
-          "is_open": false
-        },
-        {
-          "entry_date": "2025-04-23",
-          "entry_price": 1757.2,
-          "exit_date": "EN CURSO",
-          "exit_price": 2484.7,
-          "pct_return": 40.27,
-          "pnl": 1569.19,
-          "reason": "Posición Activa",
-          "duration_days": 503,
-          "is_open": true
-        }
-      ]
-    },
-    {
       "ticker": "SYY",
       "category": "US Stock",
       "price": 79.84,
@@ -7872,7 +7796,7 @@
       "recent_trades": [
         {
           "entry_date": "2021-09-10",
-          "entry_price": 68.6019,
+          "entry_price": 68.602,
           "exit_date": "2022-09-14",
           "exit_price": 72.2074,
           "pct_return": 4.42,
@@ -7885,7 +7809,7 @@
           "entry_date": "2022-09-26",
           "entry_price": 66.8999,
           "exit_date": "2025-04-04",
-          "exit_price": 72.0955,
+          "exit_price": 72.0954,
           "pct_return": 6.91,
           "pnl": 721.07,
           "reason": "Macro Crash Exit",
@@ -8058,6 +7982,82 @@
       ]
     },
     {
+      "ticker": "ETH-USD",
+      "category": "Crypto",
+      "price": 2482.86,
+      "change_24h": -0.33,
+      "signal": "HOLD",
+      "metrics": {
+        "trades_count": 22,
+        "win_rate": 31.8,
+        "profit_factor": 0.32,
+        "net_profit_usd": -6103.57,
+        "is_currently_in_position": true,
+        "entry_price": 1757.2,
+        "floating_pnl_pct": 40.17,
+        "in_sl_recovery": true
+      },
+      "dist_sl_pct": 56.3,
+      "dist_sma20_pct": 0.93,
+      "recent_trades": [
+        {
+          "entry_date": "2025-04-15",
+          "entry_price": 1622.77,
+          "exit_date": "2025-04-16",
+          "exit_price": 1589.03,
+          "pct_return": -2.86,
+          "pnl": -116.04,
+          "reason": "Macro Crash Exit",
+          "duration_days": 1,
+          "is_open": false
+        },
+        {
+          "entry_date": "2025-04-17",
+          "entry_price": 1578.01,
+          "exit_date": "2025-04-18",
+          "exit_price": 1582.4,
+          "pct_return": -0.52,
+          "pnl": -20.6,
+          "reason": "Macro Crash Exit",
+          "duration_days": 1,
+          "is_open": false
+        },
+        {
+          "entry_date": "2025-04-19",
+          "entry_price": 1588.97,
+          "exit_date": "2025-04-20",
+          "exit_price": 1612.97,
+          "pct_return": 0.7,
+          "pnl": 27.42,
+          "reason": "Macro Crash Exit",
+          "duration_days": 1,
+          "is_open": false
+        },
+        {
+          "entry_date": "2025-04-21",
+          "entry_price": 1587.46,
+          "exit_date": "2025-04-22",
+          "exit_price": 1579.82,
+          "pct_return": -1.28,
+          "pnl": -50.37,
+          "reason": "Macro Crash Exit",
+          "duration_days": 1,
+          "is_open": false
+        },
+        {
+          "entry_date": "2025-04-23",
+          "entry_price": 1757.2,
+          "exit_date": "EN CURSO",
+          "exit_price": 2482.86,
+          "pct_return": 40.17,
+          "pnl": 1565.15,
+          "reason": "Posición Activa",
+          "duration_days": 503,
+          "is_open": true
+        }
+      ]
+    },
+    {
       "ticker": "O",
       "category": "US Stock",
       "price": 61.02,
@@ -8067,7 +8067,7 @@
         "trades_count": 3,
         "win_rate": 66.7,
         "profit_factor": 1.23,
-        "net_profit_usd": 368.34,
+        "net_profit_usd": 368.33,
         "is_currently_in_position": true,
         "entry_price": 53.8127,
         "floating_pnl_pct": 12.49,
@@ -8082,14 +8082,14 @@
           "exit_date": "2022-09-14",
           "exit_price": 53.1708,
           "pct_return": 0.96,
-          "pnl": 95.52,
+          "pnl": 95.51,
           "reason": "Macro Crash Exit",
           "duration_days": 369,
           "is_open": false
         },
         {
           "entry_date": "2022-09-26",
-          "entry_price": 49.5456,
+          "entry_price": 49.5455,
           "exit_date": "2023-09-28",
           "exit_price": 42.1379,
           "pct_return": -15.63,
@@ -8186,7 +8186,7 @@
         "trades_count": 3,
         "win_rate": 33.3,
         "profit_factor": 1.58,
-        "net_profit_usd": 1277.41,
+        "net_profit_usd": 1277.4,
         "is_currently_in_position": true,
         "entry_price": 76.0971,
         "floating_pnl_pct": 15.25,
@@ -8212,7 +8212,7 @@
           "exit_date": "2025-04-04",
           "exit_price": 93.498,
           "pct_return": 35.15,
-          "pnl": 3492.41,
+          "pnl": 3492.4,
           "reason": "Macro Crash Exit",
           "duration_days": 921,
           "is_open": false
@@ -8353,7 +8353,7 @@
           "exit_date": "2022-03-08",
           "exit_price": 150.76,
           "pct_return": -16.42,
-          "pnl": -1373.57,
+          "pnl": -1373.58,
           "reason": "Stop Loss -15%",
           "duration_days": 40,
           "is_open": false
@@ -8375,7 +8375,7 @@
           "exit_date": "2025-04-04",
           "exit_price": 244.78,
           "pct_return": 70.12,
-          "pnl": 5057.61,
+          "pnl": 5057.62,
           "reason": "Macro Crash Exit",
           "duration_days": 921,
           "is_open": false
@@ -8416,7 +8416,7 @@
           "entry_date": "2021-09-10",
           "entry_price": 91.5151,
           "exit_date": "2022-05-10",
-          "exit_price": 77.9572,
+          "exit_price": 77.9573,
           "pct_return": -15.49,
           "pnl": -1549.5,
           "reason": "Stop Loss -15%",
@@ -8468,7 +8468,7 @@
         "trades_count": 2,
         "win_rate": 50.0,
         "profit_factor": 7.3,
-        "net_profit_usd": 5663.21,
+        "net_profit_usd": 5663.22,
         "is_currently_in_position": true,
         "entry_price": 38.9215,
         "floating_pnl_pct": 25.86,
@@ -8494,7 +8494,7 @@
           "exit_date": "2025-04-04",
           "exit_price": 37.4099,
           "pct_return": 72.1,
-          "pnl": 6562.08,
+          "pnl": 6562.09,
           "reason": "Macro Crash Exit",
           "duration_days": 921,
           "is_open": false
@@ -8711,7 +8711,7 @@
           "exit_date": "EN CURSO",
           "exit_price": 221.63,
           "pct_return": 9.01,
-          "pnl": 1633.06,
+          "pnl": 1633.07,
           "reason": "Posición Activa",
           "duration_days": 302,
           "is_open": true
@@ -9064,7 +9064,7 @@
         "trades_count": 4,
         "win_rate": 50.0,
         "profit_factor": 1.62,
-        "net_profit_usd": 2616.06,
+        "net_profit_usd": 2616.05,
         "is_currently_in_position": true,
         "entry_price": 158.89,
         "floating_pnl_pct": 48.87,
@@ -9101,7 +9101,7 @@
           "exit_date": "2023-03-16",
           "exit_price": 111.0,
           "pct_return": -16.92,
-          "pnl": -1935.49,
+          "pnl": -1935.5,
           "reason": "Stop Loss -15%",
           "duration_days": 97,
           "is_open": false
@@ -9250,82 +9250,6 @@
       ]
     },
     {
-      "ticker": "SOL-USD",
-      "category": "Crypto",
-      "price": 103.25,
-      "change_24h": -0.59,
-      "signal": "HOLD",
-      "metrics": {
-        "trades_count": 30,
-        "win_rate": 30.0,
-        "profit_factor": 0.68,
-        "net_profit_usd": -5349.94,
-        "is_currently_in_position": true,
-        "entry_price": 71.6121,
-        "floating_pnl_pct": 43.03,
-        "in_sl_recovery": true
-      },
-      "dist_sl_pct": 59.18,
-      "dist_sma20_pct": 2.49,
-      "recent_trades": [
-        {
-          "entry_date": "2025-04-23",
-          "entry_price": 148.74,
-          "exit_date": "2025-12-18",
-          "exit_price": 123.13,
-          "pct_return": -17.88,
-          "pnl": -1938.57,
-          "reason": "Stop Loss -15%",
-          "duration_days": 239,
-          "is_open": false
-        },
-        {
-          "entry_date": "2025-12-19",
-          "entry_price": 119.57,
-          "exit_date": "2026-02-02",
-          "exit_price": 100.84,
-          "pct_return": -16.33,
-          "pnl": -1454.14,
-          "reason": "Stop Loss -15%",
-          "duration_days": 45,
-          "is_open": false
-        },
-        {
-          "entry_date": "2026-02-03",
-          "entry_price": 104.47,
-          "exit_date": "2026-02-06",
-          "exit_price": 78.1855,
-          "pct_return": -25.76,
-          "pnl": -1918.55,
-          "reason": "Stop Loss -15%",
-          "duration_days": 3,
-          "is_open": false
-        },
-        {
-          "entry_date": "2026-02-07",
-          "entry_price": 87.4673,
-          "exit_date": "2026-06-03",
-          "exit_price": 74.1426,
-          "pct_return": -15.91,
-          "pnl": -879.85,
-          "reason": "Stop Loss -15%",
-          "duration_days": 116,
-          "is_open": false
-        },
-        {
-          "entry_date": "2026-06-04",
-          "entry_price": 71.6121,
-          "exit_date": "EN CURSO",
-          "exit_price": 103.25,
-          "pct_return": 43.03,
-          "pnl": 2000.86,
-          "reason": "Posición Activa",
-          "duration_days": 96,
-          "is_open": true
-        }
-      ]
-    },
-    {
       "ticker": "AMZN",
       "category": "US Stock",
       "price": 256.97,
@@ -9411,7 +9335,7 @@
         "trades_count": 4,
         "win_rate": 50.0,
         "profit_factor": 1.29,
-        "net_profit_usd": 1144.68,
+        "net_profit_usd": 1144.69,
         "is_currently_in_position": true,
         "entry_price": 135.47,
         "floating_pnl_pct": 67.92,
@@ -9424,7 +9348,7 @@
           "entry_date": "2021-09-10",
           "entry_price": 108.86,
           "exit_date": "2022-01-24",
-          "exit_price": 89.0226,
+          "exit_price": 89.0225,
           "pct_return": -18.87,
           "pnl": -1887.28,
           "reason": "Stop Loss -15%",
@@ -9446,7 +9370,7 @@
           "entry_date": "2022-05-24",
           "entry_price": 74.1716,
           "exit_date": "2022-09-14",
-          "exit_price": 86.6725,
+          "exit_price": 86.6724,
           "pct_return": 15.92,
           "pnl": 968.91,
           "reason": "Macro Crash Exit",
@@ -9459,7 +9383,7 @@
           "exit_date": "2025-04-04",
           "exit_price": 129.85,
           "pct_return": 57.98,
-          "pnl": 4089.99,
+          "pnl": 4090.0,
           "reason": "Macro Crash Exit",
           "duration_days": 921,
           "is_open": false
@@ -9682,7 +9606,7 @@
         "trades_count": 6,
         "win_rate": 33.3,
         "profit_factor": 0.04,
-        "net_profit_usd": -4854.61,
+        "net_profit_usd": -4854.62,
         "is_currently_in_position": true,
         "entry_price": 217.04,
         "floating_pnl_pct": 54.38,
@@ -9697,7 +9621,7 @@
           "exit_date": "2022-06-15",
           "exit_price": 281.6,
           "pct_return": -14.63,
-          "pnl": -1029.38,
+          "pnl": -1029.39,
           "reason": "Stop Loss -15%",
           "duration_days": 48,
           "is_open": false
@@ -9882,7 +9806,7 @@
           "exit_date": "EN CURSO",
           "exit_price": 54.51,
           "pct_return": 61.41,
-          "pnl": 7642.06,
+          "pnl": 7642.07,
           "reason": "Posición Activa",
           "duration_days": 502,
           "is_open": true
@@ -10432,10 +10356,86 @@
       ]
     },
     {
+      "ticker": "SOL-USD",
+      "category": "Crypto",
+      "price": 103.08,
+      "change_24h": -0.76,
+      "signal": "HOLD",
+      "metrics": {
+        "trades_count": 30,
+        "win_rate": 30.0,
+        "profit_factor": 0.68,
+        "net_profit_usd": -5349.94,
+        "is_currently_in_position": true,
+        "entry_price": 71.6121,
+        "floating_pnl_pct": 42.79,
+        "in_sl_recovery": true
+      },
+      "dist_sl_pct": 58.94,
+      "dist_sma20_pct": 2.33,
+      "recent_trades": [
+        {
+          "entry_date": "2025-04-23",
+          "entry_price": 148.74,
+          "exit_date": "2025-12-18",
+          "exit_price": 123.13,
+          "pct_return": -17.88,
+          "pnl": -1938.57,
+          "reason": "Stop Loss -15%",
+          "duration_days": 239,
+          "is_open": false
+        },
+        {
+          "entry_date": "2025-12-19",
+          "entry_price": 119.57,
+          "exit_date": "2026-02-02",
+          "exit_price": 100.84,
+          "pct_return": -16.33,
+          "pnl": -1454.14,
+          "reason": "Stop Loss -15%",
+          "duration_days": 45,
+          "is_open": false
+        },
+        {
+          "entry_date": "2026-02-03",
+          "entry_price": 104.47,
+          "exit_date": "2026-02-06",
+          "exit_price": 78.1855,
+          "pct_return": -25.76,
+          "pnl": -1918.55,
+          "reason": "Stop Loss -15%",
+          "duration_days": 3,
+          "is_open": false
+        },
+        {
+          "entry_date": "2026-02-07",
+          "entry_price": 87.4673,
+          "exit_date": "2026-06-03",
+          "exit_price": 74.1426,
+          "pct_return": -15.91,
+          "pnl": -879.85,
+          "reason": "Stop Loss -15%",
+          "duration_days": 116,
+          "is_open": false
+        },
+        {
+          "entry_date": "2026-06-04",
+          "entry_price": 71.6121,
+          "exit_date": "EN CURSO",
+          "exit_price": 103.08,
+          "pct_return": 42.79,
+          "pnl": 1989.9,
+          "reason": "Posición Activa",
+          "duration_days": 96,
+          "is_open": true
+        }
+      ]
+    },
+    {
       "ticker": "BTC-USD",
       "category": "Crypto",
-      "price": 78526.21,
-      "change_24h": -0.75,
+      "price": 78503.85,
+      "change_24h": -0.77,
       "signal": "HOLD",
       "metrics": {
         "trades_count": 23,
@@ -10444,11 +10444,11 @@
         "net_profit_usd": -402.63,
         "is_currently_in_position": true,
         "entry_price": 60016.31,
-        "floating_pnl_pct": 29.8,
+        "floating_pnl_pct": 29.76,
         "in_sl_recovery": true
       },
-      "dist_sl_pct": 45.84,
-      "dist_sma20_pct": 0.11,
+      "dist_sl_pct": 45.8,
+      "dist_sma20_pct": 0.08,
       "recent_trades": [
         {
           "entry_date": "2025-04-21",
@@ -10498,9 +10498,9 @@
           "entry_date": "2026-06-27",
           "entry_price": 60016.31,
           "exit_date": "EN CURSO",
-          "exit_price": 78526.21,
-          "pct_return": 29.8,
-          "pnl": 2859.71,
+          "exit_price": 78503.85,
+          "pct_return": 29.76,
+          "pnl": 2856.16,
           "reason": "Posición Activa",
           "duration_days": 73,
           "is_open": true
@@ -10695,7 +10695,7 @@
           "exit_date": "EN CURSO",
           "exit_price": 49.0,
           "pct_return": 81.15,
-          "pnl": 8340.12,
+          "pnl": 8340.13,
           "reason": "Posición Activa",
           "duration_days": 502,
           "is_open": true
@@ -10842,7 +10842,7 @@
         "trades_count": 2,
         "win_rate": 100.0,
         "profit_factor": 99.0,
-        "net_profit_usd": 7906.88,
+        "net_profit_usd": 7906.89,
         "is_currently_in_position": true,
         "entry_price": 252.8,
         "floating_pnl_pct": 43.49,
@@ -10868,7 +10868,7 @@
           "exit_date": "2025-04-04",
           "exit_price": 252.15,
           "pct_return": 72.4,
-          "pnl": 7519.81,
+          "pnl": 7519.82,
           "reason": "Macro Crash Exit",
           "duration_days": 921,
           "is_open": false
@@ -10879,7 +10879,7 @@
           "exit_date": "EN CURSO",
           "exit_price": 365.66,
           "pct_return": 43.49,
-          "pnl": 7787.67,
+          "pnl": 7787.68,
           "reason": "Posición Activa",
           "duration_days": 502,
           "is_open": true
@@ -11063,7 +11063,7 @@
           "exit_date": "2025-04-04",
           "exit_price": 86.3319,
           "pct_return": -11.82,
-          "pnl": -630.8,
+          "pnl": -630.79,
           "reason": "Macro Crash Exit",
           "duration_days": 548,
           "is_open": false
@@ -11074,7 +11074,7 @@
           "exit_date": "EN CURSO",
           "exit_price": 162.71,
           "pct_return": 86.03,
-          "pnl": 4049.53,
+          "pnl": 4049.52,
           "reason": "Posición Activa",
           "duration_days": 502,
           "is_open": true
@@ -11356,7 +11356,7 @@
           "exit_date": "EN CURSO",
           "exit_price": 462.98,
           "pct_return": 10.1,
-          "pnl": 1907.41,
+          "pnl": 1907.4,
           "reason": "Posición Activa",
           "duration_days": 502,
           "is_open": true
@@ -11449,7 +11449,7 @@
         "trades_count": 4,
         "win_rate": 50.0,
         "profit_factor": 0.72,
-        "net_profit_usd": -875.04,
+        "net_profit_usd": -875.03,
         "is_currently_in_position": true,
         "entry_price": 150.82,
         "floating_pnl_pct": 59.77,
@@ -11497,7 +11497,7 @@
           "exit_date": "2025-04-04",
           "exit_price": 147.49,
           "pct_return": 31.1,
-          "pnl": 2164.67,
+          "pnl": 2164.68,
           "reason": "Macro Crash Exit",
           "duration_days": 749,
           "is_open": false
@@ -11939,7 +11939,7 @@
         "profit_factor": 1.72,
         "net_profit_usd": 1429.51,
         "is_currently_in_position": true,
-        "entry_price": 82.4192,
+        "entry_price": 82.4191,
         "floating_pnl_pct": 130.95,
         "in_sl_recovery": true
       },
@@ -11981,7 +11981,7 @@
         },
         {
           "entry_date": "2025-04-24",
-          "entry_price": 82.4192,
+          "entry_price": 82.4191,
           "exit_date": "EN CURSO",
           "exit_price": 191.88,
           "pct_return": 130.95,
@@ -12208,7 +12208,7 @@
         "trades_count": 5,
         "win_rate": 20.0,
         "profit_factor": 0.42,
-        "net_profit_usd": -2563.4,
+        "net_profit_usd": -2563.41,
         "is_currently_in_position": true,
         "entry_price": 37.3806,
         "floating_pnl_pct": 65.84,
@@ -12245,7 +12245,7 @@
           "exit_date": "2023-05-04",
           "exit_price": 24.5734,
           "pct_return": -20.41,
-          "pnl": -1430.72,
+          "pnl": -1430.73,
           "reason": "Stop Loss -15%",
           "duration_days": 44,
           "is_open": false
@@ -12267,7 +12267,7 @@
           "exit_date": "EN CURSO",
           "exit_price": 62.49,
           "pct_return": 65.84,
-          "pnl": 4896.08,
+          "pnl": 4896.07,
           "reason": "Posición Activa",
           "duration_days": 502,
           "is_open": true
@@ -12674,7 +12674,7 @@
         "trades_count": 6,
         "win_rate": 16.7,
         "profit_factor": 0.44,
-        "net_profit_usd": -3758.22,
+        "net_profit_usd": -3758.23,
         "is_currently_in_position": true,
         "entry_price": 33.0185,
         "floating_pnl_pct": 13.24,
@@ -12891,7 +12891,7 @@
         "trades_count": 4,
         "win_rate": 25.0,
         "profit_factor": 1.1,
-        "net_profit_usd": 420.55,
+        "net_profit_usd": 420.56,
         "is_currently_in_position": true,
         "entry_price": 76.0356,
         "floating_pnl_pct": -8.59,
@@ -12928,7 +12928,7 @@
           "exit_date": "2025-04-04",
           "exit_price": 99.3892,
           "pct_return": 61.42,
-          "pnl": 4778.79,
+          "pnl": 4778.8,
           "reason": "Macro Crash Exit",
           "duration_days": 921,
           "is_open": false
@@ -13622,7 +13622,7 @@
           "exit_date": "EN CURSO",
           "exit_price": 256.4,
           "pct_return": 132.5,
-          "pnl": 16207.29,
+          "pnl": 16207.3,
           "reason": "Posición Activa",
           "duration_days": 502,
           "is_open": true
@@ -13975,7 +13975,7 @@
         "trades_count": 3,
         "win_rate": 33.3,
         "profit_factor": 0.84,
-        "net_profit_usd": -566.1,
+        "net_profit_usd": -566.09,
         "is_currently_in_position": true,
         "entry_price": 95.6627,
         "floating_pnl_pct": 6.74,
@@ -14012,7 +14012,7 @@
           "exit_date": "2025-11-04",
           "exit_price": 97.2038,
           "pct_return": -22.32,
-          "pnl": -2710.35,
+          "pnl": -2710.34,
           "reason": "Stop Loss -15%",
           "duration_days": 194,
           "is_open": false
@@ -14127,7 +14127,7 @@
       "recent_trades": [
         {
           "entry_date": "2021-09-10",
-          "entry_price": 62.5334,
+          "entry_price": 62.5335,
           "exit_date": "2022-09-14",
           "exit_price": 61.4647,
           "pct_return": -2.49,
@@ -14246,7 +14246,7 @@
         "trades_count": 2,
         "win_rate": 100.0,
         "profit_factor": 99.0,
-        "net_profit_usd": 7963.1,
+        "net_profit_usd": 7963.11,
         "is_currently_in_position": true,
         "entry_price": 79.3086,
         "floating_pnl_pct": -6.59,
@@ -14272,7 +14272,7 @@
           "exit_date": "2025-04-04",
           "exit_price": 81.7764,
           "pct_return": 79.26,
-          "pnl": 7942.25,
+          "pnl": 7942.26,
           "reason": "Macro Crash Exit",
           "duration_days": 921,
           "is_open": false
@@ -14335,7 +14335,7 @@
           "entry_date": "2025-04-24",
           "entry_price": 99.1253,
           "exit_date": "2025-10-29",
-          "exit_price": 82.6694,
+          "exit_price": 82.6693,
           "pct_return": -17.27,
           "pnl": -2475.46,
           "reason": "Stop Loss -15%",
@@ -14495,7 +14495,7 @@
         "trades_count": 11,
         "win_rate": 0.0,
         "profit_factor": 0.0,
-        "net_profit_usd": -8835.18,
+        "net_profit_usd": -8835.16,
         "is_currently_in_position": true,
         "entry_price": 55.9255,
         "floating_pnl_pct": 80.38,
@@ -14532,7 +14532,7 @@
           "exit_date": "2024-11-01",
           "exit_price": 65.8377,
           "pct_return": -31.26,
-          "pnl": -671.56,
+          "pnl": -671.55,
           "reason": "Stop Loss -15%",
           "duration_days": 102,
           "is_open": false
@@ -14701,7 +14701,7 @@
         "trades_count": 2,
         "win_rate": 50.0,
         "profit_factor": 4.84,
-        "net_profit_usd": 2134.91,
+        "net_profit_usd": 2134.92,
         "is_currently_in_position": true,
         "entry_price": 94.3167,
         "floating_pnl_pct": 25.56,
@@ -14727,7 +14727,7 @@
           "exit_date": "2025-04-04",
           "exit_price": 93.5482,
           "pct_return": 28.49,
-          "pnl": 2691.0,
+          "pnl": 2691.01,
           "reason": "Macro Crash Exit",
           "duration_days": 921,
           "is_open": false
@@ -14755,7 +14755,7 @@
         "trades_count": 3,
         "win_rate": 66.7,
         "profit_factor": 3.05,
-        "net_profit_usd": 3879.66,
+        "net_profit_usd": 3879.67,
         "is_currently_in_position": true,
         "entry_price": 71.106,
         "floating_pnl_pct": 33.23,
@@ -14792,7 +14792,7 @@
           "exit_date": "2025-04-04",
           "exit_price": 69.7747,
           "pct_return": 50.93,
-          "pnl": 4683.33,
+          "pnl": 4683.34,
           "reason": "Macro Crash Exit",
           "duration_days": 689,
           "is_open": false
@@ -15080,7 +15080,7 @@
         "trades_count": 3,
         "win_rate": 66.7,
         "profit_factor": 3.12,
-        "net_profit_usd": 4835.27,
+        "net_profit_usd": 4835.28,
         "is_currently_in_position": true,
         "entry_price": 60.3183,
         "floating_pnl_pct": 41.27,
@@ -15095,7 +15095,7 @@
           "exit_date": "2022-09-14",
           "exit_price": 60.4101,
           "pct_return": 43.25,
-          "pnl": 4325.13,
+          "pnl": 4325.14,
           "reason": "Macro Crash Exit",
           "duration_days": 369,
           "is_open": false
@@ -15160,7 +15160,7 @@
           "exit_date": "2022-06-14",
           "exit_price": 31.3138,
           "pct_return": -14.74,
-          "pnl": -1041.31,
+          "pnl": -1041.3,
           "reason": "Stop Loss -15%",
           "duration_days": 29,
           "is_open": false
@@ -15171,7 +15171,7 @@
           "exit_date": "2022-09-14",
           "exit_price": 39.138,
           "pct_return": 21.42,
-          "pnl": 1290.9,
+          "pnl": 1290.89,
           "reason": "Macro Crash Exit",
           "duration_days": 91,
           "is_open": false
@@ -15204,7 +15204,7 @@
           "exit_date": "EN CURSO",
           "exit_price": 85.79,
           "pct_return": 86.83,
-          "pnl": 7913.72,
+          "pnl": 7913.73,
           "reason": "Posición Activa",
           "duration_days": 502,
           "is_open": true
@@ -15221,7 +15221,7 @@
         "trades_count": 2,
         "win_rate": 50.0,
         "profit_factor": 14.24,
-        "net_profit_usd": 3972.11,
+        "net_profit_usd": 3972.12,
         "is_currently_in_position": true,
         "entry_price": 361.68,
         "floating_pnl_pct": -13.39,
@@ -15247,7 +15247,7 @@
           "exit_date": "2025-04-04",
           "exit_price": 385.9,
           "pct_return": 44.04,
-          "pnl": 4272.23,
+          "pnl": 4272.24,
           "reason": "Macro Crash Exit",
           "duration_days": 921,
           "is_open": false
@@ -15817,7 +15817,7 @@
         "trades_count": 4,
         "win_rate": 50.0,
         "profit_factor": 2.58,
-        "net_profit_usd": 4904.2,
+        "net_profit_usd": 4904.21,
         "is_currently_in_position": true,
         "entry_price": 188.38,
         "floating_pnl_pct": 33.48,
@@ -15843,7 +15843,7 @@
           "exit_date": "2022-09-14",
           "exit_price": 112.24,
           "pct_return": 11.58,
-          "pnl": 971.65,
+          "pnl": 971.66,
           "reason": "Macro Crash Exit",
           "duration_days": 295,
           "is_open": false
@@ -15876,7 +15876,7 @@
           "exit_date": "EN CURSO",
           "exit_price": 253.46,
           "pct_return": 33.48,
-          "pnl": 4989.22,
+          "pnl": 4989.23,
           "reason": "Posición Activa",
           "duration_days": 502,
           "is_open": true
@@ -15958,7 +15958,7 @@
         "trades_count": 3,
         "win_rate": 66.7,
         "profit_factor": 2.75,
-        "net_profit_usd": 5443.97,
+        "net_profit_usd": 5443.96,
         "is_currently_in_position": true,
         "entry_price": 58.7668,
         "floating_pnl_pct": -3.44,
@@ -15982,9 +15982,9 @@
           "entry_date": "2022-09-26",
           "entry_price": 40.9625,
           "exit_date": "2025-04-04",
-          "exit_price": 68.4517,
+          "exit_price": 68.4516,
           "pct_return": 65.77,
-          "pnl": 7360.29,
+          "pnl": 7360.28,
           "reason": "Macro Crash Exit",
           "duration_days": 921,
           "is_open": false
@@ -16522,7 +16522,7 @@
         "trades_count": 3,
         "win_rate": 33.3,
         "profit_factor": 1.85,
-        "net_profit_usd": 1789.14,
+        "net_profit_usd": 1789.16,
         "is_currently_in_position": true,
         "entry_price": 164.92,
         "floating_pnl_pct": 88.95,
@@ -16537,7 +16537,7 @@
           "exit_date": "2021-09-30",
           "exit_price": 162.21,
           "pct_return": -15.95,
-          "pnl": -1595.14,
+          "pnl": -1595.13,
           "reason": "Stop Loss -15%",
           "duration_days": 20,
           "is_open": false
@@ -16559,7 +16559,7 @@
           "exit_date": "2025-04-04",
           "exit_price": 166.49,
           "pct_return": 49.4,
-          "pnl": 3898.35,
+          "pnl": 3898.36,
           "reason": "Macro Crash Exit",
           "duration_days": 921,
           "is_open": false
@@ -17097,7 +17097,7 @@
         "trades_count": 5,
         "win_rate": 40.0,
         "profit_factor": 0.8,
-        "net_profit_usd": -1157.39,
+        "net_profit_usd": -1157.38,
         "is_currently_in_position": true,
         "entry_price": 353.89,
         "floating_pnl_pct": 10.91,
@@ -17112,7 +17112,7 @@
           "exit_date": "2022-09-14",
           "exit_price": 385.24,
           "pct_return": 2.5,
-          "pnl": 207.38,
+          "pnl": 207.39,
           "reason": "Macro Crash Exit",
           "duration_days": 93,
           "is_open": false
@@ -17541,7 +17541,7 @@
         "trades_count": 7,
         "win_rate": 14.3,
         "profit_factor": 0.29,
-        "net_profit_usd": -4964.54,
+        "net_profit_usd": -4964.53,
         "is_currently_in_position": true,
         "entry_price": 153.39,
         "floating_pnl_pct": 10.99,
@@ -18051,7 +18051,7 @@
         "trades_count": 7,
         "win_rate": 28.6,
         "profit_factor": 0.55,
-        "net_profit_usd": -2970.86,
+        "net_profit_usd": -2970.85,
         "is_currently_in_position": true,
         "entry_price": 182.26,
         "floating_pnl_pct": 20.32,
@@ -18077,7 +18077,7 @@
           "exit_date": "2023-09-06",
           "exit_price": 150.89,
           "pct_return": -16.24,
-          "pnl": -1220.9,
+          "pnl": -1220.89,
           "reason": "Stop Loss -15%",
           "duration_days": 29,
           "is_open": false
@@ -18281,7 +18281,7 @@
         "profit_factor": 0.13,
         "net_profit_usd": -4181.11,
         "is_currently_in_position": true,
-        "entry_price": 70.1804,
+        "entry_price": 70.1803,
         "floating_pnl_pct": 26.4,
         "in_sl_recovery": true
       },
@@ -18334,7 +18334,7 @@
         },
         {
           "entry_date": "2025-04-24",
-          "entry_price": 70.1804,
+          "entry_price": 70.1803,
           "exit_date": "EN CURSO",
           "exit_price": 89.42,
           "pct_return": 26.4,
@@ -19321,7 +19321,7 @@
         "trades_count": 4,
         "win_rate": 50.0,
         "profit_factor": 1.84,
-        "net_profit_usd": 7190.55,
+        "net_profit_usd": 7190.57,
         "is_currently_in_position": true,
         "entry_price": 210.38,
         "floating_pnl_pct": 18.57,
@@ -19336,7 +19336,7 @@
           "exit_date": "2022-09-14",
           "exit_price": 178.4,
           "pct_return": 27.37,
-          "pnl": 2737.19,
+          "pnl": 2737.2,
           "reason": "Macro Crash Exit",
           "duration_days": 369,
           "is_open": false
@@ -19347,7 +19347,7 @@
           "exit_date": "2025-04-04",
           "exit_price": 337.12,
           "pct_return": 102.55,
-          "pnl": 13062.03,
+          "pnl": 13062.04,
           "reason": "Macro Crash Exit",
           "duration_days": 921,
           "is_open": false
@@ -19380,7 +19380,7 @@
           "exit_date": "EN CURSO",
           "exit_price": 251.45,
           "pct_return": 18.57,
-          "pnl": 3191.44,
+          "pnl": 3191.45,
           "reason": "Posición Activa",
           "duration_days": 209,
           "is_open": true
@@ -20497,11 +20497,176 @@
   ],
   "ais11_signals": [
     {
+      "ticker": "NU",
+      "category": "US Stock",
+      "price": 15.33,
+      "change_24h": -0.26,
+      "ai_score": 70.9,
+      "signal": "HOLD",
+      "metrics": {
+        "trades_count": 2,
+        "win_rate": 50.0,
+        "profit_factor": 7.96,
+        "net_profit_usd": 10680.54,
+        "is_currently_in_position": true,
+        "entry_price": 11.75,
+        "floating_pnl_pct": 29.43,
+        "in_sl_recovery": false
+      },
+      "dist_sl_pct": 45.47,
+      "dist_sma20_pct": 4.32,
+      "recent_trades": [
+        {
+          "entry_date": "2022-09-26",
+          "entry_price": 4.57,
+          "exit_date": "2022-12-14",
+          "exit_price": 3.9,
+          "pct_return": -15.34,
+          "pnl": -1534.22,
+          "reason": "Stop Loss -15%",
+          "duration_days": 79,
+          "is_open": false
+        },
+        {
+          "entry_date": "2022-12-30",
+          "entry_price": 4.0,
+          "exit_date": "2025-04-04",
+          "exit_price": 9.85,
+          "pct_return": 144.28,
+          "pnl": 12214.76,
+          "reason": "Macro Crash Exit",
+          "duration_days": 826,
+          "is_open": false
+        },
+        {
+          "entry_date": "2025-05-23",
+          "entry_price": 11.75,
+          "exit_date": "EN CURSO",
+          "exit_price": 15.33,
+          "pct_return": 29.43,
+          "pnl": 6085.55,
+          "reason": "Posición Activa",
+          "duration_days": 473,
+          "is_open": true
+        }
+      ]
+    },
+    {
+      "ticker": "XOM",
+      "category": "US Stock",
+      "price": 160.66,
+      "change_24h": 0.75,
+      "ai_score": 58.0,
+      "signal": "HOLD",
+      "metrics": {
+        "trades_count": 2,
+        "win_rate": 100.0,
+        "profit_factor": 99.0,
+        "net_profit_usd": 15234.02,
+        "is_currently_in_position": true,
+        "entry_price": 103.01,
+        "floating_pnl_pct": 54.72,
+        "in_sl_recovery": false
+      },
+      "dist_sl_pct": 70.97,
+      "dist_sma20_pct": -0.37,
+      "recent_trades": [
+        {
+          "entry_date": "2021-09-10",
+          "entry_price": 46.3169,
+          "exit_date": "2022-09-14",
+          "exit_price": 84.3763,
+          "pct_return": 80.72,
+          "pnl": 8071.71,
+          "reason": "Macro Crash Exit",
+          "duration_days": 369,
+          "is_open": false
+        },
+        {
+          "entry_date": "2022-09-26",
+          "entry_price": 74.4729,
+          "exit_date": "2025-04-04",
+          "exit_price": 104.83,
+          "pct_return": 39.63,
+          "pnl": 7162.31,
+          "reason": "Macro Crash Exit",
+          "duration_days": 921,
+          "is_open": false
+        },
+        {
+          "entry_date": "2025-04-24",
+          "entry_price": 103.01,
+          "exit_date": "EN CURSO",
+          "exit_price": 160.66,
+          "pct_return": 54.72,
+          "pnl": 13807.08,
+          "reason": "Posición Activa",
+          "duration_days": 502,
+          "is_open": true
+        }
+      ]
+    },
+    {
+      "ticker": "KO",
+      "category": "US Stock",
+      "price": 88.36,
+      "change_24h": 0.33,
+      "ai_score": 55.9,
+      "signal": "HOLD",
+      "metrics": {
+        "trades_count": 2,
+        "win_rate": 100.0,
+        "profit_factor": 99.0,
+        "net_profit_usd": 5079.35,
+        "is_currently_in_position": true,
+        "entry_price": 70.5077,
+        "floating_pnl_pct": 24.32,
+        "in_sl_recovery": false
+      },
+      "dist_sl_pct": 40.32,
+      "dist_sma20_pct": -0.64,
+      "recent_trades": [
+        {
+          "entry_date": "2021-09-10",
+          "entry_price": 48.3091,
+          "exit_date": "2022-09-14",
+          "exit_price": 53.899,
+          "pct_return": 10.68,
+          "pnl": 1068.04,
+          "reason": "Macro Crash Exit",
+          "duration_days": 369,
+          "is_open": false
+        },
+        {
+          "entry_date": "2022-09-30",
+          "entry_price": 50.9167,
+          "exit_date": "2025-04-04",
+          "exit_price": 69.9283,
+          "pct_return": 36.24,
+          "pnl": 4011.31,
+          "reason": "Macro Crash Exit",
+          "duration_days": 917,
+          "is_open": false
+        },
+        {
+          "entry_date": "2025-04-24",
+          "entry_price": 70.5077,
+          "exit_date": "EN CURSO",
+          "exit_price": 88.36,
+          "pct_return": 24.32,
+          "pnl": 3667.17,
+          "reason": "Posición Activa",
+          "duration_days": 502,
+          "is_open": true
+        }
+      ]
+    },
+    {
       "ticker": "C",
       "category": "US Stock",
       "price": 136.74,
       "change_24h": -0.71,
-      "ai_score": 50.9,
+      "ai_score": 45.0,
       "signal": "HOLD",
       "metrics": {
         "trades_count": 7,
@@ -20578,7 +20743,7 @@
       "category": "US Stock",
       "price": 505.83,
       "change_24h": -0.04,
-      "ai_score": 50.1,
+      "ai_score": 41.3,
       "signal": "HOLD",
       "metrics": {
         "trades_count": 2,
@@ -20629,111 +20794,67 @@
       ]
     },
     {
-      "ticker": "KO",
+      "ticker": "O",
       "category": "US Stock",
-      "price": 88.36,
-      "change_24h": 0.33,
-      "ai_score": 50.1,
+      "price": 61.02,
+      "change_24h": -0.38,
+      "ai_score": 32.7,
       "signal": "HOLD",
       "metrics": {
-        "trades_count": 2,
-        "win_rate": 100.0,
-        "profit_factor": 99.0,
-        "net_profit_usd": 5079.35,
+        "trades_count": 3,
+        "win_rate": 66.7,
+        "profit_factor": 0.88,
+        "net_profit_usd": -221.25,
         "is_currently_in_position": true,
-        "entry_price": 70.5077,
-        "floating_pnl_pct": 24.32,
+        "entry_price": 53.3125,
+        "floating_pnl_pct": 13.54,
         "in_sl_recovery": false
       },
-      "dist_sl_pct": 40.32,
-      "dist_sma20_pct": -0.64,
+      "dist_sl_pct": 29.46,
+      "dist_sma20_pct": -1.57,
       "recent_trades": [
         {
           "entry_date": "2021-09-10",
-          "entry_price": 48.3091,
+          "entry_price": 52.2473,
           "exit_date": "2022-09-14",
-          "exit_price": 53.899,
-          "pct_return": 10.68,
-          "pnl": 1068.04,
+          "exit_price": 53.1708,
+          "pct_return": 0.96,
+          "pnl": 95.51,
           "reason": "Macro Crash Exit",
           "duration_days": 369,
           "is_open": false
         },
         {
-          "entry_date": "2022-09-30",
-          "entry_price": 50.9167,
-          "exit_date": "2025-04-04",
-          "exit_price": 69.9283,
-          "pct_return": 36.24,
-          "pnl": 4011.31,
-          "reason": "Macro Crash Exit",
-          "duration_days": 917,
-          "is_open": false
-        },
-        {
-          "entry_date": "2025-04-24",
-          "entry_price": 70.5077,
-          "exit_date": "EN CURSO",
-          "exit_price": 88.36,
-          "pct_return": 24.32,
-          "pnl": 3667.17,
-          "reason": "Posición Activa",
-          "duration_days": 502,
-          "is_open": true
-        }
-      ]
-    },
-    {
-      "ticker": "NU",
-      "category": "US Stock",
-      "price": 15.33,
-      "change_24h": -0.26,
-      "ai_score": 49.8,
-      "signal": "HOLD",
-      "metrics": {
-        "trades_count": 2,
-        "win_rate": 50.0,
-        "profit_factor": 7.96,
-        "net_profit_usd": 10680.54,
-        "is_currently_in_position": true,
-        "entry_price": 11.75,
-        "floating_pnl_pct": 29.43,
-        "in_sl_recovery": false
-      },
-      "dist_sl_pct": 45.47,
-      "dist_sma20_pct": 4.32,
-      "recent_trades": [
-        {
-          "entry_date": "2022-09-26",
-          "entry_price": 4.57,
-          "exit_date": "2022-12-14",
-          "exit_price": 3.9,
-          "pct_return": -15.34,
-          "pnl": -1534.22,
+          "entry_date": "2022-09-28",
+          "entry_price": 48.2968,
+          "exit_date": "2023-10-31",
+          "exit_price": 39.6496,
+          "pct_return": -18.56,
+          "pnl": -1873.7,
           "reason": "Stop Loss -15%",
-          "duration_days": 79,
+          "duration_days": 398,
           "is_open": false
         },
         {
-          "entry_date": "2022-12-30",
-          "entry_price": 4.0,
+          "entry_date": "2023-11-03",
+          "entry_price": 43.5162,
           "exit_date": "2025-04-04",
-          "exit_price": 9.85,
-          "pct_return": 144.28,
-          "pnl": 12214.76,
+          "exit_price": 52.1733,
+          "pct_return": 18.94,
+          "pnl": 1556.94,
           "reason": "Macro Crash Exit",
-          "duration_days": 826,
+          "duration_days": 518,
           "is_open": false
         },
         {
-          "entry_date": "2025-05-23",
-          "entry_price": 11.75,
+          "entry_date": "2025-04-30",
+          "entry_price": 53.3125,
           "exit_date": "EN CURSO",
-          "exit_price": 15.33,
-          "pct_return": 29.43,
-          "pnl": 6085.55,
+          "exit_price": 61.02,
+          "pct_return": 13.54,
+          "pnl": 1324.37,
           "reason": "Posición Activa",
-          "duration_days": 473,
+          "duration_days": 496,
           "is_open": true
         }
       ]
@@ -20743,7 +20864,7 @@
       "category": "US Stock",
       "price": 493.95,
       "change_24h": -1.15,
-      "ai_score": 49.7,
+      "ai_score": 25.6,
       "signal": "HOLD",
       "metrics": {
         "trades_count": 3,
@@ -20805,132 +20926,11 @@
       ]
     },
     {
-      "ticker": "O",
-      "category": "US Stock",
-      "price": 61.02,
-      "change_24h": -0.38,
-      "ai_score": 49.6,
-      "signal": "HOLD",
-      "metrics": {
-        "trades_count": 3,
-        "win_rate": 66.7,
-        "profit_factor": 0.88,
-        "net_profit_usd": -221.24,
-        "is_currently_in_position": true,
-        "entry_price": 53.3125,
-        "floating_pnl_pct": 13.54,
-        "in_sl_recovery": false
-      },
-      "dist_sl_pct": 29.46,
-      "dist_sma20_pct": -1.57,
-      "recent_trades": [
-        {
-          "entry_date": "2021-09-10",
-          "entry_price": 52.2473,
-          "exit_date": "2022-09-14",
-          "exit_price": 53.1708,
-          "pct_return": 0.96,
-          "pnl": 95.52,
-          "reason": "Macro Crash Exit",
-          "duration_days": 369,
-          "is_open": false
-        },
-        {
-          "entry_date": "2022-09-28",
-          "entry_price": 48.2968,
-          "exit_date": "2023-10-31",
-          "exit_price": 39.6496,
-          "pct_return": -18.56,
-          "pnl": -1873.7,
-          "reason": "Stop Loss -15%",
-          "duration_days": 398,
-          "is_open": false
-        },
-        {
-          "entry_date": "2023-11-03",
-          "entry_price": 43.5162,
-          "exit_date": "2025-04-04",
-          "exit_price": 52.1733,
-          "pct_return": 18.94,
-          "pnl": 1556.94,
-          "reason": "Macro Crash Exit",
-          "duration_days": 518,
-          "is_open": false
-        },
-        {
-          "entry_date": "2025-04-30",
-          "entry_price": 53.3125,
-          "exit_date": "EN CURSO",
-          "exit_price": 61.02,
-          "pct_return": 13.54,
-          "pnl": 1324.37,
-          "reason": "Posición Activa",
-          "duration_days": 496,
-          "is_open": true
-        }
-      ]
-    },
-    {
-      "ticker": "XOM",
-      "category": "US Stock",
-      "price": 160.66,
-      "change_24h": 0.75,
-      "ai_score": 49.0,
-      "signal": "HOLD",
-      "metrics": {
-        "trades_count": 2,
-        "win_rate": 100.0,
-        "profit_factor": 99.0,
-        "net_profit_usd": 15234.02,
-        "is_currently_in_position": true,
-        "entry_price": 103.01,
-        "floating_pnl_pct": 54.72,
-        "in_sl_recovery": false
-      },
-      "dist_sl_pct": 70.97,
-      "dist_sma20_pct": -0.37,
-      "recent_trades": [
-        {
-          "entry_date": "2021-09-10",
-          "entry_price": 46.3169,
-          "exit_date": "2022-09-14",
-          "exit_price": 84.3763,
-          "pct_return": 80.72,
-          "pnl": 8071.71,
-          "reason": "Macro Crash Exit",
-          "duration_days": 369,
-          "is_open": false
-        },
-        {
-          "entry_date": "2022-09-26",
-          "entry_price": 74.4729,
-          "exit_date": "2025-04-04",
-          "exit_price": 104.83,
-          "pct_return": 39.63,
-          "pnl": 7162.31,
-          "reason": "Macro Crash Exit",
-          "duration_days": 921,
-          "is_open": false
-        },
-        {
-          "entry_date": "2025-04-24",
-          "entry_price": 103.01,
-          "exit_date": "EN CURSO",
-          "exit_price": 160.66,
-          "pct_return": 54.72,
-          "pnl": 13807.08,
-          "reason": "Posición Activa",
-          "duration_days": 502,
-          "is_open": true
-        }
-      ]
-    },
-    {
       "ticker": "V",
       "category": "US Stock",
       "price": 368.64,
       "change_24h": -1.71,
-      "ai_score": 48.7,
+      "ai_score": 9.7,
       "signal": "HOLD",
       "metrics": {
         "trades_count": 3,
@@ -23218,27 +23218,6 @@
       "recent_trades": []
     },
     {
-      "ticker": "XRP-USD",
-      "category": "Crypto",
-      "price": 1.4204,
-      "change_24h": 1.62,
-      "ai_score": 50.3,
-      "signal": "WAIT",
-      "metrics": {
-        "trades_count": 0,
-        "win_rate": 0.0,
-        "profit_factor": 1.0,
-        "net_profit_usd": 0,
-        "is_currently_in_position": false,
-        "entry_price": null,
-        "floating_pnl_pct": 0.0,
-        "in_sl_recovery": false
-      },
-      "dist_sl_pct": -15.0,
-      "dist_sma20_pct": 0.67,
-      "recent_trades": []
-    },
-    {
       "ticker": "GOOGL",
       "category": "US Stock",
       "price": 338.36,
@@ -23428,6 +23407,27 @@
       "recent_trades": []
     },
     {
+      "ticker": "XRP-USD",
+      "category": "Crypto",
+      "price": 1.4185,
+      "change_24h": 1.48,
+      "ai_score": 50.2,
+      "signal": "WAIT",
+      "metrics": {
+        "trades_count": 0,
+        "win_rate": 0.0,
+        "profit_factor": 1.0,
+        "net_profit_usd": 0,
+        "is_currently_in_position": false,
+        "entry_price": null,
+        "floating_pnl_pct": 0.0,
+        "in_sl_recovery": false
+      },
+      "dist_sl_pct": -15.0,
+      "dist_sma20_pct": 0.54,
+      "recent_trades": []
+    },
+    {
       "ticker": "THETA-USD",
       "category": "Crypto",
       "price": 0.179898,
@@ -23596,27 +23596,6 @@
       "recent_trades": []
     },
     {
-      "ticker": "ETH-USD",
-      "category": "Crypto",
-      "price": 2484.7,
-      "change_24h": -0.25,
-      "ai_score": 50.1,
-      "signal": "WAIT",
-      "metrics": {
-        "trades_count": 0,
-        "win_rate": 0.0,
-        "profit_factor": 1.0,
-        "net_profit_usd": 0,
-        "is_currently_in_position": false,
-        "entry_price": null,
-        "floating_pnl_pct": 0.0,
-        "in_sl_recovery": false
-      },
-      "dist_sl_pct": -15.0,
-      "dist_sma20_pct": 1.0,
-      "recent_trades": []
-    },
-    {
       "ticker": "DOGE-USD",
       "category": "Crypto",
       "price": 0.08985,
@@ -23764,10 +23743,10 @@
       "recent_trades": []
     },
     {
-      "ticker": "SOL-USD",
+      "ticker": "ETH-USD",
       "category": "Crypto",
-      "price": 103.25,
-      "change_24h": -0.59,
+      "price": 2482.86,
+      "change_24h": -0.33,
       "ai_score": 50.0,
       "signal": "WAIT",
       "metrics": {
@@ -23781,7 +23760,7 @@
         "in_sl_recovery": false
       },
       "dist_sl_pct": -15.0,
-      "dist_sma20_pct": 2.49,
+      "dist_sma20_pct": 0.93,
       "recent_trades": []
     },
     {
@@ -24013,6 +23992,27 @@
       },
       "dist_sl_pct": -15.0,
       "dist_sma20_pct": -6.0,
+      "recent_trades": []
+    },
+    {
+      "ticker": "SOL-USD",
+      "category": "Crypto",
+      "price": 103.08,
+      "change_24h": -0.76,
+      "ai_score": 49.9,
+      "signal": "WAIT",
+      "metrics": {
+        "trades_count": 0,
+        "win_rate": 0.0,
+        "profit_factor": 1.0,
+        "net_profit_usd": 0,
+        "is_currently_in_position": false,
+        "entry_price": null,
+        "floating_pnl_pct": 0.0,
+        "in_sl_recovery": false
+      },
+      "dist_sl_pct": -15.0,
+      "dist_sma20_pct": 2.33,
       "recent_trades": []
     },
     {
@@ -25194,8 +25194,8 @@
     {
       "ticker": "BTC-USD",
       "category": "Crypto",
-      "price": 78526.21,
-      "change_24h": -0.75,
+      "price": 78503.85,
+      "change_24h": -0.77,
       "ai_score": 49.2,
       "signal": "WAIT",
       "metrics": {
@@ -25209,7 +25209,7 @@
         "in_sl_recovery": false
       },
       "dist_sl_pct": -15.0,
-      "dist_sma20_pct": 0.11,
+      "dist_sma20_pct": 0.08,
       "recent_trades": []
     },
     {
@@ -25444,61 +25444,6 @@
       "recent_trades": []
     },
     {
-      "ticker": "MCD",
-      "category": "US Stock",
-      "price": 255.81,
-      "change_24h": 0.05,
-      "ai_score": 49.0,
-      "signal": "WAIT",
-      "metrics": {
-        "trades_count": 3,
-        "win_rate": 66.7,
-        "profit_factor": 2.07,
-        "net_profit_usd": 2592.9,
-        "is_currently_in_position": false,
-        "entry_price": null,
-        "floating_pnl_pct": 0.0,
-        "in_sl_recovery": true
-      },
-      "dist_sl_pct": -15.0,
-      "dist_sma20_pct": -3.39,
-      "recent_trades": [
-        {
-          "entry_date": "2021-09-10",
-          "entry_price": 213.9,
-          "exit_date": "2022-09-14",
-          "exit_price": 232.03,
-          "pct_return": 7.61,
-          "pnl": 760.94,
-          "reason": "Macro Crash Exit",
-          "duration_days": 369,
-          "is_open": false
-        },
-        {
-          "entry_date": "2022-10-05",
-          "entry_price": 215.57,
-          "exit_date": "2025-04-04",
-          "exit_price": 303.23,
-          "pct_return": 39.54,
-          "pnl": 4255.39,
-          "reason": "Macro Crash Exit",
-          "duration_days": 912,
-          "is_open": false
-        },
-        {
-          "entry_date": "2025-04-24",
-          "entry_price": 306.95,
-          "exit_date": "2026-08-28",
-          "exit_price": 259.49,
-          "pct_return": -16.14,
-          "pnl": -2423.43,
-          "reason": "Stop Loss -15%",
-          "duration_days": 491,
-          "is_open": false
-        }
-      ]
-    },
-    {
       "ticker": "GILD",
       "category": "US Stock",
       "price": 146.64,
@@ -25585,8 +25530,8 @@
     {
       "ticker": "BNB-USD",
       "category": "Crypto",
-      "price": 751.77,
-      "change_24h": 1.59,
+      "price": 752.13,
+      "change_24h": 1.64,
       "ai_score": 49.0,
       "signal": "WAIT",
       "metrics": {
@@ -25600,7 +25545,7 @@
         "in_sl_recovery": false
       },
       "dist_sl_pct": -15.0,
-      "dist_sma20_pct": 6.3,
+      "dist_sma20_pct": 6.34,
       "recent_trades": []
     },
     {
@@ -27093,6 +27038,61 @@
       "dist_sl_pct": -15.0,
       "dist_sma20_pct": -15.61,
       "recent_trades": []
+    },
+    {
+      "ticker": "MCD",
+      "category": "US Stock",
+      "price": 255.81,
+      "change_24h": 0.05,
+      "ai_score": 36.4,
+      "signal": "WAIT",
+      "metrics": {
+        "trades_count": 3,
+        "win_rate": 66.7,
+        "profit_factor": 2.07,
+        "net_profit_usd": 2592.9,
+        "is_currently_in_position": false,
+        "entry_price": null,
+        "floating_pnl_pct": 0.0,
+        "in_sl_recovery": true
+      },
+      "dist_sl_pct": -15.0,
+      "dist_sma20_pct": -3.39,
+      "recent_trades": [
+        {
+          "entry_date": "2021-09-10",
+          "entry_price": 213.9,
+          "exit_date": "2022-09-14",
+          "exit_price": 232.03,
+          "pct_return": 7.61,
+          "pnl": 760.94,
+          "reason": "Macro Crash Exit",
+          "duration_days": 369,
+          "is_open": false
+        },
+        {
+          "entry_date": "2022-10-05",
+          "entry_price": 215.57,
+          "exit_date": "2025-04-04",
+          "exit_price": 303.23,
+          "pct_return": 39.54,
+          "pnl": 4255.39,
+          "reason": "Macro Crash Exit",
+          "duration_days": 912,
+          "is_open": false
+        },
+        {
+          "entry_date": "2025-04-24",
+          "entry_price": 306.95,
+          "exit_date": "2026-08-28",
+          "exit_price": 259.49,
+          "pct_return": -16.14,
+          "pnl": -2423.43,
+          "reason": "Stop Loss -15%",
+          "duration_days": 491,
+          "is_open": false
+        }
+      ]
     }
   ],
   "summary": {

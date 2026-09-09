@@ -114,9 +114,9 @@ if command -v ufw > /dev/null 2>&1; then
     sudo ufw allow 80/tcp || true
 fi
 
-# Regla directa en iptables (indispensable en imágenes de Oracle Cloud)
-sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 8000 -j ACCEPT || true
-sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 80 -j ACCEPT || true
+# Regla directa en iptables (indispensable en imágenes de Oracle Cloud, se coloca en posición 1 antes de cualquier REJECT)
+sudo iptables -I INPUT 1 -p tcp --dport 8000 -j ACCEPT || true
+sudo iptables -I INPUT 1 -p tcp --dport 80 -j ACCEPT || true
 
 if command -v netfilter-persistent > /dev/null 2>&1; then
     sudo netfilter-persistent save || true

@@ -137,6 +137,12 @@ class APIHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         parsed_path = urllib.parse.urlparse(self.path)
         
+        if parsed_path.path in ('', '/'):
+            self.send_response(302)
+            self.send_header('Location', '/web/')
+            self.end_headers()
+            return
+
         if parsed_path.path == '/api/ai-status':
             self.send_response(200)
             self.send_header('Content-type', 'application/json')

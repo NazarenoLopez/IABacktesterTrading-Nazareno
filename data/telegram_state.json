@@ -3,7 +3,11 @@
     "signal": "BUY",
     "in_pos": true
   },
-  "SS11_ETC-USD": {
+  "SS11_MINA-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_NEAR-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -16,6 +20,10 @@
     "in_pos": true
   },
   "SS11_GLW": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_XTZ-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -55,19 +63,11 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_INJ-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
   "SS11_ARM": {
     "signal": "HOLD",
     "in_pos": true
   },
   "SS11_RBLX": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_XTZ-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -95,6 +95,10 @@
     "signal": "HOLD",
     "in_pos": true
   },
+  "SS11_NEO-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
   "SS11_U": {
     "signal": "HOLD",
     "in_pos": true
@@ -103,11 +107,15 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_ALGO-USD": {
+  "SS11_KAVA-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
   "SS11_ORCL": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_THETA-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -116,6 +124,10 @@
     "in_pos": true
   },
   "SS11_WMB": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_RENDER-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -143,10 +155,6 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_FIL-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
   "SS11_MATIC-USD": {
     "signal": "HOLD",
     "in_pos": true
@@ -155,11 +163,15 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_FLOKI-USD": {
+  "SS11_BONK-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_BNB-USD": {
+  "SS11_WIF-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_EOS-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -167,11 +179,23 @@
     "signal": "HOLD",
     "in_pos": true
   },
+  "SS11_SEI-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_BTC-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_FLOKI-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
   "SS11_XRP-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_SEI-USD": {
+  "SS11_RUNE-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -179,7 +203,11 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_KAVA-USD": {
+  "SS11_ETH-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_SOL-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -188,6 +216,14 @@
     "in_pos": true
   },
   "SS11_PANW": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_DOGE-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_QNT-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -211,7 +247,7 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_BONK-USD": {
+  "SS11_FLOW-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -227,7 +263,7 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_MANA-USD": {
+  "SS11_AAVE-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -235,15 +271,7 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_MINA-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
   "SS11_FTNT": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_NEAR-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -255,7 +283,7 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_JUP-USD": {
+  "SS11_XLM-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -271,11 +299,15 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_QNT-USD": {
+  "SS11_BKR": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_BKR": {
+  "SS11_ADA-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_JUP-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -311,6 +343,10 @@
     "signal": "HOLD",
     "in_pos": true
   },
+  "SS11_FIL-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
   "SS11_VZ": {
     "signal": "HOLD",
     "in_pos": true
@@ -319,19 +355,19 @@
     "signal": "HOLD",
     "in_pos": true
   },
+  "SS11_AXS-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_BCH-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
   "SS11_WELL": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_ADA-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
   "SS11_HUM": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_EOS-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -343,11 +379,7 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_SAND-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_NEO-USD": {
+  "SS11_ALGO-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -363,15 +395,11 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_RUNE-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_FLOW-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
   "SS11_EOG": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_LTC-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -423,6 +451,14 @@
     "signal": "HOLD",
     "in_pos": true
   },
+  "SS11_AVAX-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_FET-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
   "SS11_ADM": {
     "signal": "HOLD",
     "in_pos": true
@@ -459,11 +495,11 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_T": {
+  "SS11_BNB-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_ETH-USD": {
+  "SS11_T": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -476,6 +512,10 @@
     "in_pos": true
   },
   "SS11_CL": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_ROST": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -543,15 +583,7 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_ROST": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
   "SS11_COST": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_BCH-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -568,6 +600,14 @@
     "in_pos": true
   },
   "SS11_FITB": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_OP-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_MANA-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -603,14 +643,6 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_SOL-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_BTC-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
   "SS11_NKE": {
     "signal": "HOLD",
     "in_pos": true
@@ -620,10 +652,6 @@
     "in_pos": true
   },
   "SS11_CSX": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_DOGE-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -671,10 +699,6 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_AVAX-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
   "SS11_MSFT": {
     "signal": "HOLD",
     "in_pos": true
@@ -704,10 +728,6 @@
     "in_pos": true
   },
   "SS11_DDOG": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_WIF-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -743,10 +763,6 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_AXS-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
   "SS11_MU": {
     "signal": "HOLD",
     "in_pos": true
@@ -760,10 +776,6 @@
     "in_pos": true
   },
   "SS11_VMC": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_LINK-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -783,6 +795,10 @@
     "signal": "HOLD",
     "in_pos": true
   },
+  "SS11_ICP-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
   "SS11_PCAR": {
     "signal": "HOLD",
     "in_pos": true
@@ -795,15 +811,15 @@
     "signal": "HOLD",
     "in_pos": true
   },
+  "SS11_CI": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
   "SS11_PGR": {
     "signal": "HOLD",
     "in_pos": true
   },
   "SS11_DE": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_LTC-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -815,11 +831,11 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_KMB": {
+  "SS11_BLK": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_FET-USD": {
+  "SS11_KMB": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -836,10 +852,6 @@
     "in_pos": true
   },
   "SS11_CHD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_ICP-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -903,15 +915,15 @@
     "signal": "HOLD",
     "in_pos": true
   },
+  "SS11_TIA-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
   "SS11_HD": {
     "signal": "HOLD",
     "in_pos": true
   },
   "SS11_MAR": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_RENDER-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -931,19 +943,11 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_CI": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
   "SS11_KR": {
     "signal": "HOLD",
     "in_pos": true
   },
   "SS11_TJX": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_BLK": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -955,7 +959,15 @@
     "signal": "HOLD",
     "in_pos": true
   },
+  "SS11_LINK-USD": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
   "SS11_MCO": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_ETC-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -963,15 +975,7 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_AAVE-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
   "SS11_FDX": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_XLM-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -984,6 +988,10 @@
     "in_pos": true
   },
   "SS11_GWW": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_INJ-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -1035,11 +1043,11 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_VRTX": {
+  "SS11_SAND-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_THETA-USD": {
+  "SS11_VRTX": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -1087,10 +1095,6 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_TIA-USD": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
   "SS11_DXCM": {
     "signal": "HOLD",
     "in_pos": true
@@ -1104,6 +1108,10 @@
     "in_pos": true
   },
   "SS11_PAYX": {
+    "signal": "HOLD",
+    "in_pos": true
+  },
+  "SS11_AJG": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -1123,19 +1131,11 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "SS11_AJG": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
   "SS11_HPQ": {
     "signal": "HOLD",
     "in_pos": true
   },
   "SS11_ISRG": {
-    "signal": "HOLD",
-    "in_pos": true
-  },
-  "SS11_OP-USD": {
     "signal": "HOLD",
     "in_pos": true
   },
@@ -1219,11 +1219,11 @@
     "signal": "HOLD",
     "in_pos": true
   },
-  "AIS11_INJ-USD": {
+  "AIS11_MINA-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_JUP-USD": {
+  "AIS11_INJ-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -1231,11 +1231,11 @@
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_KAVA-USD": {
+  "AIS11_GLW": {
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_GLW": {
+  "AIS11_KAVA-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -1247,7 +1247,7 @@
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_ETC-USD": {
+  "AIS11_XTZ-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -1256,10 +1256,6 @@
     "in_pos": false
   },
   "AIS11_AMD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_ICP-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -1279,10 +1275,6 @@
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_FET-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
   "AIS11_SMCI": {
     "signal": "WAIT",
     "in_pos": false
@@ -1299,27 +1291,11 @@
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_SHIB-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_FIL-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_TIA-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
   "AIS11_AMAT": {
     "signal": "WAIT",
     "in_pos": false
   },
   "AIS11_ETN": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_MINA-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -1335,15 +1311,19 @@
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_ALGO-USD": {
+  "AIS11_ETC-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_ICP-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_FIL-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
   "AIS11_GEV": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_AVAX-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -1363,15 +1343,19 @@
     "signal": "WAIT",
     "in_pos": false
   },
+  "AIS11_ALGO-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
   "AIS11_VLO": {
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_NET": {
+  "AIS11_NEO-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_LINK-USD": {
+  "AIS11_NET": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -1380,10 +1364,6 @@
     "in_pos": false
   },
   "AIS11_KEYS": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_SEI-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -1404,10 +1384,6 @@
     "in_pos": false
   },
   "AIS11_CRWD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_QNT-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -1439,23 +1415,11 @@
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_RENDER-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
   "AIS11_MPC": {
     "signal": "WAIT",
     "in_pos": false
   },
   "AIS11_PANW": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_XLM-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_NEO-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -1467,7 +1431,11 @@
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_XTZ-USD": {
+  "AIS11_FET-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_EOS-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -1495,6 +1463,10 @@
     "signal": "WAIT",
     "in_pos": false
   },
+  "AIS11_SEI-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
   "AIS11_GE": {
     "signal": "WAIT",
     "in_pos": false
@@ -1507,7 +1479,7 @@
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_FLOKI-USD": {
+  "AIS11_BONK-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -1519,7 +1491,11 @@
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_ADA-USD": {
+  "AIS11_FLOKI-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_QNT-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -1543,7 +1519,11 @@
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_SAND-USD": {
+  "AIS11_AVAX-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_XLM-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -1560,14 +1540,6 @@
     "in_pos": false
   },
   "AIS11_DAL": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_BONK-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_EOS-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -1604,6 +1576,10 @@
     "in_pos": false
   },
   "AIS11_CSX": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_XRP-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -1679,18 +1655,6 @@
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_XRP-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_THETA-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_MANA-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
   "AIS11_UNH": {
     "signal": "WAIT",
     "in_pos": false
@@ -1719,11 +1683,7 @@
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_WIF-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_AXS-USD": {
+  "AIS11_RUNE-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -1759,10 +1719,6 @@
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_BCH-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
   "AIS11_PEPE-USD": {
     "signal": "WAIT",
     "in_pos": false
@@ -1791,11 +1747,7 @@
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_SOL-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_RUNE-USD": {
+  "AIS11_BNB-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -1819,6 +1771,10 @@
     "signal": "WAIT",
     "in_pos": false
   },
+  "AIS11_ROST": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
   "AIS11_TGT": {
     "signal": "WAIT",
     "in_pos": false
@@ -1839,7 +1795,23 @@
     "signal": "WAIT",
     "in_pos": false
   },
+  "AIS11_BCH-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_WIF-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_AXS-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
   "AIS11_SPGI": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_BLK": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -1848,10 +1820,6 @@
     "in_pos": false
   },
   "AIS11_ECL": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_ROST": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -1879,10 +1847,6 @@
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_LTC-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
   "AIS11_CVX": {
     "signal": "WAIT",
     "in_pos": false
@@ -1892,10 +1856,6 @@
     "in_pos": false
   },
   "AIS11_RTX": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_BLK": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -1927,7 +1887,11 @@
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_FLOW-USD": {
+  "AIS11_BTC-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_ADA-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -1971,6 +1935,10 @@
     "signal": "WAIT",
     "in_pos": false
   },
+  "AIS11_LTC-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
   "AIS11_FTM-USD": {
     "signal": "WAIT",
     "in_pos": false
@@ -1999,6 +1967,14 @@
     "signal": "WAIT",
     "in_pos": false
   },
+  "AIS11_RENDER-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_MANA-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
   "AIS11_PM": {
     "signal": "WAIT",
     "in_pos": false
@@ -2019,7 +1995,7 @@
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_BTC-USD": {
+  "AIS11_THETA-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -2059,11 +2035,19 @@
     "signal": "WAIT",
     "in_pos": false
   },
+  "AIS11_SOL-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
   "AIS11_COST": {
     "signal": "WAIT",
     "in_pos": false
   },
   "AIS11_MRK": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_CI": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -2083,11 +2067,7 @@
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_BNB-USD": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_OP-USD": {
+  "AIS11_FLOW-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -2127,10 +2107,6 @@
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_CI": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
   "AIS11_EOG": {
     "signal": "WAIT",
     "in_pos": false
@@ -2159,6 +2135,10 @@
     "signal": "WAIT",
     "in_pos": false
   },
+  "AIS11_JUP-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
   "AIS11_MA": {
     "signal": "WAIT",
     "in_pos": false
@@ -2180,6 +2160,10 @@
     "in_pos": false
   },
   "AIS11_CRM": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_SAND-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -2212,10 +2196,6 @@
     "in_pos": false
   },
   "AIS11_CMG": {
-    "signal": "WAIT",
-    "in_pos": false
-  },
-  "AIS11_AAVE-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -2263,7 +2243,15 @@
     "signal": "WAIT",
     "in_pos": false
   },
+  "AIS11_AJG": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
   "AIS11_KMB": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_AAVE-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -2279,7 +2267,7 @@
     "signal": "WAIT",
     "in_pos": false
   },
-  "AIS11_AJG": {
+  "AIS11_OP-USD": {
     "signal": "WAIT",
     "in_pos": false
   },
@@ -2347,11 +2335,23 @@
     "signal": "WAIT",
     "in_pos": false
   },
+  "AIS11_LINK-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
   "AIS11_ADBE": {
     "signal": "WAIT",
     "in_pos": false
   },
   "AIS11_BKNG": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_SHIB-USD": {
+    "signal": "WAIT",
+    "in_pos": false
+  },
+  "AIS11_TIA-USD": {
     "signal": "WAIT",
     "in_pos": false
   },

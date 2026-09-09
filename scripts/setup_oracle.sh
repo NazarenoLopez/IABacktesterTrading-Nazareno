@@ -7,7 +7,9 @@
 set -e
 
 CURRENT_USER=$(whoami)
-CURRENT_DIR=$(pwd)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$SCRIPT_DIR"
+CURRENT_DIR="$SCRIPT_DIR"
 PYTHON_BIN="$CURRENT_DIR/.venv/bin/python"
 
 echo "=========================================================="
@@ -45,8 +47,19 @@ fi
 
 source .venv/bin/activate
 pip install --upgrade pip
-echo "📥 Instalando dependencias de Python (requirements.txt)..."
-pip install -r requirements.txt
+echo "📥 Instalando dependencias de Python..."
+if ! command -v nvidia-smi &> /dev/null; then
+    echo "💡 Detectada CPU: instalando PyTorch versión CPU (ahorra 2.5 GB y acelera el despliegue)..."
+    pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu || true
+fi
+
+if [ -f "requirements.txt" ]; then
+    echo "📥 Instalando $CURRENT_DIR/requirements.txt..."
+    pip install -r requirements.txt
+else
+    echo "❌ Error: No se encontró requirements.txt en $CURRENT_DIR"
+    exit 1
+fi
 
 # 3. Crear o actualizar archivo .env
 if [ -n "$TG_TOKEN" ]; then

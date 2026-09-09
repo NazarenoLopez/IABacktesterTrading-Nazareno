@@ -53,5 +53,6 @@ jobs:
             fi
 
             # 3. Ejecutar script de configuración y reinicio del servicio
+            cd "$APP_DIR"
             chmod +x scripts/setup_oracle.sh
             TG_TOKEN="${{ secrets.TELEGRAM_BOT_TOKEN }}" TG_CHAT="${{ secrets.TELEGRAM_CHAT_ID }}" ./scripts/setup_oracle.sh

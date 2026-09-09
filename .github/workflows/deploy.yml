@@ -25,36 +25,25 @@ jobs:
           port: ${{ secrets.OCI_PORT || 22 }}
           script_stop: true
           script: |
-            set -e
-            echo "🚀 [CI/CD] Iniciando despliegue automático en Oracle Cloud..."
+            set -ex
+            echo "🚀 [CI/CD] Iniciando despliegue en Oracle Cloud..."
 
-            CURRENT_USER=$(whoami)
-            APP_DIR="/home/$CURRENT_USER/IABacktesterTrading-Nazareno"
+            APP_DIR="$HOME/IABacktesterTrading-Nazareno"
 
-            # 1. Asegurar git en la máquina (usando sintaxis POSIX estándar)
-            if ! which git > /dev/null 2>&1; then
-              echo "📦 Instalando git..."
-              if which apt-get > /dev/null 2>&1; then
-                sudo apt-get update -y -qq && sudo apt-get install -y -qq git
-              elif which dnf > /dev/null 2>&1; then
-                sudo dnf install -y -q git
-              fi
-            fi
-
-            # 2. Clonar repo si no existe, o sincronizar si ya existe
-            if [ ! -d "$APP_DIR/.git" ]; then
-              echo "📦 Clonando repositorio por primera vez..."
+            # Si el directorio no existe en el home, intentar clonarlo o buscarlo
+            if [ ! -d "$APP_DIR" ]; then
+              echo "Clonando repositorio en $APP_DIR..."
               git clone https://github.com/NazarenoLopez/IABacktesterTrading-Nazareno.git "$APP_DIR"
-              cd "$APP_DIR"
-            else
-              echo "📦 Sincronizando repositorio existente..."
-              cd "$APP_DIR"
-              git remote set-url origin https://github.com/NazarenoLopez/IABacktesterTrading-Nazareno.git
-              git fetch origin main
-              git reset --hard origin/main
             fi
 
-            # 3. Ejecutar script de configuración y reinicio del servicio
             cd "$APP_DIR"
+            echo "Directorio actual: $(pwd)"
+
+            # Sincronizar con el último commit de main
+            git remote set-url origin https://github.com/NazarenoLopez/IABacktesterTrading-Nazareno.git
+            git fetch origin main
+            git reset --hard origin/main
+
+            # Ejecutar el script de configuración con bash
             chmod +x scripts/setup_oracle.sh
-            TG_TOKEN="${{ secrets.TELEGRAM_BOT_TOKEN }}" TG_CHAT="${{ secrets.TELEGRAM_CHAT_ID }}" bash ./scripts/setup_oracle.sh
+            TG_TOKEN="${{ secrets.TELEGRAM_BOT_TOKEN }}" TG_CHAT="${{ secrets.TELEGRAM_CHAT_ID }}" bash scripts/setup_oracle.sh

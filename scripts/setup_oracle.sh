@@ -20,10 +20,10 @@ echo "=========================================================="
 
 # 1. Actualizar paquetes del sistema
 echo "📦 Actualizando paquetes del sistema..."
-if command -v apt-get &> /dev/null; then
+if command -v apt-get > /dev/null 2>&1; then
     sudo apt-get update -y
     sudo apt-get install -y python3 python3-pip python3-venv git curl build-essential iptables-persistent
-elif command -v dnf &> /dev/null; then
+elif command -v dnf > /dev/null 2>&1; then
     sudo dnf install -y python3 python3-pip git curl gcc gcc-c++
 fi
 
@@ -48,7 +48,7 @@ fi
 source .venv/bin/activate
 pip install --upgrade pip
 echo "📥 Instalando dependencias de Python..."
-if ! command -v nvidia-smi &> /dev/null; then
+if ! command -v nvidia-smi > /dev/null 2>&1; then
     echo "💡 Detectada CPU: instalando PyTorch versión CPU (ahorra 2.5 GB y acelera el despliegue)..."
     pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu || true
 fi
@@ -106,7 +106,7 @@ sudo chmod 0440 "$SUDOERS_FILE"
 
 # 6. Configurar Firewall local del SO (Oracle bloquea puertos con iptables por defecto)
 echo "🛡️ Abriendo puerto 8000 en el firewall local (iptables / ufw)..."
-if command -v ufw &> /dev/null; then
+if command -v ufw > /dev/null 2>&1; then
     sudo ufw allow 8000/tcp || true
     sudo ufw allow 80/tcp || true
 fi
@@ -115,7 +115,7 @@ fi
 sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 8000 -j ACCEPT || true
 sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 80 -j ACCEPT || true
 
-if command -v netfilter-persistent &> /dev/null; then
+if command -v netfilter-persistent > /dev/null 2>&1; then
     sudo netfilter-persistent save || true
 fi
 

@@ -31,28 +31,30 @@ jobs:
             CURRENT_USER=$(whoami)
             APP_DIR="/home/$CURRENT_USER/IABacktesterTrading-Nazareno"
 
-            # 1. Asegurar git en la máquina
-            if ! command -v git &> /dev/null; then
-              if command -v apt-get &> /dev/null; then
+            # 1. Asegurar git en la máquina (usando sintaxis POSIX estándar)
+            if ! which git > /dev/null 2>&1; then
+              echo "📦 Instalando git..."
+              if which apt-get > /dev/null 2>&1; then
                 sudo apt-get update -y -qq && sudo apt-get install -y -qq git
-              elif command -v dnf &> /dev/null; then
+              elif which dnf > /dev/null 2>&1; then
                 sudo dnf install -y -q git
               fi
             fi
 
-            # 2. Clonar repo si no existe, o actualizar si ya existe
+            # 2. Clonar repo si no existe, o sincronizar si ya existe
             if [ ! -d "$APP_DIR/.git" ]; then
               echo "📦 Clonando repositorio por primera vez..."
-              git clone "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" "$APP_DIR"
+              git clone https://github.com/NazarenoLopez/IABacktesterTrading-Nazareno.git "$APP_DIR"
               cd "$APP_DIR"
             else
               echo "📦 Sincronizando repositorio existente..."
               cd "$APP_DIR"
-              git fetch "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" ${{ github.ref_name }}
-              git reset --hard FETCH_HEAD
+              git remote set-url origin https://github.com/NazarenoLopez/IABacktesterTrading-Nazareno.git
+              git fetch origin main
+              git reset --hard origin/main
             fi
 
             # 3. Ejecutar script de configuración y reinicio del servicio
             cd "$APP_DIR"
             chmod +x scripts/setup_oracle.sh
-            TG_TOKEN="${{ secrets.TELEGRAM_BOT_TOKEN }}" TG_CHAT="${{ secrets.TELEGRAM_CHAT_ID }}" ./scripts/setup_oracle.sh
+            TG_TOKEN="${{ secrets.TELEGRAM_BOT_TOKEN }}" TG_CHAT="${{ secrets.TELEGRAM_CHAT_ID }}" bash ./scripts/setup_oracle.sh

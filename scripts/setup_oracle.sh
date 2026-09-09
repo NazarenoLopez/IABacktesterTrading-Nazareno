@@ -25,6 +25,18 @@ elif command -v dnf &> /dev/null; then
     sudo dnf install -y python3 python3-pip git curl gcc gcc-c++
 fi
 
+# 1.1 Configurar Swap automático si la máquina tiene poca RAM (evita que PyTorch agote la memoria)
+TOTAL_RAM_MB=$(free -m | awk '/^Mem:/{print $2}')
+SWAP_EXISTS=$(free -m | awk '/^Swap:/{print $2}')
+if [ "${SWAP_EXISTS:-0}" -eq 0 ] && [ "${TOTAL_RAM_MB:-0}" -lt 3500 ]; then
+    echo "💾 Máquina con poca RAM ($TOTAL_RAM_MB MB). Creando swap de 2GB..."
+    sudo fallocate -l 2G /swapfile || sudo dd if=/dev/zero of=/swapfile bs=1M count=2048
+    sudo chmod 600 /swapfile
+    sudo mkswap /swapfile
+    sudo swapon /swapfile
+    echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab || true
+fi
+
 # 2. Configurar entorno virtual Python
 echo "🐍 Configurando entorno virtual Python..."
 if [ ! -d ".venv" ]; then
@@ -36,14 +48,19 @@ pip install --upgrade pip
 echo "📥 Instalando dependencias de Python (requirements.txt)..."
 pip install -r requirements.txt
 
-# 3. Crear archivo .env si no existe
-if [ ! -f ".env" ]; then
-    echo "⚠️ Creando plantilla .env (recuerda editar con tus tokens de Telegram):"
+# 3. Crear o actualizar archivo .env
+if [ -n "$TG_TOKEN" ]; then
+    echo "🔐 Configurando variables de entorno (.env)..."
+    cat <<EOF > .env
+TELEGRAM_BOT_TOKEN=$TG_TOKEN
+TELEGRAM_CHAT_ID=$TG_CHAT
+EOF
+elif [ ! -f ".env" ]; then
+    echo "⚠️ Creando plantilla .env (recuerda editar con tus tokens de Telegram si no usas secrets):"
     cat <<EOF > .env
 TELEGRAM_BOT_TOKEN=
 TELEGRAM_CHAT_ID=
 EOF
-    echo "Archivo .env creado en $CURRENT_DIR/.env"
 fi
 
 # 4. Crear el servicio Systemd para ejecución en segundo plano y arranque automático

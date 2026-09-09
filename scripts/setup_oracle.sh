@@ -56,6 +56,9 @@ fi
 if [ -f "requirements.txt" ]; then
     echo "📥 Instalando $CURRENT_DIR/requirements.txt..."
     pip install -r requirements.txt
+    # Librerías opcionales de re-entrenamiento (evitan fallos en Python 3.8)
+    pip install "blis<1.0.0" > /dev/null 2>&1 || true
+    pip install tsai fastai > /dev/null 2>&1 || true
 else
     echo "❌ Error: No se encontró requirements.txt en $CURRENT_DIR"
     exit 1

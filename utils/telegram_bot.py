@@ -259,7 +259,7 @@ def format_single_strategy_buys_message(scanner_data, strategy_code="SS11", top_
     mg = scanner_data.get("macro_guard", {})
     if strategy_code.upper() == "SS11":
         signals = [s for s in scanner_data.get("ss11_signals", []) if s.get("signal") == "BUY"]
-        title = "🟢 <b>OPORTUNIDADES BUY — SS11 MACRO BASE PURA</b>"
+        title = "🟢 <b>OPORTUNIDADES BUY — SS11 MACRO BASE PURA (Acciones & ETFs)</b>"
     else:
         signals = [s for s in scanner_data.get("ais11_signals", []) if s.get("signal") == "BUY"]
         title = "🧠 <b>OPORTUNIDADES BUY — AIS11 MULTI-IA GPU MASTER</b>"
@@ -323,11 +323,13 @@ def format_candidates_message(scanner_data, top_n=6):
 def check_and_notify_trades(scanner_data):
     """
     Compara las señales actuales con el estado previo y envía alertas por Telegram.
-    Garantiza:
-    1. Cero alertas retroactivas en el primer inicio.
-    2. Exactamente 1 alerta por movimiento (compra o venta).
-    3. Persistencia aditiva (saved_state.update) para no perder estado ante fallos transitorios de red.
-    4. Agrupación inteligente (digest) si se producen más de 3 movimientos simultáneos.
+    Compuerta de Calidad Institucional (Quality Gate):
+    1. Cero alertas de compras ciegas de SS11 (SS11 es Buy&Hold pasivo de benchmark).
+    2. Señales de Compra exclusivas de AIS11 con Score >= 58.0 y confirmación sobre SMA20.
+    3. Exclusión de activos con historial perdedor crónico (evita altcoins y activos destructivos).
+    4. Cooldown Anti-Whipsaw de 12 horas por ticker para eliminar el serrucho intradía.
+    5. Macro Crash Guard de SPY para alertas de emergencia a liquidez sistémica.
+    6. Formato accionable con Target (+30%), Stop Loss (-15%) y enlace directo a TradingView.
     """
     if not scanner_data:
         return
@@ -342,78 +344,138 @@ def check_and_notify_trades(scanner_data):
             saved_state = {}
 
     is_initial_run = (len(saved_state) == 0)
+    current_time = time.time()
+    COOLDOWN_SECONDS = 12 * 3600  # 12 horas entre alertas del mismo ticker
 
+    # -------------------------------------------------------------------------
+    # 1. Monitoreo del Macro Crash Guard (SPY)
+    # -------------------------------------------------------------------------
+    macro_guard = scanner_data.get("macro_guard", {})
+    is_macro_active = bool(macro_guard.get("is_active", False))
+    days_rem = macro_guard.get("days_remaining", 0)
+    prev_macro_active = bool(saved_state.get("__macro_crash_active", False))
+
+    if is_macro_active and not prev_macro_active:
+        macro_alert = (
+            "🚨 <b>ALERTA DE EMERGENCIA MACRO SISTÉMICA</b> 🚨\n\n"
+            "⚠️ <b>El índice SPY ha colapsado más de -4.2% en 24 horas.</b>\n"
+            "🛡️ <b>Filtro Macro Activado:</b> Se recomienda salida inmediata a liquidez (Cash 100%) para proteger el capital.\n"
+            f"⏱️ Período estimado de enfriamiento: <b>{days_rem} días</b>."
+        )
+        send_telegram_message(macro_alert)
+        saved_state["__macro_crash_active"] = True
+    elif not is_macro_active and prev_macro_active:
+        macro_recovery = (
+            "🟢 <b>FIN DE ALERTA MACRO SISTÉMICA</b> 🟢\n\n"
+            "✅ El mercado ha estabilizado la volatilidad macro.\n"
+            "📈 Se reactiva la búsqueda de nuevas oportunidades de compra."
+        )
+        send_telegram_message(macro_recovery)
+        saved_state["__macro_crash_active"] = False
+
+    # -------------------------------------------------------------------------
+    # 2. Compuerta de Calidad de Señales AIS11 (Multi-IA & Momentum Élite)
+    # -------------------------------------------------------------------------
     current_state = {}
     buy_alerts = []
     sell_alerts = []
 
-    strategies = [
-        ("SS11", "SS11 Macro Base Pura", scanner_data.get("ss11_signals", [])),
-        ("AIS11", "AIS11 Multi-IA GPU Master", scanner_data.get("ais11_signals", []))
-    ]
+    ais_signals = scanner_data.get("ais11_signals", [])
 
-    for strat_code, strat_name, signals_list in strategies:
-        for item in signals_list:
-            tk = item["ticker"]
-            sig = item.get("signal", "WAIT")
-            met = item.get("metrics", {})
-            in_pos = bool(met.get("is_currently_in_position", False))
-            category = item.get("category", "N/A")
-            price = item.get("price", 0.0)
-            entry_p = met.get("entry_price") or price
+    for item in ais_signals:
+        tk = item["ticker"]
+        sig = item.get("signal", "WAIT")
+        met = item.get("metrics", {})
+        in_pos = bool(met.get("is_currently_in_position", False))
+        category = item.get("category", "N/A")
+        price = item.get("price", 0.0)
+        entry_p = met.get("entry_price") or price
+        ai_score = item.get("ai_score", 50.0)
+        dist_sma20 = item.get("dist_sma20_pct", 0.0)
+        win_rate = met.get("win_rate", 0.0)
+        trades_count = met.get("trades_count", 0)
+        net_profit = met.get("net_profit_usd", 0.0)
 
-            key = f"{strat_code}_{tk}"
-            prev = saved_state.get(key)
+        key = f"AIS11_{tk}"
+        prev = saved_state.get(key, {})
 
-            # Caso 1: Primer inicio o activo recién descubierto -> Estado base sin alertas retroactivas
-            if prev is None or is_initial_run:
-                action = "BUY" if (in_pos or sig == "BUY") else "SELL"
-                current_state[key] = {
-                    "signal": sig,
-                    "in_pos": in_pos,
-                    "last_notified_action": action,
-                    "last_price": price
-                }
-                continue
-
-            prev_in_pos = bool(prev.get("in_pos", False))
-            prev_action = prev.get("last_notified_action", "BUY" if prev_in_pos else "SELL")
-
-            # Caso 2: Transición de COMPRA (no estaba en posición y entra en posición o señal BUY)
-            is_buy_transition = (in_pos or sig == "BUY") and (not prev_in_pos) and (prev_action != "BUY")
-
-            # Caso 3: Transición de SALIDA (estaba en posición y ahora salió)
-            is_sell_transition = prev_in_pos and (not in_pos) and (prev_action == "BUY")
-
-            if is_buy_transition:
-                action = "BUY"
-                buy_alerts.append({
-                    "ticker": tk,
-                    "strat_code": strat_code,
-                    "strat_name": strat_name,
-                    "category": category,
-                    "entry_price": entry_p,
-                    "price": price,
-                    "ai_score": item.get("ai_score")
-                })
-            elif is_sell_transition:
-                action = "SELL"
-                sell_alerts.append({
-                    "ticker": tk,
-                    "strat_code": strat_code,
-                    "strat_name": strat_name,
-                    "category": category,
-                    "price": price,
-                    "sig": sig,
-                    "ai_score": item.get("ai_score")
-                })
-            else:
-                action = prev_action
-
+        # Estado inicial base sin spam retroactivo
+        if prev is None or is_initial_run or not prev:
             current_state[key] = {
                 "signal": sig,
                 "in_pos": in_pos,
-                "last_notified_action": action,
+                "last_notified_action": "BUY" if in_pos else "WAIT",
+                "last_alert_time": current_time if in_pos else 0,
+                "last_price": price
+            }
+            continue
+
+        prev_in_pos = bool(prev.get("in_pos", False))
+        prev_action = prev.get("last_notified_action", "WAIT")
+        last_alert_time = prev.get("last_alert_time", 0)
+
+        is_buy_transition = (in_pos or sig == "BUY") and (not prev_in_pos) and (prev_action != "BUY")
+        is_sell_transition = prev_in_pos and (not in_pos) and (prev_action == "BUY")
+
+        # COMPUERTA DE CALIDAD PARA COMPRA:
+        if is_buy_transition:
+            # 1. Anti-Whipsaw Cooldown
+            if (current_time - last_alert_time) < COOLDOWN_SECONDS:
+                continue
+
+            # 2. Convicción mínima de IA / Momentum
+            if ai_score < 58.0:
+                continue
+
+            # 3. Filtro de tendencia: no comprar en caída libre bajo la SMA20
+            if dist_sma20 < -1.5:
+                continue
+
+            # 4. Filtro de historial negativo crónico (descarta altcoins destructoras)
+            if trades_count >= 5 and win_rate < 35.0 and net_profit < -1500.0:
+                continue
+
+            # Pasa todas las compuertas: SEÑAL VERÍDICA CONFIRMADA
+            buy_alerts.append({
+                "ticker": tk,
+                "category": category,
+                "entry_price": entry_p,
+                "price": price,
+                "ai_score": ai_score,
+                "win_rate": win_rate,
+                "trades_count": trades_count,
+                "dist_sma20": dist_sma20
+            })
+            current_state[key] = {
+                "signal": sig,
+                "in_pos": True,
+                "last_notified_action": "BUY",
+                "last_alert_time": current_time,
+                "last_price": price
+            }
+
+        elif is_sell_transition:
+            # Salida de una posición previamente alertada con BUY
+            sell_alerts.append({
+                "ticker": tk,
+                "category": category,
+                "price": price,
+                "ai_score": ai_score,
+                "entry_price": prev.get("last_price", price)
+            })
+            current_state[key] = {
+                "signal": sig,
+                "in_pos": False,
+                "last_notified_action": "SELL",
+                "last_alert_time": current_time,
+                "last_price": price
+            }
+        else:
+            current_state[key] = {
+                "signal": sig,
+                "in_pos": in_pos,
+                "last_notified_action": prev_action,
+                "last_alert_time": last_alert_time,
                 "last_price": price
             }
 
@@ -429,10 +491,10 @@ def check_and_notify_trades(scanner_data):
     # Si fue la primera inicialización, confirmar vinculación sin spamear
     if is_initial_run and current_state:
         init_msg = (
-            "🤖 <b>Monitor de Señales Inicializado</b>\n\n"
-            f"✅ Se sincronizó el estado base de <b>{len(current_state)}</b> activos.\n"
-            "⏱️ Escaneo activo cada <b>1 minuto</b>.\n"
-            "🔔 A partir de ahora recibirás exactamente <b>1 alerta por movimiento</b> (compra o venta)."
+            "🤖 <b>Monitor de Señales Institucional Inicializado</b>\n\n"
+            f"✅ Se calibró el estado base de <b>{len(current_state)}</b> activos.\n"
+            "🛡️ <b>Compuerta de Calidad Activada:</b> Solo se emitirán señales de alta convicción (Score >= 58, confirmación de tendencia y control anti-serrucho).\n"
+            "🔔 Notificaciones activas en tiempo real."
         )
         send_telegram_message(init_msg)
         return
@@ -441,74 +503,76 @@ def check_and_notify_trades(scanner_data):
     if total_alerts == 0:
         return
 
-    # Despacho de Alertas: Modo Individual (1 a 3 movimientos) o Modo Digest (>3 movimientos)
+    # Despacho de Alertas Formateadas con TradingView Links
     if total_alerts <= 3:
         for b in buy_alerts:
-            entry_p_str = format_price_telegram(b["entry_price"])
-            curr_p_str = format_price_telegram(b["price"])
-            if b["strat_code"] == "SS11":
-                card = (
-                    "🚀 <b>NUEVA SEÑAL DE COMPRA (BUY)</b>\n"
-                    f"• <b>Activo:</b> <b>{b['ticker']}</b> ({b['category']})\n"
-                    f"• <b>Estrategia:</b> {b['strat_name']}\n"
-                    f"• <b>Precio Entrada Sugerido:</b> {entry_p_str}\n"
-                    f"• <b>Precio Actual:</b> {curr_p_str}\n"
-                    "• <b>Acción:</b> Entrada en Largo (LONG)"
-                )
-            else:
-                ai_s = b.get("ai_score", 50.0)
-                card = (
-                    "🧠 <b>NUEVA SEÑAL MULTI-IA DE COMPRA (BUY)</b>\n"
-                    f"• <b>Activo:</b> <b>{b['ticker']}</b> ({b['category']})\n"
-                    f"• <b>Estrategia:</b> {b['strat_name']}\n"
-                    f"• <b>Precio Entrada Sugerido:</b> {entry_p_str}\n"
-                    f"• <b>Precio Actual:</b> {curr_p_str}\n"
-                    f"• <b>Score de IA:</b> <b>{ai_s:.1f}/100</b>\n"
-                    "• <b>Acción:</b> Entrada en Largo (LONG)"
-                )
+            entry_p = b["entry_price"]
+            curr_p = b["price"]
+            sl_price = entry_p * 0.85  # -15% Stop Loss
+            tp_price = entry_p * 1.30  # +30% Target estimado (R:R 1:2)
+
+            tv_ticker = b["ticker"].replace("-USD", "USD").replace("-", "")
+            tv_url = f"https://www.tradingview.com/chart/?symbol={tv_ticker}"
+
+            card = (
+                "🎯 <b>NUEVA SEÑAL VERÍDICA MULTI-IA (BUY)</b>\n\n"
+                f"• <b>Activo:</b> <b><a href=\"{tv_url}\">{b['ticker']}</a></b> ({b['category']})\n"
+                "• <b>Estrategia:</b> AIS11 Multi-IA High Convicción\n"
+                f"• <b>Score IA / Momentum:</b> <b>{b['ai_score']:.1f}/100</b> 🔥\n"
+                f"• <b>Precio de Entrada:</b> <code>{format_price_telegram(entry_p)}</code>\n"
+                f"• <b>Stop Loss (-15%):</b> <code>{format_price_telegram(sl_price)}</code>\n"
+                f"• <b>Objetivo Estimado (+30%):</b> <code>{format_price_telegram(tp_price)}</code>\n"
+                f"• <b>Win Rate Histórico:</b> <code>{b['win_rate']:.1f}%</code> ({b['trades_count']} trades)\n\n"
+                f"📊 <a href=\"{tv_url}\">Abrir Gráfico en TradingView</a>"
+            )
             send_telegram_message(card)
 
         for s in sell_alerts:
-            curr_p_str = format_price_telegram(s["price"])
-            if s["strat_code"] == "SS11":
-                card = (
-                    "🛑 <b>SALIDA / CIERRE DE POSICIÓN (SELL)</b>\n"
-                    f"• <b>Activo:</b> <b>{s['ticker']}</b> ({s['category']})\n"
-                    f"• <b>Estrategia:</b> {s['strat_name']}\n"
-                    f"• <b>Precio de Salida:</b> {curr_p_str}\n"
-                    "• <b>Motivo:</b> Salida de posición / Stop Loss / Macro Guard"
-                )
-            else:
-                ai_s = s.get("ai_score", 50.0)
-                card = (
-                    "🛑 <b>SALIDA DE POSICIÓN IA (SELL)</b>\n"
-                    f"• <b>Activo:</b> <b>{s['ticker']}</b> ({s['category']})\n"
-                    f"• <b>Estrategia:</b> {s['strat_name']}\n"
-                    f"• <b>Precio de Salida:</b> {curr_p_str}\n"
-                    f"• <b>Score de IA Actual:</b> {ai_s:.1f}/100"
-                )
+            curr_p = s["price"]
+            ent_p = s.get("entry_price", curr_p)
+            ret_pct = ((curr_p / ent_p) - 1.0) * 100.0 if ent_p > 0 else 0.0
+            emoji_ret = "🟢" if ret_pct >= 0 else "🔴"
+
+            tv_ticker = s["ticker"].replace("-USD", "USD").replace("-", "")
+            tv_url = f"https://www.tradingview.com/chart/?symbol={tv_ticker}"
+
+            card = (
+                "🛑 <b>CIERRE DE POSICIÓN / TOMA DE BENEFICIOS (SELL)</b>\n\n"
+                f"• <b>Activo:</b> <b><a href=\"{tv_url}\">{s['ticker']}</a></b> ({s['category']})\n"
+                f"• <b>Precio de Salida:</b> <code>{format_price_telegram(curr_p)}</code>\n"
+                f"• <b>Resultado Estimado:</b> {emoji_ret} <b>{ret_pct:+.2f}%</b>\n"
+                f"• <b>Score IA Actual:</b> <code>{s['ai_score']:.1f}/100</code>\n"
+                "• <b>Motivo:</b> Debilidad del Momentum / Salida Estratégica\n\n"
+                f"📊 <a href=\"{tv_url}\">Ver Gráfico en TradingView</a>"
+            )
             send_telegram_message(card)
     else:
         # Modo Digest / Resumen cuando ocurren múltiples movimientos simultáneos
         now_str = datetime.now().strftime("%H:%M:%S")
         lines = [
-            f"🔔 <b>REPORTE DE MOVIMIENTOS EN VIVO ({now_str})</b>",
-            f"<i>Se detectaron {total_alerts} movimientos en el escáner:</i>\n"
+            f"🔔 <b>REPORTE DE SEÑALES CONFIRMADAS ({now_str})</b>",
+            f"<i>Se detectaron {total_alerts} movimientos de alta convicción:</i>\n"
         ]
         if buy_alerts:
             lines.append(f"🟢 <b>Nuevas Compras ({len(buy_alerts)}):</b>")
             for b in buy_alerts:
-                extra = f" (Score IA: {b['ai_score']:.1f}/100)" if b.get("ai_score") is not None else ""
-                lines.append(f"• <b>{b['ticker']}</b> ({b['strat_code']}) ➔ Ent: {format_price_telegram(b['entry_price'])}{extra}")
+                lines.append(
+                    f"• <b>{b['ticker']}</b> ➔ Ent: <code>{format_price_telegram(b['entry_price'])}</code> "
+                    f"(Score: <b>{b['ai_score']:.1f}</b> | SL: <code>{format_price_telegram(b['entry_price'] * 0.85)}</code>)"
+                )
             lines.append("")
 
         if sell_alerts:
             lines.append(f"🔴 <b>Salidas / Cierres ({len(sell_alerts)}):</b>")
             for s in sell_alerts:
-                lines.append(f"• <b>{s['ticker']}</b> ({s['strat_code']}) ➔ Salida: {format_price_telegram(s['price'])}")
+                lines.append(
+                    f"• <b>{s['ticker']}</b> ➔ Salida: <code>{format_price_telegram(s['price'])}</code> "
+                    f"(Score: <code>{s['ai_score']:.1f}</code>)"
+                )
 
         digest_msg = "\n".join(lines)
         send_telegram_message(digest_msg)
+
 
 # -------------------------------------------------------------------------
 # Bucle Listener Polling de Comandos de Telegram

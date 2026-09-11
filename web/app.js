@@ -1226,11 +1226,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (elActivePositionsTbody) {
             if (activePosItems.length === 0) {
+                let emptyMsg = `No hay posiciones actualmente abiertas para los filtros seleccionados (${selectedScannerStrategy}).`;
+                if (selectedScannerStrategy === "SS11" && selectedScannerUniverse === "CRYPTO") {
+                    emptyMsg = `🛡️ <b>SS11 (Macro Base Pura)</b> está optimizada exclusivamente para acciones y ETFs de Wall Street basadas en el filtro SPY. Para operar Criptomonedas, selecciona la estrategia <b>AIS11 (Multi-IA GPU)</b>.`;
+                }
                 elActivePositionsTbody.innerHTML = `
                     <tr>
                         <td colspan="8" class="text-center p-4 text-muted">
                             <i class="fa-solid fa-folder-open" style="font-size: 18px; margin-right: 8px; color: var(--text-muted);"></i>
-                            No hay posiciones actualmente abiertas para los filtros seleccionados (${selectedScannerStrategy}).
+                            ${emptyMsg}
                         </td>
                     </tr>
                 `;
@@ -1453,7 +1457,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (elLiveScannerTbody) {
             if (filtered.length === 0) {
                 let msg = "No se encontraron activos para los filtros seleccionados.";
-                if (selectedScannerUniverse === "BUY_ONLY") {
+                if (selectedScannerStrategy === "SS11" && selectedScannerUniverse === "CRYPTO") {
+                    msg = `🛡️ <b>Estrategia SS11 (Macro Base Pura)</b> está diseñada y optimizada exclusivamente para acciones y ETFs de Wall Street (filtro Macro SPY). Para escanear Criptomonedas, selecciona la estrategia <b>AIS11 (Multi-IA GPU)</b>.`;
+                } else if (selectedScannerUniverse === "BUY_ONLY") {
                     msg = `ℹ️ No hay nuevas señales de compra (BUY) generadas en la sesión de hoy (${buyCount}). Tus operaciones abiertas se encuentran en estado HOLD en la pestaña <b>💼 Posiciones Activas (${posCount})</b>.`;
                 } else if (selectedScannerUniverse === "POS_ONLY") {
                     msg = `ℹ️ No hay posiciones abiertas actualmente para este mercado.`;
@@ -1535,27 +1541,35 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!liveScannerData) return;
             let list = (selectedScannerStrategy === "AIS11") ? liveScannerData.ais11_signals : liveScannerData.ss11_signals;
             
+            // Base estándar de capital asignado por trade para la consolidación global de cartera ($10,000 por operación)
+            const BASE_CAPITAL_PER_TRADE = 10000;
+
             let allTrades = [];
             (list || []).forEach(item => {
                 (item.recent_trades || []).forEach(t => {
+                    const retPct = Number(t.pct_return) || 0;
+                    // Normalizar PnL nominal para que cada activo pese equitativamente y no por cuentas virtuales desorbitadas
+                    const normalizedPnl = Math.round((retPct / 100.0) * BASE_CAPITAL_PER_TRADE * 100) / 100;
                     allTrades.push({
                         ...t,
-                        ticker: item.ticker
+                        ticker: item.ticker,
+                        pnl: normalizedPnl // Asignación homogénea de $10,000 por operación
                     });
                 });
             });
 
             if (elSelectedTradeTicker) elSelectedTradeTicker.textContent = `TODOS LOS ACTIVOS (${allTrades.length} Trades)`;
-            if (elSelectedTradeStrat) elSelectedTradeStrat.textContent = (selectedScannerStrategy === "AIS11") ? "AIS11: Multi-IA GPU" : "SS11: Macro Base Pura";
+            if (elSelectedTradeStrat) elSelectedTradeStrat.textContent = (selectedScannerStrategy === "AIS11") ? "AIS11: Multi-IA GPU (Acciones & Cripto)" : "SS11: Macro Base Pura (Acciones & ETFs)";
 
-            // Calcular métricas globales consolidadas para todos los trades
+            // Calcular métricas globales consolidadas sobre base homogénea
             const closedTrades = allTrades.filter(t => !t.is_open && t.exit_date !== "EN CURSO");
             const totalClosed = closedTrades.length;
-            const wins = closedTrades.filter(t => (t.pnl || 0) > 0);
+            const wins = closedTrades.filter(t => (Number(t.pct_return) || 0) > 0);
             const winRate = totalClosed > 0 ? (wins.length / totalClosed) * 100 : 0;
+
             const totalNetProfit = closedTrades.reduce((acc, t) => acc + (Number(t.pnl) || 0), 0);
-            const gains = closedTrades.filter(t => (t.pnl || 0) > 0).reduce((acc, t) => acc + Number(t.pnl), 0);
-            const losses = closedTrades.filter(t => (t.pnl || 0) < 0).reduce((acc, t) => acc + Math.abs(Number(t.pnl)), 0);
+            const gains = closedTrades.filter(t => (Number(t.pct_return) || 0) > 0).reduce((acc, t) => acc + Number(t.pnl), 0);
+            const losses = closedTrades.filter(t => (Number(t.pct_return) || 0) < 0).reduce((acc, t) => acc + Math.abs(Number(t.pnl)), 0);
             const profitFactor = losses > 0 ? (gains / losses) : (gains > 0 ? 99.0 : 1.0);
 
             if (elTvNetProfit) {

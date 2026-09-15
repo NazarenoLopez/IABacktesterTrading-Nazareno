@@ -2,11 +2,10 @@
 """
 Motor de Escáner en Tiempo Real y Generador de Señales Dual (SS11 & AIS11)
 Aceleración mediante PyTorch CUDA Cores (NVIDIA GPU).
-Optimizaciones implementadas:
-- Ponderación Cuantitativa Híbrida para AIS11 adaptativa a activos con/sin modelo Deep Learning.
-- Control estricto de reentrada (SMA20 filter) para frenar pérdidas en cascada tras Stop Loss.
-- Cálculo de equidad real y beneficio neto incluyendo posición en curso (flotante).
-- Sanitización robusta contra NaNs/Infs y compatibilidad completa con el bot de Telegram.
+
+AIS11 live espeja el backtester original (data/ais11_com_params.json):
+  score > entry_th entra; score < exit_th sale; SMA20 solo post Stop Loss.
+Tickers sin señales IA no inventan score híbrido: quedan marcados NO_AI (no push).
 """
 
 import os
@@ -25,6 +24,79 @@ from utils.tickers_universe import get_all_tickers, get_us_tickers, get_crypto_t
 
 CACHE_DIR = ".data_cache"
 os.makedirs(CACHE_DIR, exist_ok=True)
+
+AIS11_PARAMS_PATH = "data/ais11_com_params.json"
+AIS11_DEFAULT_PARAMS = {
+    "indicators": ["AI_MINIROCKET_GPU", "AI_TIMESFM", "AI_TSPULSE", "ROC_3_NORM"],
+    "weights": [5, 20, 65, 10],
+    "entry_th": 55,
+    "exit_th": 5,
+}
+AI_SIGNAL_FILES = [
+    "data/minirocket_gpu_signals.json",
+    "data/timesfm_signals.json",
+    "data/tspulse_signals.json",
+]
+
+
+def load_ais11_params():
+    """Carga umbrales/pesos AIS11 exactamente como el backtester."""
+    try:
+        with open(AIS11_PARAMS_PATH, "r", encoding="utf-8") as f:
+            p = json.load(f)
+        return {
+            "indicators": list(p.get("indicators", AIS11_DEFAULT_PARAMS["indicators"])),
+            "weights": list(p.get("weights", AIS11_DEFAULT_PARAMS["weights"])),
+            "entry_th": float(p.get("entry_th", AIS11_DEFAULT_PARAMS["entry_th"])),
+            "exit_th": float(p.get("exit_th", AIS11_DEFAULT_PARAMS["exit_th"])),
+        }
+    except Exception:
+        return dict(AIS11_DEFAULT_PARAMS)
+
+
+def get_ai_signals_age_days():
+    """Edad en días del archivo de señales IA más reciente (None si no hay)."""
+    newest = None
+    for path in AI_SIGNAL_FILES:
+        if os.path.exists(path):
+            mtime = os.path.getmtime(path)
+            if newest is None or mtime > newest:
+                newest = mtime
+    if newest is None:
+        return None
+    return (time.time() - newest) / 86400.0
+
+
+def compute_ais11_score(df, params):
+    """
+    Score ponderado idéntico a backtester.generate_signals para AIS11.
+    Retorna (score_array, has_ai_core) donde has_ai_core exige al menos un modelo IA.
+    """
+    n = len(df)
+    indicators = params["indicators"]
+    weights = params["weights"]
+    score = np.zeros(n, dtype=float)
+    total_w = np.zeros(n, dtype=float)
+
+    ai_core_inds = {"AI_MINIROCKET_GPU", "AI_TIMESFM", "AI_TSPULSE", "AI_MINIROCKET_BIN"}
+    has_ai_core = False
+
+    for idx, ind in enumerate(indicators):
+        if ind not in df.columns:
+            continue
+        vals = df[ind].values.astype(float)
+        valid = (~np.isnan(vals)).astype(float)
+        if ind in ai_core_inds and valid.any():
+            has_ai_core = True
+        safe_vals = np.where(np.isnan(vals), 0.0, vals)
+        w = float(weights[idx]) if idx < len(weights) else 0.0
+        score += safe_vals * w
+        total_w += valid * w
+
+    valid_rows = total_w > 0
+    score = np.where(valid_rows, score / total_w, 50.0)
+    score = np.clip(np.nan_to_num(score, nan=50.0), 0.0, 100.0)
+    return score, has_ai_core
 
 # -------------------------------------------------------------------------
 # Detección de Hardware (GPU NVIDIA CUDA)
@@ -400,24 +472,54 @@ def simulate_strategy_trades(df, signals_long, signals_exit, stop_loss_pct=-15.0
 # -------------------------------------------------------------------------
 # Ejecución del Escáner Completo
 # -------------------------------------------------------------------------
+def _infer_exit_reason(item, is_macro_active):
+    """Motivo legible de salida a partir de trades recientes / macro / score."""
+    recent = item.get("recent_trades") or []
+    closed = [t for t in recent if not t.get("is_open")]
+    if closed:
+        reason = closed[-1].get("reason") or "Salida de Estrategia"
+        if "Stop Loss" in str(reason):
+            return "Stop Loss -15%"
+        if is_macro_active:
+            return "Macro Crash Guard"
+        return reason
+    if is_macro_active:
+        return "Macro Crash Guard"
+    if item.get("signal") == "SELL":
+        return "Score bajo umbral de salida / Macro"
+    return "Salida de Estrategia"
+
+
 def run_live_scanner(tickers=None):
     if tickers is None:
         tickers = get_all_tickers()
 
     us_list = get_us_tickers()
     crypto_list = get_crypto_tickers()
+    ais11_params = load_ais11_params()
+    entry_th = ais11_params["entry_th"]
+    exit_th = ais11_params["exit_th"]
 
+    t0 = time.time()
     data_map = fetch_ticker_data(tickers)
-    
+
     spy_df = data_map.get(BENCHMARK_TICKER)
     if spy_df is None and os.path.exists(".data_cache/SPY.csv"):
         spy_df = pd.read_csv(".data_cache/SPY.csv", index_col=0, parse_dates=True)
 
     macro_mask, is_macro_active, days_remaining = evaluate_macro_crash_guard(spy_df)
+    ai_age_days = get_ai_signals_age_days()
 
     results = {
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "hardware": get_hardware_status(),
+        "ais11_params": {
+            "entry_th": entry_th,
+            "exit_th": exit_th,
+            "indicators": ais11_params["indicators"],
+            "weights": ais11_params["weights"],
+        },
+        "ai_signals_age_days": None if ai_age_days is None else round(ai_age_days, 2),
         "macro_guard": {
             "is_active": is_macro_active,
             "days_remaining": days_remaining,
@@ -428,10 +530,14 @@ def run_live_scanner(tickers=None):
         "ais11_signals": [],
         "summary": {
             "total_scanned": 0,
+            "with_ai": 0,
+            "without_ai": 0,
             "ss11_buys": 0,
             "ss11_holds": 0,
+            "ss11_in_position": 0,
             "ais11_buys": 0,
-            "ais11_holds": 0
+            "ais11_holds": 0,
+            "ais11_in_position": 0,
         }
     }
 
@@ -449,7 +555,6 @@ def run_live_scanner(tickers=None):
         change_24h = ((latest_close - prev_close) / prev_close) * 100.0
         latest_sma20 = float(df['SMA_20'].iloc[-1]) if 'SMA_20' in df.columns and pd.notna(df['SMA_20'].iloc[-1]) else latest_close
 
-        # Align SPY Macro Guard
         if spy_df is not None and not spy_df.empty:
             spy_series = pd.Series(macro_mask, index=spy_df.index)
             macro_aligned = spy_series.reindex(df.index).ffill().fillna(False).values
@@ -457,14 +562,12 @@ def run_live_scanner(tickers=None):
             macro_aligned = np.zeros(n, dtype=bool)
 
         # -----------------------------------------------------------------
-        # 1. Estrategia SS11 (Macro Base Pura con Reingreso Disciplinado)
-        # Exclusiva para Acciones y ETFs (Macro Crash Guard SPY)
+        # 1. SS11 (Macro Base Pura) — acciones/ETFs
         # -----------------------------------------------------------------
         if category != "Crypto":
             ss11_long = ~macro_aligned
             ss11_exit = macro_aligned
 
-            # is_strict_reentry=True exige que tras un stop loss el precio recupere SMA20
             ss11_sig, ss11_met, ss11_trades = simulate_strategy_trades(
                 df, ss11_long, ss11_exit, stop_loss_pct=-15.0, is_strict_reentry=True
             )
@@ -474,8 +577,7 @@ def run_live_scanner(tickers=None):
                 dist_sl = ((latest_close / ss11_met['entry_price']) - 1.0) * 100.0 - (-15.0)
 
             dist_sma20 = ((latest_close / latest_sma20) - 1.0) * 100.0
-
-            results["ss11_signals"].append({
+            ss11_item = {
                 "ticker": ticker,
                 "category": category,
                 "price": smart_round_price(latest_close),
@@ -484,62 +586,65 @@ def run_live_scanner(tickers=None):
                 "metrics": ss11_met,
                 "dist_sl_pct": round(dist_sl, 2),
                 "dist_sma20_pct": round(dist_sma20, 2),
-                "recent_trades": ss11_trades[-5:]
-            })
+                "recent_trades": ss11_trades[-5:],
+                "notify_eligible": True,
+                "strategy": "SS11",
+            }
+            ss11_item["exit_reason"] = _infer_exit_reason(ss11_item, is_macro_active)
+            results["ss11_signals"].append(ss11_item)
 
-            if ss11_sig == "BUY": results["summary"]["ss11_buys"] += 1
-            elif ss11_sig == "HOLD": results["summary"]["ss11_holds"] += 1
+            if ss11_sig == "BUY":
+                results["summary"]["ss11_buys"] += 1
+            elif ss11_sig == "HOLD":
+                results["summary"]["ss11_holds"] += 1
+            if ss11_met.get("is_currently_in_position"):
+                results["summary"]["ss11_in_position"] += 1
 
         # -----------------------------------------------------------------
-        # 2. Estrategia AIS11 (Multi-IA GPU & Score Cuantitativo Híbrido)
+        # 2. AIS11 — espejo exacto del backtester (params JSON)
         # -----------------------------------------------------------------
-        roc3_norm = df['ROC_3_NORM'].values
-        roc10_norm = df['ROC_10_NORM'].values
-        has_ai_gpu = 'AI_MINIROCKET_GPU' in df.columns and df['AI_MINIROCKET_GPU'].notna().any()
-        has_ai_tfm = 'AI_TIMESFM' in df.columns and df['AI_TIMESFM'].notna().any()
-        has_ai_tsp = 'AI_TSPULSE' in df.columns and df['AI_TSPULSE'].notna().any()
-
-        if has_ai_gpu or has_ai_tfm or has_ai_tsp:
-            # Ensamble de modelos de Deep Learning disponibles
-            w_gpu = 5.0 if has_ai_gpu else 0.0
-            w_tfm = 20.0 if has_ai_tfm else 0.0
-            w_tsp = 65.0 if has_ai_tsp else 0.0
-            w_roc = 10.0
-            total_w = w_gpu + w_tfm + w_tsp + w_roc
-
-            v_gpu = df['AI_MINIROCKET_GPU'].fillna(50.0).values if has_ai_gpu else 50.0
-            v_tfm = df['AI_TIMESFM'].fillna(50.0).values if has_ai_tfm else 50.0
-            v_tsp = df['AI_TSPULSE'].fillna(50.0).values if has_ai_tsp else 50.0
-
-            score = (v_gpu * w_gpu + v_tfm * w_tfm + v_tsp * w_tsp + roc3_norm * w_roc) / total_w
-        else:
-            # Score Cuantitativo de Alta Convicción para activos sin IA precalculada:
-            # - Momentum rápido (ROC 3): 35%
-            # - Momentum medio (ROC 10): 25%
-            # - Estructura de Medias Móviles (SMA20, SMA50, SMA200): 40%
-            c_arr = df['Close'].values
-            s20_arr = df['SMA_20'].values
-            s50_arr = df['SMA_50'].values
-            s200_arr = df['SMA_200'].values
-
-            trend_bonus = np.zeros(n)
-            trend_bonus += np.where(c_arr > s20_arr, 15.0, -15.0)
-            trend_bonus += np.where(s20_arr > s50_arr, 15.0, -15.0)
-            trend_bonus += np.where(c_arr > s200_arr, 10.0, -10.0)
-
-            mom_bonus = (roc3_norm - 50.0) * 0.4 + (roc10_norm - 50.0) * 0.3
-            score = 50.0 + trend_bonus + mom_bonus
-
-        score = np.clip(score, 0.0, 100.0)
-        score = np.nan_to_num(score, nan=50.0)
+        score, has_ai = compute_ais11_score(df, ais11_params)
         latest_score = float(score[-1]) if n > 0 else 50.0
+        dist_sma20_ais = ((latest_close / latest_sma20) - 1.0) * 100.0
 
-        # Lógica de Trading Dinámica
-        ai_wants_in  = (score >= 58.0) & (df['Close'].values > df['SMA_20'].values)
-        ai_wants_out = (score < 38.0) | (df['Close'].values < (df['SMA_20'].values * 0.98))
+        if not has_ai:
+            # Sin modelos IA: no inventar score; no operar / no push
+            results["ais11_signals"].append({
+                "ticker": ticker,
+                "category": category,
+                "price": smart_round_price(latest_close),
+                "change_24h": round(change_24h, 2),
+                "ai_score": None,
+                "signal": "NO_AI",
+                "metrics": {
+                    "trades_count": 0,
+                    "win_rate": 0.0,
+                    "profit_factor": 1.0,
+                    "net_profit_usd": 0.0,
+                    "total_return_pct": 0.0,
+                    "current_equity": 10000.0,
+                    "is_currently_in_position": False,
+                    "entry_price": None,
+                    "floating_pnl_pct": 0.0,
+                    "in_sl_recovery": False,
+                },
+                "dist_sl_pct": -15.0,
+                "dist_sma20_pct": round(dist_sma20_ais, 2),
+                "recent_trades": [],
+                "has_ai": False,
+                "notify_eligible": False,
+                "strategy": "AIS11",
+                "exit_reason": None,
+            })
+            results["summary"]["without_ai"] += 1
+            results["summary"]["total_scanned"] += 1
+            continue
 
-        ais11_exit = macro_aligned | ai_wants_out
+        # Paridad con backtester: score > entry_th / score < exit_th (+ macro)
+        ai_wants_in = score > entry_th
+        ai_wants_out = score < exit_th
         ais11_long = ai_wants_in & (~macro_aligned)
+        ais11_exit = macro_aligned | ai_wants_out
 
         ais11_sig, ais11_met, ais11_trades = simulate_strategy_trades(
             df, ais11_long, ais11_exit, stop_loss_pct=-15.0, is_strict_reentry=True
@@ -549,9 +654,7 @@ def run_live_scanner(tickers=None):
         if ais11_met['is_currently_in_position'] and ais11_met.get('entry_price') and ais11_met['entry_price'] > 0:
             dist_sl_ais = ((latest_close / ais11_met['entry_price']) - 1.0) * 100.0 - (-15.0)
 
-        dist_sma20_ais = ((latest_close / latest_sma20) - 1.0) * 100.0
-
-        results["ais11_signals"].append({
+        ais11_item = {
             "ticker": ticker,
             "category": category,
             "price": smart_round_price(latest_close),
@@ -561,30 +664,50 @@ def run_live_scanner(tickers=None):
             "metrics": ais11_met,
             "dist_sl_pct": round(dist_sl_ais, 2),
             "dist_sma20_pct": round(dist_sma20_ais, 2),
-            "recent_trades": ais11_trades[-5:]
-        })
+            "recent_trades": ais11_trades[-5:],
+            "has_ai": True,
+            "notify_eligible": True,
+            "strategy": "AIS11",
+            "entry_th": entry_th,
+            "exit_th": exit_th,
+        }
+        ais11_item["exit_reason"] = _infer_exit_reason(ais11_item, is_macro_active)
+        results["ais11_signals"].append(ais11_item)
 
-        if ais11_sig == "BUY": results["summary"]["ais11_buys"] += 1
-        elif ais11_sig == "HOLD": results["summary"]["ais11_holds"] += 1
-
+        if ais11_sig == "BUY":
+            results["summary"]["ais11_buys"] += 1
+        elif ais11_sig == "HOLD":
+            results["summary"]["ais11_holds"] += 1
+        if ais11_met.get("is_currently_in_position"):
+            results["summary"]["ais11_in_position"] += 1
+        results["summary"]["with_ai"] += 1
         results["summary"]["total_scanned"] += 1
 
-    # Ordenar por Oportunidades (BUY primero, luego HOLD, etc.)
-    priority = {"BUY": 0, "HOLD": 1, "WAIT": 2, "SELL": 3}
+    priority = {"BUY": 0, "HOLD": 1, "WAIT": 2, "SELL": 3, "NO_AI": 4}
     results["ss11_signals"].sort(key=lambda x: (priority.get(x["signal"], 99), -x["change_24h"]))
-    results["ais11_signals"].sort(key=lambda x: (priority.get(x["signal"], 99), -x["ai_score"]))
+    results["ais11_signals"].sort(
+        key=lambda x: (priority.get(x["signal"], 99), -(x.get("ai_score") or 0.0))
+    )
 
-    # Sanitizar NaNs e Infs para evitar errores de sintaxis JSON en el frontend
     results = clean_nans(results)
+    elapsed = time.time() - t0
+    results["scan_elapsed_sec"] = round(elapsed, 2)
 
-    # Guardar en data/live_scanner_cache.json
     try:
         with open("data/live_scanner_cache.json", "w", encoding="utf-8") as f:
             json.dump(results, f, indent=2, ensure_ascii=False)
     except Exception as e:
         print(f"[Scanner Engine] Error al persistir caché del escáner: {e}")
 
-    # Enviar notificaciones de Telegram si hay señales o cambios de trade
+    sm = results["summary"]
+    print(
+        f"[Scanner Engine] Escaneo {elapsed:.1f}s | scanned={sm['total_scanned']} "
+        f"with_ai={sm['with_ai']} no_ai={sm['without_ai']} | "
+        f"SS11 in_pos={sm['ss11_in_position']} buys={sm['ss11_buys']} | "
+        f"AIS11 in_pos={sm['ais11_in_position']} buys={sm['ais11_buys']} | "
+        f"entry/exit={entry_th}/{exit_th} | ai_age_days={results.get('ai_signals_age_days')}"
+    )
+
     try:
         from utils.telegram_bot import check_and_notify_trades
         check_and_notify_trades(results)

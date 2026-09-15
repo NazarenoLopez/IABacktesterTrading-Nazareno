@@ -1417,7 +1417,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     
                     const distSlOpp = (item.dist_sl_pct !== undefined && item.dist_sl_pct !== null) ? item.dist_sl_pct : -15.0;
                     const distSma20Opp = (item.dist_sma20_pct !== undefined && item.dist_sma20_pct !== null) ? item.dist_sma20_pct : 0.0;
-                    const scoreText = item.ai_score !== undefined ? `Score IA: ${item.ai_score.toFixed(1)}/100` : `Dist. SMA20: ${distSma20Opp > 0 ? '+' : ''}${distSma20Opp.toFixed(1)}%`;
+                    const scoreText = (item.ai_score !== undefined && item.ai_score !== null)
+                        ? `Score IA: ${Number(item.ai_score).toFixed(1)}/100`
+                        : (item.signal === "NO_AI"
+                            ? "Sin señales IA (no operable AIS11)"
+                            : `Dist. SMA20: ${distSma20Opp > 0 ? '+' : ''}${distSma20Opp.toFixed(1)}%`);
 
                     return `
                         <div class="opp-card">

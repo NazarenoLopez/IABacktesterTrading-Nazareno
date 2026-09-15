@@ -2,6 +2,11 @@
 """
 Motor de Escáner en Tiempo Real y Generador de Señales Dual (SS11 & AIS11)
 Aceleración mediante PyTorch CUDA Cores (NVIDIA GPU).
+Optimizaciones implementadas:
+- Ponderación Cuantitativa Híbrida para AIS11 adaptativa a activos con/sin modelo Deep Learning.
+- Control estricto de reentrada (SMA20 filter) para frenar pérdidas en cascada tras Stop Loss.
+- Cálculo de equidad real y beneficio neto incluyendo posición en curso (flotante).
+- Sanitización robusta contra NaNs/Infs y compatibilidad completa con el bot de Telegram.
 """
 
 import os
@@ -95,17 +100,17 @@ def fetch_ticker_data(tickers=None, cache_expire=1800):
     tspulse_data = {}
     
     try:
-        with open("data/minirocket_gpu_signals.json", "r") as f:
+        with open("data/minirocket_gpu_signals.json", "r", encoding="utf-8") as f:
             minirocket_gpu_data = json.load(f)
     except Exception: pass
     
     try:
-        with open("data/timesfm_signals.json", "r") as f:
+        with open("data/timesfm_signals.json", "r", encoding="utf-8") as f:
             timesfm_data = json.load(f)
     except Exception: pass
     
     try:
-        with open("data/tspulse_signals.json", "r") as f:
+        with open("data/tspulse_signals.json", "r", encoding="utf-8") as f:
             tspulse_data = json.load(f)
     except Exception: pass
 
@@ -165,31 +170,41 @@ def fetch_ticker_data(tickers=None, cache_expire=1800):
         if len(df) < 30:
             continue
 
-        # Indicadores Básicos
+        # Indicadores Básicos de Tendencia y Momentum
         c = df['Close']
-        v = df['Volume'] if 'Volume' in df.columns else pd.Series(1000.0, index=df.index)
-        
-        df['SMA_20'] = c.rolling(20).mean()
-        df['SMA_50'] = c.rolling(50).mean()
-        df['SMA_200'] = c.rolling(200).mean()
+        df['SMA_20'] = c.rolling(20, min_periods=1).mean()
+        df['SMA_50'] = c.rolling(50, min_periods=1).mean()
+        df['SMA_200'] = c.rolling(200, min_periods=1).mean()
 
-        roc3 = c.pct_change(3) * 100
+        roc3 = c.pct_change(3).fillna(0.0) * 100
         df['ROC_3_NORM'] = sigmoid_norm(roc3, 5.0)
 
-        # Cargar AI Signals para AIS11
+        roc10 = c.pct_change(10).fillna(0.0) * 100
+        df['ROC_10_NORM'] = sigmoid_norm(roc10, 10.0)
+
+        # Cargar AI Signals para AIS11 si existen
         s_gpu = pd.Series(minirocket_gpu_data.get(ticker, {}))
-        if not s_gpu.empty: s_gpu.index = pd.to_datetime(s_gpu.index)
-        df['AI_MINIROCKET_GPU'] = s_gpu.reindex(df.index).fillna(0.5) * 100.0
+        if not s_gpu.empty:
+            s_gpu.index = pd.to_datetime(s_gpu.index)
+            df['AI_MINIROCKET_GPU'] = s_gpu.reindex(df.index).ffill().fillna(0.5) * 100.0
+        else:
+            df['AI_MINIROCKET_GPU'] = np.nan
 
         s_tfm = pd.Series(timesfm_data.get(ticker, {}))
-        if not s_tfm.empty: s_tfm.index = pd.to_datetime(s_tfm.index)
-        s_tfm_aligned = s_tfm.reindex(df.index).fillna(0.0)
-        df['AI_TIMESFM'] = sigmoid_norm(s_tfm_aligned * 100.0, 2.0)
+        if not s_tfm.empty:
+            s_tfm.index = pd.to_datetime(s_tfm.index)
+            s_tfm_aligned = s_tfm.reindex(df.index).ffill().fillna(0.0)
+            df['AI_TIMESFM'] = sigmoid_norm(s_tfm_aligned * 100.0, 2.0)
+        else:
+            df['AI_TIMESFM'] = np.nan
 
         s_tsp = pd.Series(tspulse_data.get(ticker, {}))
-        if not s_tsp.empty: s_tsp.index = pd.to_datetime(s_tsp.index)
-        s_tsp_aligned = s_tsp.reindex(df.index).fillna(0.0)
-        df['AI_TSPULSE'] = sigmoid_norm(s_tsp_aligned * 100.0, 2.0)
+        if not s_tsp.empty:
+            s_tsp.index = pd.to_datetime(s_tsp.index)
+            s_tsp_aligned = s_tsp.reindex(df.index).ffill().fillna(0.0)
+            df['AI_TSPULSE'] = sigmoid_norm(s_tsp_aligned * 100.0, 2.0)
+        else:
+            df['AI_TSPULSE'] = np.nan
 
         data[ticker] = df
 
@@ -241,7 +256,8 @@ def simulate_strategy_trades(df, signals_long, signals_exit, stop_loss_pct=-15.0
         except Exception:
             return 0
 
-    cash = 10000.0
+    initial_capital = 10000.0
+    cash = initial_capital
     pos  = 0.0
     in_pos = False
     entry_price = 0.0
@@ -286,7 +302,7 @@ def simulate_strategy_trades(df, signals_long, signals_exit, stop_loss_pct=-15.0
                 "exit_price":   smart_round_price(opens[i]),
                 "pct_return":   round(float(pct_ret), 2),
                 "pnl":          round(float(pnl), 2),
-                "reason":       "Stop Loss -15%" if hit_stop_loss else "Macro Crash Exit",
+                "reason":       "Stop Loss -15%" if hit_stop_loss else "Salida de Estrategia",
                 "duration_days": _days_diff(dates[i], dates[entry_idx]),
                 "is_open": False
             })
@@ -348,22 +364,31 @@ def simulate_strategy_trades(df, signals_long, signals_exit, stop_loss_pct=-15.0
         else:
             live_signal = "WAIT"
 
-    # Métricas Globales
-    num_trades = len([t for t in trades if not t['is_open']])
-    wins = [t for t in trades if not t['is_open'] and t['pct_return'] > 0]
+    # Equidad Real y Métricas Consistentes
+    current_val = pos * latest_close * (1.0 - commission) if in_pos else 0.0
+    current_equity = cash + current_val
+    net_profit_usd = current_equity - initial_capital
+    total_return_pct = ((current_equity / initial_capital) - 1.0) * 100.0
+
+    trade_eval = [t for t in trades if not t['is_open']]
+    if in_pos and len(trades) > 0 and trades[-1]['is_open']:
+        trade_eval.append(trades[-1])
+
+    num_trades = len(trade_eval)
+    wins = [t for t in trade_eval if t['pct_return'] > 0]
     win_rate = (len(wins) / num_trades * 100.0) if num_trades > 0 else 0.0
 
-    gains = sum(t['pnl'] for t in trades if not t['is_open'] and t['pnl'] > 0)
-    losses = sum(abs(t['pnl']) for t in trades if not t['is_open'] and t['pnl'] < 0)
+    gains = sum(t['pnl'] for t in trade_eval if t['pnl'] > 0)
+    losses = sum(abs(t['pnl']) for t in trade_eval if t['pnl'] < 0)
     profit_factor = (gains / losses) if losses > 0 else (99.0 if gains > 0 else 1.0)
 
-    total_net_profit = sum(t['pnl'] for t in trades if not t['is_open'])
-
     metrics = {
-        "trades_count": num_trades,
+        "trades_count": len([t for t in trades if not t['is_open']]),
         "win_rate": round(win_rate, 1),
         "profit_factor": round(profit_factor, 2),
-        "net_profit_usd": round(total_net_profit, 2),
+        "net_profit_usd": round(net_profit_usd, 2),
+        "total_return_pct": round(total_return_pct, 2),
+        "current_equity": round(current_equity, 2),
         "is_currently_in_position": in_pos,
         "entry_price": smart_round_price(entry_price) if in_pos else None,
         "floating_pnl_pct": round(floating_pnl_pct, 2) if in_pos else 0.0,
@@ -397,7 +422,7 @@ def run_live_scanner(tickers=None):
             "is_active": is_macro_active,
             "days_remaining": days_remaining,
             "benchmark": BENCHMARK_TICKER,
-            "message": "⚠️ CRASH SISTÉMICO ACTIVO - Salida a Liquidez" if is_macro_active else "🟢 Mercado Seguro - Macro Filtro OK"
+            "message": "🚨 CRASH SISTÉMICO ACTIVO - Salida a Liquidez" if is_macro_active else "🟢 Mercado Seguro - Macro Filtro OK"
         },
         "ss11_signals": [],
         "ais11_signals": [],
@@ -432,50 +457,86 @@ def run_live_scanner(tickers=None):
             macro_aligned = np.zeros(n, dtype=bool)
 
         # -----------------------------------------------------------------
-        # 1. Estrategia SS11 (Macro Base Pura)
+        # 1. Estrategia SS11 (Macro Base Pura con Reingreso Disciplinado)
+        # Exclusiva para Acciones y ETFs (Macro Crash Guard SPY)
         # -----------------------------------------------------------------
-        ss11_long = ~macro_aligned
-        ss11_exit = macro_aligned
+        if category != "Crypto":
+            ss11_long = ~macro_aligned
+            ss11_exit = macro_aligned
 
-        ss11_sig, ss11_met, ss11_trades = simulate_strategy_trades(
-            df, ss11_long, ss11_exit, stop_loss_pct=-15.0, is_strict_reentry=False
-        )
+            # is_strict_reentry=True exige que tras un stop loss el precio recupere SMA20
+            ss11_sig, ss11_met, ss11_trades = simulate_strategy_trades(
+                df, ss11_long, ss11_exit, stop_loss_pct=-15.0, is_strict_reentry=True
+            )
 
-        dist_sl = -15.0
-        if ss11_met['is_currently_in_position'] and ss11_met.get('entry_price') and ss11_met['entry_price'] > 0:
-            dist_sl = ((latest_close / ss11_met['entry_price']) - 1.0) * 100.0 - (-15.0)
+            dist_sl = -15.0
+            if ss11_met['is_currently_in_position'] and ss11_met.get('entry_price') and ss11_met['entry_price'] > 0:
+                dist_sl = ((latest_close / ss11_met['entry_price']) - 1.0) * 100.0 - (-15.0)
 
-        dist_sma20 = ((latest_close / latest_sma20) - 1.0) * 100.0
+            dist_sma20 = ((latest_close / latest_sma20) - 1.0) * 100.0
 
-        results["ss11_signals"].append({
-            "ticker": ticker,
-            "category": category,
-            "price": smart_round_price(latest_close),
-            "change_24h": round(change_24h, 2),
-            "signal": ss11_sig,
-            "metrics": ss11_met,
-            "dist_sl_pct": round(dist_sl, 2),
-            "dist_sma20_pct": round(dist_sma20, 2),
-            "recent_trades": ss11_trades[-5:]
-        })
+            results["ss11_signals"].append({
+                "ticker": ticker,
+                "category": category,
+                "price": smart_round_price(latest_close),
+                "change_24h": round(change_24h, 2),
+                "signal": ss11_sig,
+                "metrics": ss11_met,
+                "dist_sl_pct": round(dist_sl, 2),
+                "dist_sma20_pct": round(dist_sma20, 2),
+                "recent_trades": ss11_trades[-5:]
+            })
 
-        if ss11_sig == "BUY": results["summary"]["ss11_buys"] += 1
-        elif ss11_sig == "HOLD": results["summary"]["ss11_holds"] += 1
+            if ss11_sig == "BUY": results["summary"]["ss11_buys"] += 1
+            elif ss11_sig == "HOLD": results["summary"]["ss11_holds"] += 1
 
         # -----------------------------------------------------------------
-        # 2. Estrategia AIS11 (Multi-IA GPU Master Model)
+        # 2. Estrategia AIS11 (Multi-IA GPU & Score Cuantitativo Híbrido)
         # -----------------------------------------------------------------
-        ais10_gpu = df['AI_MINIROCKET_GPU'].values
-        ais10_tfm = df['AI_TIMESFM'].values
-        ais10_tsp = df['AI_TSPULSE'].values
-        roc3_norm  = df['ROC_3_NORM'].values
+        roc3_norm = df['ROC_3_NORM'].values
+        roc10_norm = df['ROC_10_NORM'].values
+        has_ai_gpu = 'AI_MINIROCKET_GPU' in df.columns and df['AI_MINIROCKET_GPU'].notna().any()
+        has_ai_tfm = 'AI_TIMESFM' in df.columns and df['AI_TIMESFM'].notna().any()
+        has_ai_tsp = 'AI_TSPULSE' in df.columns and df['AI_TSPULSE'].notna().any()
 
-        score = (ais10_gpu * 5.0 + ais10_tfm * 20.0 + ais10_tsp * 65.0 + roc3_norm * 10.0) / 100.0
+        if has_ai_gpu or has_ai_tfm or has_ai_tsp:
+            # Ensamble de modelos de Deep Learning disponibles
+            w_gpu = 5.0 if has_ai_gpu else 0.0
+            w_tfm = 20.0 if has_ai_tfm else 0.0
+            w_tsp = 65.0 if has_ai_tsp else 0.0
+            w_roc = 10.0
+            total_w = w_gpu + w_tfm + w_tsp + w_roc
+
+            v_gpu = df['AI_MINIROCKET_GPU'].fillna(50.0).values if has_ai_gpu else 50.0
+            v_tfm = df['AI_TIMESFM'].fillna(50.0).values if has_ai_tfm else 50.0
+            v_tsp = df['AI_TSPULSE'].fillna(50.0).values if has_ai_tsp else 50.0
+
+            score = (v_gpu * w_gpu + v_tfm * w_tfm + v_tsp * w_tsp + roc3_norm * w_roc) / total_w
+        else:
+            # Score Cuantitativo de Alta Convicción para activos sin IA precalculada:
+            # - Momentum rápido (ROC 3): 35%
+            # - Momentum medio (ROC 10): 25%
+            # - Estructura de Medias Móviles (SMA20, SMA50, SMA200): 40%
+            c_arr = df['Close'].values
+            s20_arr = df['SMA_20'].values
+            s50_arr = df['SMA_50'].values
+            s200_arr = df['SMA_200'].values
+
+            trend_bonus = np.zeros(n)
+            trend_bonus += np.where(c_arr > s20_arr, 15.0, -15.0)
+            trend_bonus += np.where(s20_arr > s50_arr, 15.0, -15.0)
+            trend_bonus += np.where(c_arr > s200_arr, 10.0, -10.0)
+
+            mom_bonus = (roc3_norm - 50.0) * 0.4 + (roc10_norm - 50.0) * 0.3
+            score = 50.0 + trend_bonus + mom_bonus
+
+        score = np.clip(score, 0.0, 100.0)
         score = np.nan_to_num(score, nan=50.0)
         latest_score = float(score[-1]) if n > 0 else 50.0
 
-        ai_wants_in  = score > 55.0
-        ai_wants_out = score < 5.0
+        # Lógica de Trading Dinámica
+        ai_wants_in  = (score >= 58.0) & (df['Close'].values > df['SMA_20'].values)
+        ai_wants_out = (score < 38.0) | (df['Close'].values < (df['SMA_20'].values * 0.98))
 
         ais11_exit = macro_aligned | ai_wants_out
         ais11_long = ai_wants_in & (~macro_aligned)
@@ -520,7 +581,8 @@ def run_live_scanner(tickers=None):
     try:
         with open("data/live_scanner_cache.json", "w", encoding="utf-8") as f:
             json.dump(results, f, indent=2, ensure_ascii=False)
-    except Exception: pass
+    except Exception as e:
+        print(f"[Scanner Engine] Error al persistir caché del escáner: {e}")
 
     # Enviar notificaciones de Telegram si hay señales o cambios de trade
     try:
@@ -534,4 +596,4 @@ def run_live_scanner(tickers=None):
 if __name__ == "__main__":
     print(f"Probando escáner en vivo con hardware: {get_hardware_status()}")
     res = run_live_scanner()
-    print(f"Escaneo completado. Scanned: {res['summary']['total_scanned']}, SS11 Buys: {res['summary']['ss11_buys']}, AIS11 Buys: {res['summary']['ais11_buys']}")
+    print(f"Escaneo completado. Scanned: {res['summary']['total_scanned']}, SS11 Buys: {res['summary']['ss11_buys']}, AIS11 Buys: {res['summary']['ais11_buys']}, AIS11 Holds: {res['summary']['ais11_holds']}")

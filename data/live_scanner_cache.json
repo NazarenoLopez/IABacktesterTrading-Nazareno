@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-15 20:23:31",
+  "timestamp": "2026-09-15 20:31:34",
   "hardware": {
     "cuda_available": true,
     "device_name": "NVIDIA GeForce RTX 2060 SUPER",
@@ -21,7 +21,7 @@
       10
     ]
   },
-  "ai_signals_age_days": 0.0,
+  "ai_signals_age_days": 0.01,
   "macro_guard": {
     "is_active": false,
     "days_remaining": 0,
@@ -17993,74 +17993,11 @@
   ],
   "ais11_signals": [
     {
-      "ticker": "NU",
-      "category": "US Stock",
-      "price": 14.19,
-      "change_24h": -1.53,
-      "ai_score": 68.7,
-      "signal": "HOLD",
-      "metrics": {
-        "trades_count": 2,
-        "win_rate": 66.7,
-        "profit_factor": 10.63,
-        "net_profit_usd": 14775.66,
-        "total_return_pct": 147.76,
-        "current_equity": 24775.66,
-        "is_currently_in_position": true,
-        "entry_price": 11.75,
-        "floating_pnl_pct": 19.8,
-        "in_sl_recovery": false
-      },
-      "dist_sl_pct": 35.77,
-      "dist_sma20_pct": -4.13,
-      "recent_trades": [
-        {
-          "entry_date": "2022-09-26",
-          "entry_price": 4.57,
-          "exit_date": "2022-12-14",
-          "exit_price": 3.9,
-          "pct_return": -15.34,
-          "pnl": -1534.22,
-          "reason": "Stop Loss -15%",
-          "duration_days": 79,
-          "is_open": false
-        },
-        {
-          "entry_date": "2022-12-30",
-          "entry_price": 4.0,
-          "exit_date": "2025-04-04",
-          "exit_price": 9.85,
-          "pct_return": 144.28,
-          "pnl": 12214.76,
-          "reason": "Salida de Estrategia",
-          "duration_days": 826,
-          "is_open": false
-        },
-        {
-          "entry_date": "2025-05-23",
-          "entry_price": 11.75,
-          "exit_date": "EN CURSO",
-          "exit_price": 14.19,
-          "pct_return": 19.8,
-          "pnl": 4095.11,
-          "reason": "Posición Activa",
-          "duration_days": 480,
-          "is_open": true
-        }
-      ],
-      "has_ai": true,
-      "notify_eligible": true,
-      "strategy": "AIS11",
-      "entry_th": 55.0,
-      "exit_th": 5.0,
-      "exit_reason": "Salida de Estrategia"
-    },
-    {
       "ticker": "XOM",
       "category": "US Stock",
       "price": 169.32,
       "change_24h": 2.57,
-      "ai_score": 60.3,
+      "ai_score": 73.2,
       "signal": "HOLD",
       "metrics": {
         "trades_count": 17,
@@ -18141,181 +18078,11 @@
       "exit_reason": "Salida de Estrategia"
     },
     {
-      "ticker": "KO",
-      "category": "US Stock",
-      "price": 88.71,
-      "change_24h": -0.72,
-      "ai_score": 56.3,
-      "signal": "HOLD",
-      "metrics": {
-        "trades_count": 17,
-        "win_rate": 55.6,
-        "profit_factor": 10.85,
-        "net_profit_usd": 67301.11,
-        "total_return_pct": 673.01,
-        "current_equity": 77301.11,
-        "is_currently_in_position": true,
-        "entry_price": 70.5077,
-        "floating_pnl_pct": 24.81,
-        "in_sl_recovery": false
-      },
-      "dist_sl_pct": 40.82,
-      "dist_sma20_pct": -0.61,
-      "recent_trades": [
-        {
-          "entry_date": "2015-09-04",
-          "entry_price": 27.4254,
-          "exit_date": "2020-02-28",
-          "exit_price": 44.189,
-          "pct_return": 59.84,
-          "pnl": 11991.57,
-          "reason": "Salida de Estrategia",
-          "duration_days": 1638,
-          "is_open": false
-        },
-        {
-          "entry_date": "2020-04-16",
-          "entry_price": 39.2519,
-          "exit_date": "2020-06-12",
-          "exit_price": 38.6141,
-          "pct_return": -2.41,
-          "pnl": -772.05,
-          "reason": "Salida de Estrategia",
-          "duration_days": 57,
-          "is_open": false
-        },
-        {
-          "entry_date": "2020-06-29",
-          "entry_price": 36.7674,
-          "exit_date": "2022-09-14",
-          "exit_price": 53.899,
-          "pct_return": 45.42,
-          "pnl": 14199.41,
-          "reason": "Salida de Estrategia",
-          "duration_days": 807,
-          "is_open": false
-        },
-        {
-          "entry_date": "2022-09-30",
-          "entry_price": 50.9167,
-          "exit_date": "2025-04-04",
-          "exit_price": 69.9283,
-          "pct_return": 36.24,
-          "pnl": 16475.33,
-          "reason": "Salida de Estrategia",
-          "duration_days": 917,
-          "is_open": false
-        },
-        {
-          "entry_date": "2025-04-24",
-          "entry_price": 70.5077,
-          "exit_date": "EN CURSO",
-          "exit_price": 88.71,
-          "pct_return": 24.81,
-          "pnl": 15366.87,
-          "reason": "Posición Activa",
-          "duration_days": 509,
-          "is_open": true
-        }
-      ],
-      "has_ai": true,
-      "notify_eligible": true,
-      "strategy": "AIS11",
-      "entry_th": 55.0,
-      "exit_th": 5.0,
-      "exit_reason": "Salida de Estrategia"
-    },
-    {
-      "ticker": "C",
-      "category": "US Stock",
-      "price": 136.17,
-      "change_24h": -0.01,
-      "ai_score": 43.3,
-      "signal": "HOLD",
-      "metrics": {
-        "trades_count": 40,
-        "win_rate": 39.0,
-        "profit_factor": 1.81,
-        "net_profit_usd": 39273.29,
-        "total_return_pct": 392.73,
-        "current_equity": 49273.29,
-        "is_currently_in_position": true,
-        "entry_price": 132.87,
-        "floating_pnl_pct": 1.66,
-        "in_sl_recovery": false
-      },
-      "dist_sl_pct": 17.48,
-      "dist_sma20_pct": 1.07,
-      "recent_trades": [
-        {
-          "entry_date": "2022-05-18",
-          "entry_price": 43.8659,
-          "exit_date": "2022-09-14",
-          "exit_price": 42.9013,
-          "pct_return": -2.98,
-          "pnl": -478.84,
-          "reason": "Salida de Estrategia",
-          "duration_days": 119,
-          "is_open": false
-        },
-        {
-          "entry_date": "2022-09-30",
-          "entry_price": 37.0158,
-          "exit_date": "2025-04-04",
-          "exit_price": 58.1513,
-          "pct_return": 55.84,
-          "pnl": 8706.51,
-          "reason": "Salida de Estrategia",
-          "duration_days": 917,
-          "is_open": false
-        },
-        {
-          "entry_date": "2025-04-24",
-          "entry_price": 63.952,
-          "exit_date": "2026-07-15",
-          "exit_price": 133.4,
-          "pct_return": 106.93,
-          "pnl": 25981.29,
-          "reason": "Salida de Estrategia",
-          "duration_days": 447,
-          "is_open": false
-        },
-        {
-          "entry_date": "2026-07-22",
-          "entry_price": 132.05,
-          "exit_date": "2026-07-30",
-          "exit_price": 128.32,
-          "pct_return": -3.6,
-          "pnl": -1810.7,
-          "reason": "Salida de Estrategia",
-          "duration_days": 8,
-          "is_open": false
-        },
-        {
-          "entry_date": "2026-07-31",
-          "entry_price": 132.87,
-          "exit_date": "EN CURSO",
-          "exit_price": 136.17,
-          "pct_return": 1.66,
-          "pnl": 805.54,
-          "reason": "Posición Activa",
-          "duration_days": 46,
-          "is_open": true
-        }
-      ],
-      "has_ai": true,
-      "notify_eligible": true,
-      "strategy": "AIS11",
-      "entry_th": 55.0,
-      "exit_th": 5.0,
-      "exit_reason": "Salida de Estrategia"
-    },
-    {
       "ticker": "BRK-B",
       "category": "US Stock",
       "price": 516.76,
       "change_24h": 0.35,
-      "ai_score": 42.2,
+      "ai_score": 59.1,
       "signal": "HOLD",
       "metrics": {
         "trades_count": 2,
@@ -18374,170 +18141,11 @@
       "exit_reason": "Salida de Estrategia"
     },
     {
-      "ticker": "O",
-      "category": "US Stock",
-      "price": 58.71,
-      "change_24h": -0.94,
-      "ai_score": 32.4,
-      "signal": "HOLD",
-      "metrics": {
-        "trades_count": 18,
-        "win_rate": 78.9,
-        "profit_factor": 6.36,
-        "net_profit_usd": 326580.7,
-        "total_return_pct": 3265.81,
-        "current_equity": 336580.7,
-        "is_currently_in_position": true,
-        "entry_price": 53.3125,
-        "floating_pnl_pct": 9.24,
-        "in_sl_recovery": false
-      },
-      "dist_sl_pct": 25.12,
-      "dist_sma20_pct": -4.21,
-      "recent_trades": [
-        {
-          "entry_date": "2020-05-07",
-          "entry_price": 37.5865,
-          "exit_date": "2020-06-12",
-          "exit_price": 43.0059,
-          "pct_return": 13.51,
-          "pnl": 29962.61,
-          "reason": "Salida de Estrategia",
-          "duration_days": 36,
-          "is_open": false
-        },
-        {
-          "entry_date": "2020-06-29",
-          "entry_price": 41.7596,
-          "exit_date": "2022-09-14",
-          "exit_price": 53.1708,
-          "pct_return": 26.31,
-          "pnl": 66253.58,
-          "reason": "Salida de Estrategia",
-          "duration_days": 807,
-          "is_open": false
-        },
-        {
-          "entry_date": "2022-09-28",
-          "entry_price": 48.2968,
-          "exit_date": "2023-10-31",
-          "exit_price": 39.6496,
-          "pct_return": -18.56,
-          "pnl": -59034.26,
-          "reason": "Stop Loss -15%",
-          "duration_days": 398,
-          "is_open": false
-        },
-        {
-          "entry_date": "2023-11-03",
-          "entry_price": 43.5162,
-          "exit_date": "2025-04-04",
-          "exit_price": 52.1733,
-          "pct_return": 18.94,
-          "pnl": 49054.14,
-          "reason": "Salida de Estrategia",
-          "duration_days": 518,
-          "is_open": false
-        },
-        {
-          "entry_date": "2025-04-30",
-          "entry_price": 53.3125,
-          "exit_date": "EN CURSO",
-          "exit_price": 58.71,
-          "pct_return": 9.24,
-          "pnl": 28483.49,
-          "reason": "Posición Activa",
-          "duration_days": 503,
-          "is_open": true
-        }
-      ],
-      "has_ai": true,
-      "notify_eligible": true,
-      "strategy": "AIS11",
-      "entry_th": 55.0,
-      "exit_th": 5.0,
-      "exit_reason": "Salida de Estrategia"
-    },
-    {
-      "ticker": "MSFT",
-      "category": "US Stock",
-      "price": 497.12,
-      "change_24h": -1.64,
-      "ai_score": 26.3,
-      "signal": "HOLD",
-      "metrics": {
-        "trades_count": 3,
-        "win_rate": 50.0,
-        "profit_factor": 3.5,
-        "net_profit_usd": 5520.23,
-        "total_return_pct": 55.2,
-        "current_equity": 15520.23,
-        "is_currently_in_position": true,
-        "entry_price": 371.34,
-        "floating_pnl_pct": 32.8,
-        "in_sl_recovery": false
-      },
-      "dist_sl_pct": 48.87,
-      "dist_sma20_pct": 0.29,
-      "recent_trades": [
-        {
-          "entry_date": "2021-09-17",
-          "entry_price": 291.92,
-          "exit_date": "2022-05-13",
-          "exit_price": 247.95,
-          "pct_return": -15.74,
-          "pnl": -1574.08,
-          "reason": "Stop Loss -15%",
-          "duration_days": 238,
-          "is_open": false
-        },
-        {
-          "entry_date": "2022-05-31",
-          "entry_price": 263.19,
-          "exit_date": "2022-09-14",
-          "exit_price": 245.36,
-          "pct_return": -7.52,
-          "pnl": -633.51,
-          "reason": "Salida de Estrategia",
-          "duration_days": 106,
-          "is_open": false
-        },
-        {
-          "entry_date": "2022-10-05",
-          "entry_price": 238.06,
-          "exit_date": "2025-04-04",
-          "exit_price": 359.91,
-          "pct_return": 49.98,
-          "pnl": 3894.27,
-          "reason": "Salida de Estrategia",
-          "duration_days": 912,
-          "is_open": false
-        },
-        {
-          "entry_date": "2025-04-24",
-          "entry_price": 371.34,
-          "exit_date": "EN CURSO",
-          "exit_price": 497.12,
-          "pct_return": 32.8,
-          "pnl": 3833.56,
-          "reason": "Posición Activa",
-          "duration_days": 509,
-          "is_open": true
-        }
-      ],
-      "has_ai": true,
-      "notify_eligible": true,
-      "strategy": "AIS11",
-      "entry_th": 55.0,
-      "exit_th": 5.0,
-      "exit_reason": "Salida de Estrategia"
-    },
-    {
       "ticker": "V",
       "category": "US Stock",
       "price": 375.62,
       "change_24h": 0.09,
-      "ai_score": 12.1,
+      "ai_score": 47.1,
       "signal": "HOLD",
       "metrics": {
         "trades_count": 9,
@@ -18618,11 +18226,403 @@
       "exit_reason": "Salida de Estrategia"
     },
     {
+      "ticker": "KO",
+      "category": "US Stock",
+      "price": 88.71,
+      "change_24h": -0.72,
+      "ai_score": 45.2,
+      "signal": "HOLD",
+      "metrics": {
+        "trades_count": 17,
+        "win_rate": 55.6,
+        "profit_factor": 10.85,
+        "net_profit_usd": 67301.11,
+        "total_return_pct": 673.01,
+        "current_equity": 77301.11,
+        "is_currently_in_position": true,
+        "entry_price": 70.5077,
+        "floating_pnl_pct": 24.81,
+        "in_sl_recovery": false
+      },
+      "dist_sl_pct": 40.82,
+      "dist_sma20_pct": -0.61,
+      "recent_trades": [
+        {
+          "entry_date": "2015-09-04",
+          "entry_price": 27.4254,
+          "exit_date": "2020-02-28",
+          "exit_price": 44.189,
+          "pct_return": 59.84,
+          "pnl": 11991.57,
+          "reason": "Salida de Estrategia",
+          "duration_days": 1638,
+          "is_open": false
+        },
+        {
+          "entry_date": "2020-04-16",
+          "entry_price": 39.2519,
+          "exit_date": "2020-06-12",
+          "exit_price": 38.6141,
+          "pct_return": -2.41,
+          "pnl": -772.05,
+          "reason": "Salida de Estrategia",
+          "duration_days": 57,
+          "is_open": false
+        },
+        {
+          "entry_date": "2020-06-29",
+          "entry_price": 36.7674,
+          "exit_date": "2022-09-14",
+          "exit_price": 53.899,
+          "pct_return": 45.42,
+          "pnl": 14199.41,
+          "reason": "Salida de Estrategia",
+          "duration_days": 807,
+          "is_open": false
+        },
+        {
+          "entry_date": "2022-09-30",
+          "entry_price": 50.9167,
+          "exit_date": "2025-04-04",
+          "exit_price": 69.9283,
+          "pct_return": 36.24,
+          "pnl": 16475.33,
+          "reason": "Salida de Estrategia",
+          "duration_days": 917,
+          "is_open": false
+        },
+        {
+          "entry_date": "2025-04-24",
+          "entry_price": 70.5077,
+          "exit_date": "EN CURSO",
+          "exit_price": 88.71,
+          "pct_return": 24.81,
+          "pnl": 15366.87,
+          "reason": "Posición Activa",
+          "duration_days": 509,
+          "is_open": true
+        }
+      ],
+      "has_ai": true,
+      "notify_eligible": true,
+      "strategy": "AIS11",
+      "entry_th": 55.0,
+      "exit_th": 5.0,
+      "exit_reason": "Salida de Estrategia"
+    },
+    {
+      "ticker": "O",
+      "category": "US Stock",
+      "price": 58.71,
+      "change_24h": -0.94,
+      "ai_score": 45.1,
+      "signal": "HOLD",
+      "metrics": {
+        "trades_count": 18,
+        "win_rate": 78.9,
+        "profit_factor": 6.36,
+        "net_profit_usd": 326580.7,
+        "total_return_pct": 3265.81,
+        "current_equity": 336580.7,
+        "is_currently_in_position": true,
+        "entry_price": 53.3125,
+        "floating_pnl_pct": 9.24,
+        "in_sl_recovery": false
+      },
+      "dist_sl_pct": 25.12,
+      "dist_sma20_pct": -4.21,
+      "recent_trades": [
+        {
+          "entry_date": "2020-05-07",
+          "entry_price": 37.5865,
+          "exit_date": "2020-06-12",
+          "exit_price": 43.0059,
+          "pct_return": 13.51,
+          "pnl": 29962.61,
+          "reason": "Salida de Estrategia",
+          "duration_days": 36,
+          "is_open": false
+        },
+        {
+          "entry_date": "2020-06-29",
+          "entry_price": 41.7596,
+          "exit_date": "2022-09-14",
+          "exit_price": 53.1708,
+          "pct_return": 26.31,
+          "pnl": 66253.58,
+          "reason": "Salida de Estrategia",
+          "duration_days": 807,
+          "is_open": false
+        },
+        {
+          "entry_date": "2022-09-28",
+          "entry_price": 48.2968,
+          "exit_date": "2023-10-31",
+          "exit_price": 39.6496,
+          "pct_return": -18.56,
+          "pnl": -59034.26,
+          "reason": "Stop Loss -15%",
+          "duration_days": 398,
+          "is_open": false
+        },
+        {
+          "entry_date": "2023-11-03",
+          "entry_price": 43.5162,
+          "exit_date": "2025-04-04",
+          "exit_price": 52.1733,
+          "pct_return": 18.94,
+          "pnl": 49054.14,
+          "reason": "Salida de Estrategia",
+          "duration_days": 518,
+          "is_open": false
+        },
+        {
+          "entry_date": "2025-04-30",
+          "entry_price": 53.3125,
+          "exit_date": "EN CURSO",
+          "exit_price": 58.71,
+          "pct_return": 9.24,
+          "pnl": 28483.49,
+          "reason": "Posición Activa",
+          "duration_days": 503,
+          "is_open": true
+        }
+      ],
+      "has_ai": true,
+      "notify_eligible": true,
+      "strategy": "AIS11",
+      "entry_th": 55.0,
+      "exit_th": 5.0,
+      "exit_reason": "Salida de Estrategia"
+    },
+    {
+      "ticker": "NU",
+      "category": "US Stock",
+      "price": 14.19,
+      "change_24h": -1.53,
+      "ai_score": 34.5,
+      "signal": "HOLD",
+      "metrics": {
+        "trades_count": 2,
+        "win_rate": 66.7,
+        "profit_factor": 10.63,
+        "net_profit_usd": 14775.66,
+        "total_return_pct": 147.76,
+        "current_equity": 24775.66,
+        "is_currently_in_position": true,
+        "entry_price": 11.75,
+        "floating_pnl_pct": 19.8,
+        "in_sl_recovery": false
+      },
+      "dist_sl_pct": 35.77,
+      "dist_sma20_pct": -4.13,
+      "recent_trades": [
+        {
+          "entry_date": "2022-09-26",
+          "entry_price": 4.57,
+          "exit_date": "2022-12-14",
+          "exit_price": 3.9,
+          "pct_return": -15.34,
+          "pnl": -1534.22,
+          "reason": "Stop Loss -15%",
+          "duration_days": 79,
+          "is_open": false
+        },
+        {
+          "entry_date": "2022-12-30",
+          "entry_price": 4.0,
+          "exit_date": "2025-04-04",
+          "exit_price": 9.85,
+          "pct_return": 144.28,
+          "pnl": 12214.76,
+          "reason": "Salida de Estrategia",
+          "duration_days": 826,
+          "is_open": false
+        },
+        {
+          "entry_date": "2025-05-23",
+          "entry_price": 11.75,
+          "exit_date": "EN CURSO",
+          "exit_price": 14.19,
+          "pct_return": 19.8,
+          "pnl": 4095.11,
+          "reason": "Posición Activa",
+          "duration_days": 480,
+          "is_open": true
+        }
+      ],
+      "has_ai": true,
+      "notify_eligible": true,
+      "strategy": "AIS11",
+      "entry_th": 55.0,
+      "exit_th": 5.0,
+      "exit_reason": "Salida de Estrategia"
+    },
+    {
+      "ticker": "C",
+      "category": "US Stock",
+      "price": 136.17,
+      "change_24h": -0.01,
+      "ai_score": 34.4,
+      "signal": "HOLD",
+      "metrics": {
+        "trades_count": 40,
+        "win_rate": 39.0,
+        "profit_factor": 1.81,
+        "net_profit_usd": 39273.29,
+        "total_return_pct": 392.73,
+        "current_equity": 49273.29,
+        "is_currently_in_position": true,
+        "entry_price": 132.87,
+        "floating_pnl_pct": 1.66,
+        "in_sl_recovery": false
+      },
+      "dist_sl_pct": 17.48,
+      "dist_sma20_pct": 1.07,
+      "recent_trades": [
+        {
+          "entry_date": "2022-05-18",
+          "entry_price": 43.8659,
+          "exit_date": "2022-09-14",
+          "exit_price": 42.9013,
+          "pct_return": -2.98,
+          "pnl": -478.84,
+          "reason": "Salida de Estrategia",
+          "duration_days": 119,
+          "is_open": false
+        },
+        {
+          "entry_date": "2022-09-30",
+          "entry_price": 37.0158,
+          "exit_date": "2025-04-04",
+          "exit_price": 58.1513,
+          "pct_return": 55.84,
+          "pnl": 8706.51,
+          "reason": "Salida de Estrategia",
+          "duration_days": 917,
+          "is_open": false
+        },
+        {
+          "entry_date": "2025-04-24",
+          "entry_price": 63.952,
+          "exit_date": "2026-07-15",
+          "exit_price": 133.4,
+          "pct_return": 106.93,
+          "pnl": 25981.29,
+          "reason": "Salida de Estrategia",
+          "duration_days": 447,
+          "is_open": false
+        },
+        {
+          "entry_date": "2026-07-22",
+          "entry_price": 132.05,
+          "exit_date": "2026-07-30",
+          "exit_price": 128.32,
+          "pct_return": -3.6,
+          "pnl": -1810.7,
+          "reason": "Salida de Estrategia",
+          "duration_days": 8,
+          "is_open": false
+        },
+        {
+          "entry_date": "2026-07-31",
+          "entry_price": 132.87,
+          "exit_date": "EN CURSO",
+          "exit_price": 136.17,
+          "pct_return": 1.66,
+          "pnl": 805.54,
+          "reason": "Posición Activa",
+          "duration_days": 46,
+          "is_open": true
+        }
+      ],
+      "has_ai": true,
+      "notify_eligible": true,
+      "strategy": "AIS11",
+      "entry_th": 55.0,
+      "exit_th": 5.0,
+      "exit_reason": "Salida de Estrategia"
+    },
+    {
+      "ticker": "MSFT",
+      "category": "US Stock",
+      "price": 497.12,
+      "change_24h": -1.64,
+      "ai_score": 13.7,
+      "signal": "HOLD",
+      "metrics": {
+        "trades_count": 3,
+        "win_rate": 50.0,
+        "profit_factor": 3.5,
+        "net_profit_usd": 5520.23,
+        "total_return_pct": 55.2,
+        "current_equity": 15520.23,
+        "is_currently_in_position": true,
+        "entry_price": 371.34,
+        "floating_pnl_pct": 32.8,
+        "in_sl_recovery": false
+      },
+      "dist_sl_pct": 48.87,
+      "dist_sma20_pct": 0.29,
+      "recent_trades": [
+        {
+          "entry_date": "2021-09-17",
+          "entry_price": 291.92,
+          "exit_date": "2022-05-13",
+          "exit_price": 247.95,
+          "pct_return": -15.74,
+          "pnl": -1574.08,
+          "reason": "Stop Loss -15%",
+          "duration_days": 238,
+          "is_open": false
+        },
+        {
+          "entry_date": "2022-05-31",
+          "entry_price": 263.19,
+          "exit_date": "2022-09-14",
+          "exit_price": 245.36,
+          "pct_return": -7.52,
+          "pnl": -633.51,
+          "reason": "Salida de Estrategia",
+          "duration_days": 106,
+          "is_open": false
+        },
+        {
+          "entry_date": "2022-10-05",
+          "entry_price": 238.06,
+          "exit_date": "2025-04-04",
+          "exit_price": 359.91,
+          "pct_return": 49.98,
+          "pnl": 3894.27,
+          "reason": "Salida de Estrategia",
+          "duration_days": 912,
+          "is_open": false
+        },
+        {
+          "entry_date": "2025-04-24",
+          "entry_price": 371.34,
+          "exit_date": "EN CURSO",
+          "exit_price": 497.12,
+          "pct_return": 32.8,
+          "pnl": 3833.56,
+          "reason": "Posición Activa",
+          "duration_days": 509,
+          "is_open": true
+        }
+      ],
+      "has_ai": true,
+      "notify_eligible": true,
+      "strategy": "AIS11",
+      "entry_th": 55.0,
+      "exit_th": 5.0,
+      "exit_reason": "Salida de Estrategia"
+    },
+    {
       "ticker": "MCD",
       "category": "US Stock",
       "price": 252.78,
       "change_24h": -1.83,
-      "ai_score": 37.3,
+      "ai_score": 17.2,
       "signal": "WAIT",
       "metrics": {
         "trades_count": 20,
@@ -26274,5 +26274,5 @@
     "ais11_holds": 8,
     "ais11_in_position": 8
   },
-  "scan_elapsed_sec": 432.61
+  "scan_elapsed_sec": 422.43
 }

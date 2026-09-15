@@ -8,13 +8,23 @@ import os
 import io
 import contextlib
 import shutil
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import backtester
 import threading
 
 PORT = 8000
 IS_LOADING = True
+
+# Post-cierre US (aprox. 17:30 America/New_York ≈ 21:30 UTC en horario estándar;
+# usamos 21:30 UTC como ancla estable sin depender de zoneinfo extra).
+AI_UPDATE_HOUR_UTC = int(os.environ.get("AI_UPDATE_HOUR_UTC", "21"))
+AI_UPDATE_MINUTE_UTC = int(os.environ.get("AI_UPDATE_MINUTE_UTC", "30"))
+LAST_SCANNER_META = {
+    "last_ok_at": None,
+    "last_error": None,
+    "last_summary": None,
+}
 
 AI_STATUS = {
     "is_running": False,
@@ -204,6 +214,48 @@ class APIHandler(http.server.SimpleHTTPRequestHandler):
             self.wfile.write(json.dumps(res).encode('utf-8'))
             return
 
+        if parsed_path.path == '/api/health':
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            try:
+                from utils.scanner_engine import get_ai_signals_age_days, load_ais11_params
+                from utils.telegram_bot import get_bot_token, get_saved_chat_id, is_dry_run
+                ai_age = get_ai_signals_age_days()
+                params = load_ais11_params()
+                cache_ts = None
+                if os.path.exists("data/live_scanner_cache.json"):
+                    try:
+                        with open("data/live_scanner_cache.json", "r", encoding="utf-8") as f:
+                            cache_ts = json.load(f).get("timestamp")
+                    except Exception:
+                        pass
+                payload = {
+                    "ok": True,
+                    "telegram_token": bool(get_bot_token()),
+                    "telegram_chat": bool(get_saved_chat_id()),
+                    "telegram_dry_run": is_dry_run(),
+                    "ai_signals_age_days": None if ai_age is None else round(ai_age, 2),
+                    "ais11_params": {
+                        "entry_th": params["entry_th"],
+                        "exit_th": params["exit_th"],
+                    },
+                    "last_scanner_cache": cache_ts,
+                    "last_scanner_meta": LAST_SCANNER_META,
+                    "ai_status": {
+                        "is_running": AI_STATUS["is_running"],
+                        "step_name": AI_STATUS["step_name"],
+                        "error": AI_STATUS["error"],
+                    },
+                    "next_ai_update_utc": (
+                        f"{AI_UPDATE_HOUR_UTC:02d}:{AI_UPDATE_MINUTE_UTC:02d} UTC diário"
+                    ),
+                }
+                self.wfile.write(json.dumps(payload, ensure_ascii=False).encode('utf-8'))
+            except Exception as e:
+                self.wfile.write(json.dumps({"ok": False, "error": str(e)}).encode('utf-8'))
+            return
+
         # API Endpoint
         if parsed_path.path == '/api/status':
             global IS_LOADING
@@ -368,30 +420,61 @@ if __name__ == "__main__":
             traceback.print_exc()
         IS_LOADING = False
 
+    def seconds_until_next_ai_update():
+        """Segundos hasta el próximo post-cierre US (ancla UTC configurable)."""
+        now = datetime.now(timezone.utc)
+        target = now.replace(
+            hour=AI_UPDATE_HOUR_UTC,
+            minute=AI_UPDATE_MINUTE_UTC,
+            second=0,
+            microsecond=0,
+        )
+        if now >= target:
+            target = target + timedelta(days=1)
+        # Saltar fin de semana (sábado=5, domingo=6) hacia el lunes
+        while target.weekday() >= 5:
+            target = target + timedelta(days=1)
+        return max(60.0, (target - now).total_seconds())
+
     def run_auto_scanner_loop():
         import time
         from utils.scanner_engine import run_live_scanner
-        print("[Auto-Scanner] Bucle de actualización automática cada 60 segundos iniciado.")
+        print("[Auto-Scanner] Bucle cada 60s iniciado.")
         while True:
             try:
-                # Runs scanner and updates live_scanner_cache.json
-                run_live_scanner()
+                res = run_live_scanner()
+                LAST_SCANNER_META["last_ok_at"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                LAST_SCANNER_META["last_error"] = None
+                LAST_SCANNER_META["last_summary"] = res.get("summary")
             except Exception as e:
-                print(f"[Auto-Scanner] Advertencia en escáner automático: {e}")
+                LAST_SCANNER_META["last_error"] = str(e)
+                print(f"[Auto-Scanner] Advertencia: {e}")
+                traceback.print_exc()
             time.sleep(60)
 
     def run_daily_timer_loop():
         import time
-        print("[Timer-Scheduler] Temporizador de IA iniciado: primer ejecución en 18 horas, luego cada 24 horas.")
-        time.sleep(18 * 3600)
+        print(
+            f"[Timer-Scheduler] Update IA post-mercado a "
+            f"{AI_UPDATE_HOUR_UTC:02d}:{AI_UPDATE_MINUTE_UTC:02d} UTC (L-V)."
+        )
         while True:
             try:
+                wait_s = seconds_until_next_ai_update()
+                nxt = datetime.now(timezone.utc) + timedelta(seconds=wait_s)
+                print(
+                    f"[Timer-Scheduler] Próxima actualización IA en {wait_s/3600:.1f}h "
+                    f"(~{nxt.strftime('%Y-%m-%d %H:%M')} UTC)"
+                )
+                time.sleep(wait_s)
                 if not AI_STATUS["is_running"]:
-                    print("\n[Timer-Scheduler] ⏰ Iniciando actualización automática de IA (intervalo 24hs)...")
+                    print("\n[Timer-Scheduler] Iniciando actualización automática de IA (post-mercado)...")
                     threading.Thread(target=run_ai_update_background, daemon=True).start()
+                else:
+                    print("[Timer-Scheduler] IA ya en curso; se omite este ciclo.")
             except Exception as e:
-                print(f"[Timer-Scheduler] Advertencia en temporizador: {e}")
-            time.sleep(24 * 3600)
+                print(f"[Timer-Scheduler] Advertencia: {e}")
+                time.sleep(3600)
 
     # Start data loading & auto-scanner in background
     threading.Thread(target=load_data_thread, daemon=True).start()

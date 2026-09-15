@@ -20,8 +20,13 @@
   "SS11_INTC": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 97.14,
+    "entry_price": 21.04,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 104.47
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_SHIB-USD": {
     "signal": "HOLD",
@@ -32,8 +37,13 @@
   "SS11_GLW": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 143.57,
+    "entry_price": 42.0208,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 165.96
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_XTZ-USD": {
     "signal": "HOLD",
@@ -44,104 +54,189 @@
   "SS11_ENPH": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 36.72,
+    "entry_price": 29.35,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 38.83
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_SEDG": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 35.26,
+    "entry_price": 12.02,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 36.43
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_AMD": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 504.2,
+    "entry_price": 91.59,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 505.74
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_FCX": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 69.38,
+    "entry_price": 35.076,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 76.62
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_EIX": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 54.56,
+    "entry_price": 48.3489,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 59.33
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_LRCX": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 270.87,
+    "entry_price": 69.1146,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 320.42
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_PLUG": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 2.05,
+    "entry_price": 0.94,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 2.26
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_TSLA": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 356.58,
+    "entry_price": 250.5,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 368.16
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_AMAT": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 421.17,
+    "entry_price": 145.96,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 472.79
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_ARM": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 241.83,
+    "entry_price": 107.36,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 261.53
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_RBLX": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 50.24,
+    "entry_price": 39.04,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 44.82
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_VLO": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 397.04,
+    "entry_price": 111.72,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 382.85
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_QCOM": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 187.8,
+    "entry_price": 138.25,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 174.09
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_GEV": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 882.81,
+    "entry_price": 341.57,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 971.31
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_AVGO": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 339.27,
+    "entry_price": 177.96,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 368.56
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_ETN": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 392.4,
+    "entry_price": 272.79,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 422.13
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_RIVN": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 15.54,
+    "entry_price": 11.87,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 16.17
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_NEO-USD": {
     "signal": "HOLD",
@@ -152,14 +247,24 @@
   "SS11_U": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 43.01,
+    "entry_price": 19.585,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 42.75
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_LULU": {
-    "signal": "HOLD",
-    "in_pos": true,
-    "last_notified_action": "BUY",
-    "last_price": 103.19
+    "signal": "WAIT",
+    "in_pos": false,
+    "last_price": 98.37,
+    "entry_price": null,
+    "ai_score": null,
+    "strategy": "SS11",
+    "last_notified_action": "SELL",
+    "last_alert_time": 1789510936.2250724,
+    "last_sell_time": 1789510936.2250724
   },
   "SS11_KAVA-USD": {
     "signal": "HOLD",
@@ -170,8 +275,13 @@
   "SS11_ORCL": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 140.35,
+    "entry_price": 130.74,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 162.52
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_THETA-USD": {
     "signal": "HOLD",
@@ -182,14 +292,24 @@
   "SS11_MPC": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 410.84,
+    "entry_price": 131.57,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 397.77
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_WMB": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 71.63,
+    "entry_price": 56.1676,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 75.83
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_RENDER-USD": {
     "signal": "HOLD",
@@ -200,38 +320,68 @@
   "SS11_LMT": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 533.46,
+    "entry_price": 447.67,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 536.15
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_NET": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 327.23,
+    "entry_price": 112.9,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 284.3
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_KEYS": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 313.36,
+    "entry_price": 138.66,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 333.42
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_DELL": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 543.51,
+    "entry_price": 88.3878,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 533.88
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_KMI": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 30.77,
+    "entry_price": 25.1261,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 31.98
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_KLAC": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 168.02,
+    "entry_price": 66.743,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 188.98
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_MATIC-USD": {
     "signal": "HOLD",
@@ -242,8 +392,13 @@
   "SS11_SMCI": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 35.64,
+    "entry_price": 25.06,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 40.26
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_BONK-USD": {
     "signal": "HOLD",
@@ -266,8 +421,13 @@
   "SS11_XEL": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 72.49,
+    "entry_price": 67.6729,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 76.88
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_SEI-USD": {
     "signal": "HOLD",
@@ -302,8 +462,13 @@
   "SS11_PM": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 194.11,
+    "entry_price": 161.23,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 184.73
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_ETH-USD": {
     "signal": "HOLD",
@@ -320,14 +485,24 @@
   "SS11_EBAY": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 108.03,
+    "entry_price": 65.648,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 104.59
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_PANW": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 375.09,
+    "entry_price": 159.13,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 336.98
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_DOGE-USD": {
     "signal": "HOLD",
@@ -344,32 +519,57 @@
   "SS11_SE": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 102.65,
+    "entry_price": 85.0,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 113.33
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_WEC": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 103.51,
+    "entry_price": 103.21,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 107.06
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_CAT": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 783.54,
+    "entry_price": 293.7,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 822.48
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_OXY": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 63.52,
+    "entry_price": 38.8425,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 60.65
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_SO": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 85.95,
+    "entry_price": 86.7073,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 88.99
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_FLOW-USD": {
     "signal": "HOLD",
@@ -380,20 +580,35 @@
   "SS11_DOV": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 188.97,
+    "entry_price": 157.45,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 194.74
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_UNH": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 375.93,
+    "entry_price": 263.38,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 400.84
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_ED": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 105.24,
+    "entry_price": 106.87,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 108.27
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_AAVE-USD": {
     "signal": "HOLD",
@@ -404,26 +619,46 @@
   "SS11_DUK": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 117.77,
+    "entry_price": 114.99,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 121.24
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_FTNT": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 172.37,
+    "entry_price": 79.18,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 157.47
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_XOM": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 169.32,
+    "entry_price": 103.01,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 160.66
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_AEP": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 120.61,
+    "entry_price": 101.99,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 125.42
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_XLM-USD": {
     "signal": "HOLD",
@@ -434,26 +669,46 @@
   "SS11_EXC": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 42.195,
+    "entry_price": 44.1967,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 43.95
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_DVN": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 51.33,
+    "entry_price": 30.4783,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 48.4
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_NOC": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 531.25,
+    "entry_price": 458.03,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 518.58
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_BKR": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 56.72,
+    "entry_price": 35.2821,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 63.92
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_ADA-USD": {
     "signal": "HOLD",
@@ -470,50 +725,90 @@
   "SS11_ANET": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 192.84,
+    "entry_price": 71.56,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 194.96
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_ODFL": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 180.96,
+    "entry_price": 138.64,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 187.01
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_PEP": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 135.5,
+    "entry_price": 133.16,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 138.45
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_DLR": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 179.27,
+    "entry_price": 146.83,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 189.5
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_CVX": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 217.77,
+    "entry_price": 129.65,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 209.8
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_COP": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 141.22,
+    "entry_price": 86.5202,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 135.04
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_D": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 63.87,
+    "entry_price": 49.7342,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 66.22
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_MDLZ": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 62.1,
+    "entry_price": 55.5882,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 61.63
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_FIL-USD": {
     "signal": "HOLD",
@@ -524,14 +819,24 @@
   "SS11_VZ": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 51.45,
+    "entry_price": 39.3429,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 50.41
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_URI": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 989.13,
+    "entry_price": 606.29,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 1015.17
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_AXS-USD": {
     "signal": "HOLD",
@@ -548,26 +853,46 @@
   "SS11_WELL": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 232.76,
+    "entry_price": 143.59,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 237.25
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_HUM": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 396.62,
+    "entry_price": 184.32,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 403.09
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_KO": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 88.71,
+    "entry_price": 70.5077,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 88.36
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_ADI": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 361.35,
+    "entry_price": 188.74,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 363.2
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_ALGO-USD": {
     "signal": "HOLD",
@@ -578,26 +903,46 @@
   "SS11_FANG": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 211.52,
+    "entry_price": 131.85,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 199.65
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_TXN": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 263.43,
+    "entry_price": 157.97,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 258.92
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_CCI": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 73.25,
+    "entry_price": 75.31,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 75.97
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_EOG": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 153.74,
+    "entry_price": 108.14,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 145.36
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_LTC-USD": {
     "signal": "HOLD",
@@ -606,28 +951,48 @@
     "last_price": 54.321
   },
   "SS11_MCD": {
-    "signal": "HOLD",
-    "in_pos": true,
-    "last_notified_action": "BUY",
-    "last_price": 255.81
+    "signal": "WAIT",
+    "in_pos": false,
+    "last_price": 252.78,
+    "entry_price": null,
+    "ai_score": null,
+    "strategy": "SS11",
+    "last_notified_action": "SELL",
+    "last_alert_time": 1789510936.2250724,
+    "last_sell_time": 1789510936.2250724
   },
   "SS11_CEG": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 259.89,
+    "entry_price": 207.87,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 299.05
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_CTAS": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 198.95,
+    "entry_price": 175.03,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 200.5
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_CMG": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 34.83,
+    "entry_price": 32.64,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 36.96
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_SUI-USD": {
     "signal": "HOLD",
@@ -656,26 +1021,46 @@
   "SS11_AXP": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 324.43,
+    "entry_price": 254.7,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 326.1
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_GOOGL": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 344.98,
+    "entry_price": 155.42,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 338.36
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_CSCO": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 110.07,
+    "entry_price": 53.8543,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 109.17
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_BRK-B": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 516.76,
+    "entry_price": 526.81,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 505.83
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_AVAX-USD": {
     "signal": "HOLD",
@@ -692,14 +1077,24 @@
   "SS11_ADM": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 86.61,
+    "entry_price": 45.761,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 84.5
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_PSA": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 296.68,
+    "entry_price": 282.01,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 301.6
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_FTM-USD": {
     "signal": "HOLD",
@@ -710,38 +1105,68 @@
   "SS11_GS": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 976.67,
+    "entry_price": 511.63,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 1036.53
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_DD": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 128.04,
+    "entry_price": 77.6475,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 131.32
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_AWK": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 138.02,
+    "entry_price": 126.1,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 140.38
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_DIS": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 106.42,
+    "entry_price": 85.8357,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 105.06
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_SYY": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 79.6,
+    "entry_price": 69.9614,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 79.84
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_NU": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 14.19,
+    "entry_price": 11.54,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 15.33
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_BNB-USD": {
     "signal": "HOLD",
@@ -752,158 +1177,288 @@
   "SS11_T": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 26.72,
+    "entry_price": 21.51,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 25.6
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_O": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 58.71,
+    "entry_price": 53.8127,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 61.02
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_UNP": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 283.99,
+    "entry_price": 201.47,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 288.45
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_CL": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 87.0,
+    "entry_price": 77.8153,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 88.41
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_ROST": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 226.26,
+    "entry_price": 135.21,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 229.31
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_TT": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 422.73,
+    "entry_price": 333.45,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 446.0
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_ECL": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 274.6,
+    "entry_price": 234.79,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 278.11
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_EMR": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 147.0,
+    "entry_price": 98.6614,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 152.15
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_FAST": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 49.41,
+    "entry_price": 38.9214,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 49.38
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_BAC": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 59.52,
+    "entry_price": 37.4232,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 62.39
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_SNPS": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 367.7,
+    "entry_price": 426.16,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 392.03
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_RSG": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 223.04,
+    "entry_price": 212.03,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 221.63
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_SNOW": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 322.98,
+    "entry_price": 151.6,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 335.5
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_META": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 670.24,
+    "entry_price": 516.64,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 613.48
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_ITW": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 268.6,
+    "entry_price": 230.76,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 268.69
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_MLM": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 506.81,
+    "entry_price": 493.58,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 511.98
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_WM": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 217.25,
+    "entry_price": 224.25,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 217.78
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_MTB": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 235.37,
+    "entry_price": 158.89,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 238.44
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_PG": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 146.67,
+    "entry_price": 154.86,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 145.58
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_VICI": {
-    "signal": "HOLD",
-    "in_pos": true,
-    "last_notified_action": "BUY",
-    "last_price": 25.27
+    "signal": "WAIT",
+    "in_pos": false,
+    "last_price": 24.76,
+    "entry_price": null,
+    "ai_score": null,
+    "strategy": "SS11",
+    "last_notified_action": "SELL",
+    "last_alert_time": 1789510936.2250724,
+    "last_sell_time": 1789510936.2250724
   },
   "SS11_AMZN": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 248.42,
+    "entry_price": 180.92,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 256.97
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_COST": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 901.35,
+    "entry_price": 965.36,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 910.18
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_HON": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 203.44,
+    "entry_price": 189.35,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 208.24
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_WST": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 365.0,
+    "entry_price": 217.04,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 337.75
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_GE": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 307.05,
+    "entry_price": 193.07,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 334.91
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_FITB": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 54.67,
+    "entry_price": 33.5019,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 54.51
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_OP-USD": {
     "signal": "HOLD",
@@ -920,278 +1475,508 @@
   "SS11_MS": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 206.28,
+    "entry_price": 107.77,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 216.24
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_CVS": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 94.49,
+    "entry_price": 63.0877,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 96.07
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_PH": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 925.0,
+    "entry_price": 569.87,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 955.87
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_C": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 136.17,
+    "entry_price": 63.952,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 136.74
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_SLB": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 54.2,
+    "entry_price": 32.9573,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 57.1
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_BA": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 209.69,
+    "entry_price": 171.2,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 210.73
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_HAL": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 35.67,
+    "entry_price": 20.0854,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 36.8
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_HCA": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 423.82,
+    "entry_price": 334.69,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 402.02
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_NKE": {
-    "signal": "HOLD",
-    "in_pos": true,
-    "last_notified_action": "BUY",
-    "last_price": 38.1
+    "signal": "WAIT",
+    "in_pos": false,
+    "last_price": 36.22,
+    "entry_price": null,
+    "ai_score": null,
+    "strategy": "SS11",
+    "last_notified_action": "SELL",
+    "last_alert_time": 1789510936.2250724,
+    "last_sell_time": 1789510936.2250724
   },
   "SS11_YUM": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 140.77,
+    "entry_price": 142.23,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 149.51
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_CSX": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 48.66,
+    "entry_price": 26.8331,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 49.0
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_RTX": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 195.5,
+    "entry_price": 117.16,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 198.81
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_TRV": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 377.97,
+    "entry_price": 251.94,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 365.66
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_WMT": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 108.09,
+    "entry_price": 93.4744,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 106.05
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_MO": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 69.81,
+    "entry_price": 53.8405,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 68.17
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_TGT": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 154.4,
+    "entry_price": 86.7643,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 162.71
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_AZO": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 2860.25,
+    "entry_price": 3075.26,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 2951.61
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_MCHP": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 71.49,
+    "entry_price": 44.4348,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 73.38
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_LCID": {
-    "signal": "HOLD",
-    "in_pos": true,
-    "last_notified_action": "BUY",
-    "last_price": 4.63
+    "signal": "WAIT",
+    "in_pos": false,
+    "last_price": 4.12,
+    "entry_price": null,
+    "ai_score": null,
+    "strategy": "SS11",
+    "last_notified_action": "SELL",
+    "last_alert_time": 1789510936.2250724,
+    "last_sell_time": 1789510936.2250724
   },
   "SS11_MSI": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 469.14,
+    "entry_price": 417.16,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 462.98
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_ROK": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 417.0,
+    "entry_price": 235.79,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 429.13
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_PNC": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 240.78,
+    "entry_price": 150.82,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 242.91
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_MSFT": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 497.12,
+    "entry_price": 371.34,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 493.95
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_AAPL": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 331.34,
+    "entry_price": 203.64,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 316.22
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_DHR": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 209.36,
+    "entry_price": 173.18,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 205.23
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_IBM": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 248.37,
+    "entry_price": 222.33,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 232.09
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_APH": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 77.65,
+    "entry_price": 35.931,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 81.76
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_STT": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 185.13,
+    "entry_price": 82.4192,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 191.88
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_MRK": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 143.79,
+    "entry_price": 74.9967,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 148.46
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_DDOG": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 230.27,
+    "entry_price": 94.9,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 210.23
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_USB": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 62.22,
+    "entry_price": 37.3806,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 62.49
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_JPM": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 352.49,
+    "entry_price": 234.11,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 353.51
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_MA": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 573.27,
+    "entry_price": 524.71,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 570.89
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_CB": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 341.86,
+    "entry_price": 279.56,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 336.64
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_CRWD": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 242.49,
+    "entry_price": 96.5,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 210.02
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_TDG": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 1085.0,
+    "entry_price": 1267.25,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 1145.14
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_DAL": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 78.89,
+    "entry_price": 40.099,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 78.96
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_GIS": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 36.58,
+    "entry_price": 34.1096,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 37.69
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_MU": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 927.6,
+    "entry_price": 74.3805,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 1000.26
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_OTIS": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 68.5,
+    "entry_price": 78.3278,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 70.06
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_SYF": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 76.06,
+    "entry_price": 48.3751,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 78.62
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_VMC": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 249.2,
+    "entry_price": 241.09,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 258.3
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_AAL": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 12.77,
+    "entry_price": 9.41,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 12.91
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_V": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 375.62,
+    "entry_price": 329.51,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 368.64
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_NXPI": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 226.35,
+    "entry_price": 183.09,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 223.87
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_TMO": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 641.39,
+    "entry_price": 427.99,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 603.02
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_ICP-USD": {
     "signal": "HOLD",
@@ -1202,176 +1987,321 @@
   "SS11_PCAR": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 122.46,
+    "entry_price": 87.295,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 122.5
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_LOW": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 194.61,
+    "entry_price": 212.25,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 200.8
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_NUE": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 258.82,
+    "entry_price": 109.4,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 256.4
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_CI": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 288.9,
+    "entry_price": 273.74,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 275.83
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_PGR": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 221.31,
+    "entry_price": 205.23,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 214.9
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_DE": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 684.04,
+    "entry_price": 451.42,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 680.73
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_NFLX": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 77.9,
+    "entry_price": 71.48,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 76.77
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_COR": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 323.29,
+    "entry_price": 280.6,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 324.69
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_BLK": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 1058.66,
+    "entry_price": 868.05,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 1095.37
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_KMB": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 98.675,
+    "entry_price": 101.22,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 102.93
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_HIG": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 136.03,
+    "entry_price": 115.19,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 135.66
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_NVDA": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 212.17,
+    "entry_price": 103.22,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 225.73
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_AIG": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 75.98,
+    "entry_price": 79.3086,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 74.68
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_CHD": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 94.51,
+    "entry_price": 86.2529,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 96.54
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_MCK": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 899.56,
+    "entry_price": 690.77,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 889.12
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_EL": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 96.25,
+    "entry_price": 57.1763,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 101.69
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_REGN": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 774.11,
+    "entry_price": 517.95,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 810.31
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_HLT": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 307.79,
+    "entry_price": 213.83,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 304.47
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_PRU": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 119.31,
+    "entry_price": 94.3167,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 119.38
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_MET": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 98.22,
+    "entry_price": 71.106,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 95.5
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_LLY": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 1136.11,
+    "entry_price": 706.54,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 1123.91
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_SCHW": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 107.79,
+    "entry_price": 76.4944,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 106.87
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_JNJ": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 267.2,
+    "entry_price": 149.97,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 269.12
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_WFC": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 89.72,
+    "entry_price": 65.5088,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 87.96
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_CTVA": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 83.39,
+    "entry_price": 60.3183,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 85.9
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_GM": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 85.37,
+    "entry_price": 45.5515,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 85.79
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_AON": {
-    "signal": "HOLD",
-    "in_pos": true,
-    "last_notified_action": "BUY",
-    "last_price": 315.79
+    "signal": "WAIT",
+    "in_pos": false,
+    "last_price": 304.67,
+    "entry_price": null,
+    "ai_score": null,
+    "strategy": "SS11",
+    "last_notified_action": "SELL",
+    "last_alert_time": 1789510936.2250724,
+    "last_sell_time": 1789510936.2250724
   },
   "SS11_SHW": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 323.22,
+    "entry_price": 327.75,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 326.09
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_ORLY": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 85.16,
+    "entry_price": 90.592,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 85.89
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_TIA-USD": {
     "signal": "HOLD",
@@ -1382,62 +2312,112 @@
   "SS11_HD": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 305.48,
+    "entry_price": 342.6,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 313.7
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_MAR": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 337.24,
+    "entry_price": 225.44,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 328.79
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_PLTR": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 172.56,
+    "entry_price": 101.53,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 170.3
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_PFE": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 27.55,
+    "entry_price": 20.1917,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 27.79
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_SBUX": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 96.58,
+    "entry_price": 79.2552,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 102.01
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_ALL": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 257.21,
+    "entry_price": 188.38,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 253.46
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_KR": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 62.25,
+    "entry_price": 61.0769,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 57.2
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_TJX": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 124.6,
+    "entry_price": 122.4,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 128.92
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_LUV": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 39.28,
+    "entry_price": 23.9447,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 38.67
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_ACGL": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 97.04,
+    "entry_price": 92.09,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 95.71
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_LINK-USD": {
     "signal": "HOLD",
@@ -1448,8 +2428,13 @@
   "SS11_MCO": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 467.16,
+    "entry_price": 428.01,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 481.25
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_ETC-USD": {
     "signal": "HOLD",
@@ -1460,32 +2445,57 @@
   "SS11_COF": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 206.85,
+    "entry_price": 173.26,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 213.96
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_FDX": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 308.26,
+    "entry_price": 164.28,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 314.13
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_BALL": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 61.01,
+    "entry_price": 47.8734,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 61.02
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_APP": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 331.46,
+    "entry_price": 253.73,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 312.01
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_GWW": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 1269.53,
+    "entry_price": 983.79,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 1289.17
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_INJ-USD": {
     "signal": "HOLD",
@@ -1496,74 +2506,134 @@
   "SS11_WTW": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 321.97,
+    "entry_price": 255.25,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 325.34
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_UAL": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 106.92,
+    "entry_price": 66.66,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 108.24
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_IDXX": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 510.73,
+    "entry_price": 429.03,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 520.21
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_ROP": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 383.94,
+    "entry_price": 347.03,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 395.65
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_GILD": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 146.3,
+    "entry_price": 102.69,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 146.64
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_CDNS": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 273.96,
+    "entry_price": 270.31,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 284.11
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_ABBV": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 263.04,
+    "entry_price": 170.79,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 248.78
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_GEHC": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 64.07,
+    "entry_price": 64.853,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 66.775
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_TWLO": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 242.16,
+    "entry_price": 88.15,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 225.89
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_BDX": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 185.92,
+    "entry_price": 131.59,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 179.1
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_EFX": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 167.08,
+    "entry_price": 171.16,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 171.62
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_COIN": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 172.11,
+    "entry_price": 165.19,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 178.94
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_SAND-USD": {
     "signal": "HOLD",
@@ -1574,152 +2644,277 @@
   "SS11_VRTX": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 514.63,
+    "entry_price": 400.09,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 528.9
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_BMY": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 63.73,
+    "entry_price": 45.1489,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 64.69
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_SPGI": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 412.52,
+    "entry_price": 407.79,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 429.31
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_IQV": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 269.67,
+    "entry_price": 147.59,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 259.21
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_RMD": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 229.44,
+    "entry_price": 198.67,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 221.05
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_PYPL": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 53.81,
+    "entry_price": 46.9658,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 53.18
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_CPRT": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 31.04,
+    "entry_price": 30.44,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 32.6
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_GPN": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 88.98,
+    "entry_price": 69.9822,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 89.42
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_MDB": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 377.67,
+    "entry_price": 162.92,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 356.0
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_ADBE": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 257.76,
+    "entry_price": 216.1,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 257.26
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_UBER": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 71.43,
+    "entry_price": 74.155,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 73.13
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_ADP": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 276.53,
+    "entry_price": 216.01,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 267.96
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_DXCM": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 86.45,
+    "entry_price": 61.99,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 84.53
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_CRM": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 255.65,
+    "entry_price": 163.99,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 249.12
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_HOOD": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 110.45,
+    "entry_price": 45.09,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 117.34
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_PAYX": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 118.3,
+    "entry_price": 93.0518,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 116.93
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_AJG": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 248.04,
+    "entry_price": 207.99,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 251.45
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_FISV": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 50.02,
+    "entry_price": 52.25,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 50.86
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_ACN": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 193.4,
+    "entry_price": 130.48,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 179.03
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_INTU": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 329.27,
+    "entry_price": 270.72,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 318.93
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_F": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 13.5,
+    "entry_price": 9.1715,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 14.0
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_HPQ": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 33.82,
+    "entry_price": 19.1027,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 31.17
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_ISRG": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 377.16,
+    "entry_price": 376.31,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 350.16
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_APTV": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 43.75,
+    "entry_price": 47.71,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 45.73
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_ZS": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 193.89,
+    "entry_price": 137.39,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 161.94
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_GRT-USD": {
     "signal": "HOLD",
@@ -1730,44 +2925,79 @@
   "SS11_NOW": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 141.9,
+    "entry_price": 91.13,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 134.21
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_BSX": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 43.87,
+    "entry_price": 45.22,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 44.98
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_BKNG": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 171.32,
+    "entry_price": 179.15,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 180.3
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_SHOP": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 129.86,
+    "entry_price": 90.645,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 134.1
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_PATH": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 14.23,
+    "entry_price": 11.0,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 14.01
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_SYK": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 281.5,
+    "entry_price": 312.72,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 276.43
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_AMGN": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 375.65,
+    "entry_price": 266.42,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 393.17
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "SS11_UNI-USD": {
     "signal": "SELL",
@@ -1776,66 +3006,103 @@
     "last_price": 0.000163
   },
   "SS11_STZ": {
-    "signal": "SELL",
+    "signal": "HOLD",
     "in_pos": true,
+    "last_price": 123.62,
+    "entry_price": 134.63,
+    "ai_score": null,
+    "strategy": "SS11",
     "last_notified_action": "BUY",
-    "last_price": 120.98
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "AIS11_NU": {
-    "signal": "BUY",
+    "signal": "HOLD",
     "in_pos": true,
+    "last_price": 14.19,
+    "entry_price": 11.75,
+    "ai_score": 68.7,
+    "strategy": "AIS11",
     "last_notified_action": "BUY",
-    "last_alert_time": 0,
-    "last_price": 15.0
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "AIS11_XOM": {
-    "signal": "BUY",
-    "in_pos": false,
-    "last_notified_action": "SELL",
-    "last_alert_time": 1789088593.4016693,
-    "last_price": 164.23
+    "signal": "HOLD",
+    "in_pos": true,
+    "last_price": 169.32,
+    "entry_price": 103.01,
+    "ai_score": 60.3,
+    "strategy": "AIS11",
+    "last_notified_action": "BUY",
+    "last_alert_time": 1789510936.2250724,
+    "last_sell_time": 0.0
   },
   "AIS11_KO": {
-    "signal": "WAIT",
-    "in_pos": false,
-    "last_notified_action": "SELL",
-    "last_alert_time": 1789088113.8149123,
-    "last_price": 87.55
+    "signal": "HOLD",
+    "in_pos": true,
+    "last_price": 88.71,
+    "entry_price": 70.5077,
+    "ai_score": 56.3,
+    "strategy": "AIS11",
+    "last_notified_action": "BUY",
+    "last_alert_time": 1789510936.2250724,
+    "last_sell_time": 0.0
   },
   "AIS11_C": {
     "signal": "HOLD",
     "in_pos": true,
+    "last_price": 136.17,
+    "entry_price": 132.87,
+    "ai_score": 43.3,
+    "strategy": "AIS11",
     "last_notified_action": "BUY",
-    "last_alert_time": 0,
-    "last_price": 137.8
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
   },
   "AIS11_BRK-B": {
-    "signal": "WAIT",
-    "in_pos": false,
-    "last_notified_action": "SELL",
-    "last_alert_time": 1789088593.4016693,
-    "last_price": 506.72
+    "signal": "HOLD",
+    "in_pos": true,
+    "last_price": 516.76,
+    "entry_price": 526.81,
+    "ai_score": 42.2,
+    "strategy": "AIS11",
+    "last_notified_action": "BUY",
+    "last_alert_time": 1789510936.2250724,
+    "last_sell_time": 0.0
   },
   "AIS11_O": {
-    "signal": "WAIT",
-    "in_pos": false,
-    "last_notified_action": "SELL",
-    "last_alert_time": 1789088593.4016693,
-    "last_price": 60.11
+    "signal": "HOLD",
+    "in_pos": true,
+    "last_price": 58.71,
+    "entry_price": 53.3125,
+    "ai_score": 32.4,
+    "strategy": "AIS11",
+    "last_notified_action": "BUY",
+    "last_alert_time": 1789510936.2250724,
+    "last_sell_time": 0.0
   },
   "AIS11_MSFT": {
-    "signal": "WAIT",
-    "in_pos": false,
-    "last_notified_action": "SELL",
-    "last_alert_time": 1789088113.8149123,
-    "last_price": 491.65
+    "signal": "HOLD",
+    "in_pos": true,
+    "last_price": 497.12,
+    "entry_price": 371.34,
+    "ai_score": 26.3,
+    "strategy": "AIS11",
+    "last_notified_action": "BUY",
+    "last_alert_time": 1789510936.2250724,
+    "last_sell_time": 0.0
   },
   "AIS11_V": {
-    "signal": "WAIT",
-    "in_pos": false,
-    "last_notified_action": "SELL",
-    "last_alert_time": 1789088593.4016693,
-    "last_price": 367.39
+    "signal": "HOLD",
+    "in_pos": true,
+    "last_price": 375.62,
+    "entry_price": 329.51,
+    "ai_score": 12.1,
+    "strategy": "AIS11",
+    "last_notified_action": "BUY",
+    "last_alert_time": 1789510936.2250724,
+    "last_sell_time": 0.0
   },
   "AIS11_MINA-USD": {
     "signal": "WAIT",
@@ -3777,8 +5044,15 @@
   "AIS11_MCD": {
     "signal": "WAIT",
     "in_pos": false,
+    "last_price": 252.78,
+    "entry_price": null,
+    "ai_score": 37.3,
+    "strategy": "AIS11",
     "last_notified_action": "SELL",
-    "last_alert_time": 0,
-    "last_price": 253.48
-  }
+    "last_alert_time": 0.0,
+    "last_sell_time": 0.0
+  },
+  "__last_ai_stale_warn": 1789510936.2250724,
+  "__last_scan": "2026-09-15 19:24:44",
+  "__updated_at": "2026-09-15 19:24:45"
 }

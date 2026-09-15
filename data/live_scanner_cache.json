@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-15 19:24:44",
+  "timestamp": "2026-09-15 20:23:31",
   "hardware": {
     "cuda_available": true,
     "device_name": "NVIDIA GeForce RTX 2060 SUPER",
@@ -21,7 +21,7 @@
       10
     ]
   },
-  "ai_signals_age_days": 6.37,
+  "ai_signals_age_days": 0.0,
   "macro_guard": {
     "is_active": false,
     "days_remaining": 0,
@@ -26274,5 +26274,5 @@
     "ais11_holds": 8,
     "ais11_in_position": 8
   },
-  "scan_elapsed_sec": 14.48
+  "scan_elapsed_sec": 432.61
 }

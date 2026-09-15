@@ -3,48 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TradingView Pine Script Backtesting & Rankings</title>
-    <!-- Google Fonts: Outfit & Inter -->
+    <title>PineLab — Escáner y Laboratorio Histórico</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Chart.js -->
-    <script href="https://cdn.jsdelivr.net/npm/chart.js" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Custom Stylesheet -->
-    <link rel="stylesheet" href="styles.css?v=3">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="styles.css?v=6">
 </head>
-<body>
-    <!-- STARTUP LOADER OVERLAY -->
+<body data-view="scanner">
+    <!-- STARTUP LOADER -->
     <div id="startup-loader" class="startup-loader">
         <div class="loader-content">
             <div class="loader-icon-container">
                 <i class="fa-solid fa-chart-line pulse-icon-large"></i>
             </div>
-            <h2 class="loader-title">Delfos</h2>
-            <p class="loader-subtitle">Conectando al Oráculo...</p>
+            <h2 class="loader-title">PineLab</h2>
+            <p class="loader-subtitle">Cargando resultados históricos…</p>
             <div class="spinner-container">
                 <div class="loader-spinner"></div>
             </div>
-            <p class="loader-text" id="loader-status-text">Cargando base de datos histórica y calculando indicadores...</p>
+            <p class="loader-text" id="loader-status-text">Preparando base de datos y métricas de backtest…</p>
         </div>
     </div>
 
     <div class="app-container">
-        
-        <!-- SIDEBAR: Strategy List & Filter -->
-        <aside class="sidebar">
+        <!-- SIDEBAR: solo visible en Laboratorio -->
+        <aside class="sidebar" id="lab-sidebar">
             <div class="sidebar-header">
                 <div class="logo">
                     <i class="fa-solid fa-chart-line logo-icon"></i>
-                    <span>PineLab <span class="tag">Backtester</span></span>
+                    <span>PineLab <span class="tag">Lab</span></span>
                 </div>
-                <p class="subtitle">Ranking de Estrategias LONG (30+ Años)</p>
+                <p class="subtitle">Ranking histórico de estrategias LONG</p>
             </div>
+
+            <button type="button" class="btn btn-secondary sidebar-close-mobile" id="btn-close-sidebar" aria-label="Cerrar panel">
+                <i class="fa-solid fa-xmark"></i> Cerrar
+            </button>
             
             <div class="filter-box">
-                <label for="ticker-filter"><i class="fa-solid fa-filter"></i> Filtrar Rankings por Activo:</label>
+                <label for="ticker-filter"><i class="fa-solid fa-filter"></i> Filtrar ranking por activo</label>
                 <select id="ticker-filter">
                     <option value="GLOBAL">GLOBAL (Promedio Multiactivo)</option>
                     <option value="SPY">SPY (S&P 500 ETF)</option>
@@ -69,96 +68,125 @@
             </div>
             
             <div class="filter-box">
-                <label><i class="fa-solid fa-calendar-days"></i> Rango de Fechas (Opcional):</label>
-                <div style="display: flex; gap: 8px; align-items: center;">
-                    <input type="date" id="start-date" title="Fecha de Inicio" style="width: 50%; padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: white; font-family: 'JetBrains Mono', monospace; font-size: 12px;">
-                    <input type="date" id="end-date" title="Fecha de Fin" style="width: 50%; padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: white; font-family: 'JetBrains Mono', monospace; font-size: 12px;">
+                <label><i class="fa-solid fa-calendar-days"></i> Rango de fechas (opcional)</label>
+                <div class="date-range-row">
+                    <input type="date" id="start-date" title="Fecha de inicio" class="date-input">
+                    <input type="date" id="end-date" title="Fecha de fin" class="date-input">
                 </div>
             </div>
             
             <div class="filter-box">
-                <label for="commission-input"><i class="fa-solid fa-coins"></i> Comisión / Recalcular:</label>
-                <div style="display: flex; gap: 8px;">
-                    <input type="number" id="commission-input" value="0.4" step="0.1" min="0" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: white;">
-                    <button id="recalc-btn" class="btn btn-primary" style="padding: 8px 12px;"><i class="fa-solid fa-rotate-right"></i></button>
+                <label for="commission-input"><i class="fa-solid fa-coins"></i> Comisión / Recalcular</label>
+                <div class="commission-row">
+                    <input type="number" id="commission-input" value="0.4" step="0.1" min="0" class="commission-input">
+                    <button id="recalc-btn" class="btn btn-primary" type="button"><i class="fa-solid fa-rotate-right"></i></button>
                 </div>
-                <small style="color: var(--text-muted); display: block; margin-top: 6px; font-size: 11px;">(Ej: 0.4 significa 0.4% en Compra + 0.4% en Venta)</small>
+                <small class="filter-hint">0.4 = 0.4% en compra + 0.4% en venta</small>
             </div>
             
             <div class="strategy-list-container">
-                <div class="list-title">Estrategias Evaluadas <span class="count-badge" id="strategy-count">0</span></div>
+                <div class="list-title">Estrategias evaluadas <span class="count-badge" id="strategy-count">0</span></div>
                 <ul class="strategy-list" id="strategy-list">
-                    <!-- Loaded dynamically via JavaScript -->
                     <li class="loading-item">Cargando base de datos...</li>
                 </ul>
             </div>
         </aside>
 
-        <!-- MAIN PANEL: Strategy Details & Visualization -->
         <main class="main-content">
-            
-            <!-- TOP VIEW SWITCHER NAVBAR -->
+            <!-- TOP NAV -->
             <div class="top-nav-bar">
+                <div class="nav-brand-mobile">
+                    <i class="fa-solid fa-chart-line"></i> PineLab
+                </div>
                 <div class="nav-tabs">
-                    <button class="nav-tab-btn active" id="nav-btn-scanner"><i class="fa-solid fa-bolt text-warning"></i> Escáner en Vivo SS11 & AIS11 GPU</button>
-                    <button class="nav-tab-btn" id="nav-btn-backtester"><i class="fa-solid fa-chart-line text-indigo"></i> Probador & Rankings Históricos</button>
+                    <button class="nav-tab-btn active" id="nav-btn-scanner" type="button">
+                        <i class="fa-solid fa-bolt text-warning"></i> Escáner en vivo
+                    </button>
+                    <button class="nav-tab-btn" id="nav-btn-backtester" type="button">
+                        <i class="fa-solid fa-chart-line text-indigo"></i> Laboratorio histórico
+                    </button>
                 </div>
                 <div class="hardware-badge-container">
-                    <span class="gpu-badge" id="gpu-cuda-badge"><i class="fa-solid fa-microchip"></i> <span id="gpu-name-text">NVIDIA CUDA: Detectando...</span></span>
+                    <button type="button" class="btn btn-secondary btn-open-sidebar" id="btn-open-sidebar" title="Ver estrategias">
+                        <i class="fa-solid fa-list"></i>
+                    </button>
+                    <span class="gpu-badge" id="gpu-cuda-badge"><i class="fa-solid fa-microchip"></i> <span id="gpu-name-text">Detectando hardware…</span></span>
                 </div>
             </div>
 
-            <!-- LIVE SCANNER PANEL SECTION -->
+            <!-- ========== ESCÁNER ========== -->
             <div id="scanner-view-panel" class="scanner-container">
                 
-                <!-- MACRO GUARD STATUS BANNER -->
-                <div class="macro-banner" id="macro-guard-banner">
+                <!-- KPI strip -->
+                <section class="scanner-kpi-strip" id="scanner-kpi-strip">
+                    <div class="scanner-kpi-card">
+                        <span class="scanner-kpi-label">Posiciones abiertas</span>
+                        <strong class="scanner-kpi-value" id="kpi-open-positions">0</strong>
+                    </div>
+                    <div class="scanner-kpi-card">
+                        <span class="scanner-kpi-label">Señales BUY</span>
+                        <strong class="scanner-kpi-value text-success" id="kpi-buy-signals">0</strong>
+                    </div>
+                    <div class="scanner-kpi-card">
+                        <span class="scanner-kpi-label" title="Promedio simple del PnL flotante de posiciones abiertas">PnL flotante (prom.)</span>
+                        <strong class="scanner-kpi-value" id="kpi-avg-pnl">—</strong>
+                    </div>
+                    <div class="scanner-kpi-card">
+                        <span class="scanner-kpi-label">Último escaneo</span>
+                        <strong class="scanner-kpi-value scanner-kpi-time" id="kpi-last-scan">—</strong>
+                        <span class="scanner-kpi-sub" id="kpi-scan-countdown">Auto 60s</span>
+                    </div>
+                </section>
+
+                <!-- Macro Guard (contexto) -->
+                <div class="macro-banner macro-banner-compact" id="macro-guard-banner" title="Filtro anti-crash basado en caídas bruscas de SPY. Si está activo, las estrategias evitan nuevas entradas.">
                     <div class="macro-banner-info">
                         <i class="fa-solid fa-shield-halved macro-icon" id="macro-icon"></i>
                         <div>
-                            <h3 id="macro-status-title">Detección de Crash Sistémico Macro (SPY)</h3>
-                            <p id="macro-status-desc">Monitoreando cotizaciones del S&P 500 en tiempo real para activar el seguro anti-crash...</p>
+                            <h3 id="macro-status-title">Filtro Macro (SPY)</h3>
+                            <p id="macro-status-desc">Monitoreando el S&P 500 para el seguro anti-crash…</p>
                         </div>
                     </div>
                     <div class="macro-actions">
                         <span class="auto-timer-badge" id="auto-timer-badge"><i class="fa-solid fa-clock"></i> Auto (1m)</span>
-                        <span class="macro-tag" id="macro-status-tag">Comprobando SPY...</span>
-                        <button class="btn btn-primary" id="btn-refresh-scanner"><i class="fa-solid fa-rotate"></i> Escanear Cotizaciones</button>
+                        <span class="macro-tag" id="macro-status-tag">Comprobando SPY…</span>
+                        <button class="btn btn-primary" id="btn-refresh-scanner" type="button"><i class="fa-solid fa-rotate"></i> Escanear</button>
                     </div>
                 </div>
 
-                <!-- SCANNER CONTROLS & FILTERS -->
+                <!-- Controles -->
                 <div class="scanner-controls-bar">
                     <div class="control-group">
-                        <label><i class="fa-solid fa-chess-knight"></i> Estrategia Activa:</label>
+                        <label title="SS11: reglas técnicas + Macro SPY. AIS11: ensamble Multi-IA. Combo: ambas en la misma vista.">
+                            <i class="fa-solid fa-chess-knight"></i> Estrategia
+                        </label>
                         <div class="pill-group" id="strategy-pill-group">
-                            <button class="pill-btn" data-strat="SS11">SS11: Macro Base Pura</button>
-                            <button class="pill-btn" data-strat="AIS11">AIS11: Multi-IA GPU</button>
-                            <button class="pill-btn active" data-strat="COMBO">Vista Combo (Ambas)</button>
+                            <button class="pill-btn" data-strat="SS11" type="button">SS11</button>
+                            <button class="pill-btn" data-strat="AIS11" type="button">AIS11</button>
+                            <button class="pill-btn active" data-strat="COMBO" type="button" title="Muestra señales de SS11 y AIS11 juntas">Combo</button>
                         </div>
                     </div>
-
                     <div class="control-group">
-                        <label><i class="fa-solid fa-globe"></i> Universo de Activos (300):</label>
+                        <label><i class="fa-solid fa-globe"></i> Universo</label>
                         <div class="pill-group" id="universe-pill-group">
-                            <button class="pill-btn active" data-univ="ALL">Todos (300)</button>
-                            <button class="pill-btn" data-univ="US">Top 250 EE.UU.</button>
-                            <button class="pill-btn" data-univ="CRYPTO">Top 50 Criptos</button>
-                            <button class="pill-btn" data-univ="BUY_ONLY">🚀 Oportunidades (BUY)</button>
-                            <button class="pill-btn" data-univ="POS_ONLY">💼 Posiciones Activas</button>
+                            <button class="pill-btn active" data-univ="ALL" type="button">Todos</button>
+                            <button class="pill-btn" data-univ="US" type="button">EE.UU.</button>
+                            <button class="pill-btn" data-univ="CRYPTO" type="button">Cripto</button>
+                            <button class="pill-btn" data-univ="BUY_ONLY" type="button">BUY</button>
+                            <button class="pill-btn" data-univ="POS_ONLY" type="button">Posiciones</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- LIVE ACTIVE POSITIONS SECTION -->
+                <!-- Posiciones -->
                 <section class="active-positions-section" id="sec-active-positions">
                     <div class="section-title-bar collapsible-header" data-collapse-target="active-positions-body">
                         <h2>
                             <i class="fa-solid fa-chevron-down collapse-icon"></i>
-                            <i class="fa-solid fa-briefcase text-warning"></i> Posiciones Activas en Cartera
+                            <i class="fa-solid fa-briefcase text-warning"></i> Posiciones activas
                         </h2>
                         <div class="title-right-group">
-                            <span class="count-pill" id="active-pos-count-badge">0 Posiciones Abiertas</span>
+                            <span class="count-pill" id="active-pos-count-badge">0 abiertas</span>
                             <span class="collapse-hint"><i class="fa-solid fa-compress"></i> Colapsar</span>
                         </div>
                     </div>
@@ -167,138 +195,96 @@
                             <table class="live-table positions-table" id="active-positions-table">
                                 <thead>
                                     <tr>
-                                        <th class="pos-sortable-th" data-sort="ticker" style="cursor:pointer; user-select:none;">Ticker <i class="fa-solid fa-sort"></i></th>
-                                        <th class="pos-sortable-th" data-sort="category" style="cursor:pointer; user-select:none;">Mercado / Estrategia <i class="fa-solid fa-sort"></i></th>
-                                        <th class="pos-sortable-th" data-sort="entry_price" style="cursor:pointer; user-select:none;">Precio Entrada <i class="fa-solid fa-sort"></i></th>
-                                        <th class="pos-sortable-th" data-sort="price" style="cursor:pointer; user-select:none;">Precio Actual <i class="fa-solid fa-sort"></i></th>
-                                        <th class="pos-sortable-th" data-sort="pnl" style="cursor:pointer; user-select:none;">PnL Flotante (%) <i class="fa-solid fa-sort"></i></th>
-                                        <th class="pos-sortable-th" data-sort="dist_sl" style="cursor:pointer; user-select:none;">Dist. Stop Loss (-15%) <i class="fa-solid fa-sort"></i></th>
-                                        <th class="pos-sortable-th" data-sort="signal" style="cursor:pointer; user-select:none;">Estado <i class="fa-solid fa-sort"></i></th>
-                                        <th style="text-align: center;">Historial / Trades</th>
+                                        <th class="pos-sortable-th sticky-col" data-sort="ticker">Ticker <i class="fa-solid fa-sort"></i></th>
+                                        <th class="pos-sortable-th" data-sort="category">Estrategia <i class="fa-solid fa-sort"></i></th>
+                                        <th class="pos-sortable-th" data-sort="entry_price">Entrada <i class="fa-solid fa-sort"></i></th>
+                                        <th class="pos-sortable-th" data-sort="price">Actual <i class="fa-solid fa-sort"></i></th>
+                                        <th class="pos-sortable-th" data-sort="pnl">PnL % <i class="fa-solid fa-sort"></i></th>
+                                        <th class="pos-sortable-th" data-sort="dist_sl" title="Distancia al stop loss del -15% desde la entrada">Dist. SL <i class="fa-solid fa-sort"></i></th>
+                                        <th class="pos-sortable-th" data-sort="signal">Señal <i class="fa-solid fa-sort"></i></th>
+                                        <th style="text-align:center;">Acción</th>
                                     </tr>
                                 </thead>
                                 <tbody id="active-positions-tbody">
-                                    <tr><td colspan="8" class="text-center p-4 text-muted">No hay posiciones activas en este momento.</td></tr>
+                                    <tr><td colspan="8" class="text-center p-4 text-muted">No hay posiciones activas.</td></tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </section>
 
-                <!-- LIVE OPPORTUNITIES GRID (HIGHLIGHTED BUY SIGNALS) -->
+                <!-- Oportunidades BUY -->
                 <section class="opportunities-section" id="sec-opportunities">
                     <div class="section-title-bar collapsible-header" data-collapse-target="opportunities-body">
                         <h2>
                             <i class="fa-solid fa-chevron-down collapse-icon"></i>
-                            <i class="fa-solid fa-rocket text-success"></i> Oportunidades de Compra Detectadas
+                            <i class="fa-solid fa-rocket text-success"></i> Oportunidades de compra
                         </h2>
                         <div class="title-right-group">
-                            <span class="count-pill" id="buy-count-badge">0 Activos en BUY</span>
+                            <span class="count-pill" id="buy-count-badge">0 en BUY</span>
                             <span class="collapse-hint"><i class="fa-solid fa-compress"></i> Colapsar</span>
                         </div>
                     </div>
                     <div class="collapsible-body" id="opportunities-body">
                         <div class="cards-grid" id="opportunities-cards-grid">
-                            <!-- Cards loaded dynamically -->
-                            <div class="empty-cards-notice">Haga clic en "Escanear Cotizaciones" para obtener las señales vivas del mercado.</div>
+                            <div class="empty-cards-notice">Haz clic en «Escanear» para obtener señales en vivo.</div>
                         </div>
                     </div>
                 </section>
 
-                <!-- LIVE POSITIONS & SIGNALS TABLE -->
+                                <!-- Watchlist -->
                 <section class="live-signals-table-section" id="sec-live-signals">
                     <div class="section-title-bar collapsible-header" data-collapse-target="live-signals-body">
                         <h2>
                             <i class="fa-solid fa-chevron-down collapse-icon"></i>
-                            <i class="fa-solid fa-table-list text-indigo"></i> Monitoreo General de la Cartera (Cotizaciones en Vivo)
-                            <button class="btn btn-primary" id="btn-show-all-trades" style="margin-left: 12px; font-size: 12px; padding: 6px 14px;">
-                                <i class="fa-solid fa-layer-group"></i> Ver TODOS los Trades por Fecha
+                            <i class="fa-solid fa-table-list text-indigo"></i> Watchlist
+                            <span class="count-pill" id="watchlist-count-badge">0</span>
+                            <button class="btn btn-primary btn-inline" id="btn-show-all-trades" type="button">
+                                <i class="fa-solid fa-layer-group"></i> Ver todos los trades
                             </button>
                         </h2>
                         <div class="title-right-group">
-                            <input type="text" id="scanner-search-input" placeholder="Buscar ticker (ej: AAPL, BTC-USD, NVDA)..." class="search-input">
+                            <label class="watchlist-noise-toggle" title="Oculta HOLD/WAIT y deja BUY, SELL y posiciones">
+                                <input type="checkbox" id="watchlist-actionable-only"> Solo accionables
+                            </label>
+                            <input type="text" id="scanner-search-input" placeholder="Buscar ticker…" class="search-input">
                             <span class="collapse-hint"><i class="fa-solid fa-compress"></i> Colapsar</span>
                         </div>
                     </div>
                     <div class="collapsible-body" id="live-signals-body">
                         <div class="table-responsive">
                             <table class="live-table" id="live-scanner-table">
-                            <thead>
-                                <tr>
-                                    <th class="scanner-sortable-th" data-sort="ticker" style="cursor:pointer; user-select:none;">Ticker <i class="fa-solid fa-sort"></i></th>
-                                    <th class="scanner-sortable-th" data-sort="category" style="cursor:pointer; user-select:none;">Mercado / Estrategia <i class="fa-solid fa-sort"></i></th>
-                                    <th class="scanner-sortable-th" data-sort="price" style="cursor:pointer; user-select:none;">Precio Actual <i class="fa-solid fa-sort"></i></th>
-                                    <th class="scanner-sortable-th" data-sort="change_24h" style="cursor:pointer; user-select:none;">Var 24h <i class="fa-solid fa-sort"></i></th>
-                                    <th class="scanner-sortable-th" data-sort="signal" style="cursor:pointer; user-select:none;">Señal en Vivo <i class="fa-solid fa-sort"></i></th>
-                                    <th class="scanner-sortable-th" data-sort="pnl" style="cursor:pointer; user-select:none;">PnL Flotante (%) <i class="fa-solid fa-sort"></i></th>
-                                    <th class="scanner-sortable-th" data-sort="dist_sl" style="cursor:pointer; user-select:none;">Dist. Stop Loss (-15%) <i class="fa-solid fa-sort"></i></th>
-                                    <th class="scanner-sortable-th" data-sort="dist_sma20" style="cursor:pointer; user-select:none;">Dist. Recup. SMA(20) <i class="fa-solid fa-sort"></i></th>
-                                    <th>TradingView Trades</th>
-                                </tr>
-                            </thead>
-                            <tbody id="live-scanner-tbody">
-                                <tr><td colspan="9" class="text-center p-4">Cargando escáner en vivo...</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                </section>
-
-                <!-- TRADINGVIEW STYLE TRADE LOG MODAL / SECTION -->
-                <section class="tv-trade-log-section hidden" id="tv-trade-log-panel">
-                    <div class="panel-header">
-                        <div class="panel-title">
-                            <i class="fa-solid fa-list-check text-warning"></i>
-                            <div>
-                                <h3>Probador de Estrategias Estilo TradingView (Pine Script Log)</h3>
-                                <p>Historial detallado de operaciones de entrada/salida para <strong id="selected-trade-ticker">AAPL</strong> con la estrategia <strong id="selected-trade-strat">SS11</strong></p>
-                            </div>
+                                <thead>
+                                    <tr>
+                                        <th class="scanner-sortable-th sticky-col" data-sort="ticker">Ticker <i class="fa-solid fa-sort"></i></th>
+                                        <th class="scanner-sortable-th" data-sort="price">Precio <i class="fa-solid fa-sort"></i></th>
+                                        <th class="scanner-sortable-th" data-sort="change_24h">Var 24h <i class="fa-solid fa-sort"></i></th>
+                                        <th class="scanner-sortable-th" data-sort="signal">Señal <i class="fa-solid fa-sort"></i></th>
+                                        <th class="scanner-sortable-th" data-sort="dist_sl" title="Distancia al stop loss del -15%">Dist. SL <i class="fa-solid fa-sort"></i></th>
+                                        <th class="scanner-sortable-th" data-sort="dist_sma20" title="Distancia a la SMA 20 (filtro de reentrada tras stop)">Dist. SMA20 <i class="fa-solid fa-sort"></i></th>
+                                        <th style="text-align:center;">Ver</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="live-scanner-tbody">
+                                    <tr><td colspan="7" class="text-center p-4">Cargando escáner…</td></tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <button class="btn btn-secondary" id="btn-close-tv-trades"><i class="fa-solid fa-xmark"></i> Cerrar Historial</button>
-                    </div>
-
-                    <div class="tv-summary-metrics-grid">
-                        <div class="tv-card"><span class="lbl">Ganancia Neta</span><strong id="tv-net-profit" class="val text-success">$0.00</strong></div>
-                        <div class="tv-card"><span class="lbl">Factor de Beneficio</span><strong id="tv-profit-factor" class="val">0.00</strong></div>
-                        <div class="tv-card"><span class="lbl">Tasa de Acierto</span><strong id="tv-win-rate" class="val">0.0%</strong></div>
-                        <div class="tv-card"><span class="lbl">Operaciones Totales</span><strong id="tv-total-trades" class="val">0</strong></div>
-                    </div>
-
-                    <div class="table-responsive">
-                        <table class="tv-trades-table">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th class="tv-sortable-th" data-sort="ticker" style="cursor: pointer; user-select: none;" title="Ordenar por Ticker">Ticker <i class="fa-solid fa-sort"></i></th>
-                                    <th class="tv-sortable-th" data-sort="entry_date" style="cursor: pointer; user-select: none;" title="Ordenar por Fecha de Entrada">Fecha Entrada <i class="fa-solid fa-sort"></i></th>
-                                    <th>Precio Entrada</th>
-                                    <th class="tv-sortable-th" data-sort="exit_date" style="cursor: pointer; user-select: none;" title="Ordenar por Fecha de Salida">Fecha Salida <i class="fa-solid fa-sort"></i></th>
-                                    <th>Precio Salida</th>
-                                    <th class="tv-sortable-th" data-sort="pct_return" style="cursor: pointer; user-select: none;" title="Ordenar por Resultado %">Resultado (%) <i class="fa-solid fa-sort"></i></th>
-                                    <th class="tv-sortable-th" data-sort="pnl" style="cursor: pointer; user-select: none;" title="Ordenar por PnL $">Ganancia/Pérdida ($) <i class="fa-solid fa-sort"></i></th>
-                                    <th class="tv-sortable-th" data-sort="duration_days" style="cursor: pointer; user-select: none;" title="Ordenar por Duración">Duración (Días) <i class="fa-solid fa-sort"></i></th>
-                                    <th>Razón de Salida</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tv-trades-tbody">
-                                <!-- Loaded dynamically -->
-                            </tbody>
-                        </table>
+                        <div class="watchlist-pager" id="watchlist-pager"></div>
                     </div>
                 </section>
-
             </div>
 
-            <!-- Global Dashboard Loader/State -->
+            <!-- Empty state Laboratorio -->
             <div id="no-selection-state" class="state-panel hidden">
                 <i class="fa-solid fa-arrow-left pulse-icon"></i>
-                <h2>Selecciona una estrategia para ver las métricas</h2>
-                <p>Elige cualquiera de las estrategias del panel lateral para inspeccionar su rendimiento histórico de 30 años, comparar su curva de equidad contra Buy & Hold, ver el reporte por ticker y descargar el código en Pine Script v5.</p>
+                <h2>Selecciona una estrategia</h2>
+                <p>Elige una estrategia del panel lateral para ver su rendimiento histórico, la curva de equidad frente a Buy &amp; Hold, el desglose por activo y el código Pine Script.</p>
             </div>
 
+            <!-- ========== LABORATORIO ========== -->
             <div id="dashboard-state" class="hidden">
                 
-                <!-- STRATEGY GENERAL HEADER -->
                 <section class="strategy-header-panel">
                     <div class="header-info">
                         <div class="rank-container">
@@ -306,286 +292,324 @@
                             <span class="rank-num" id="strat-rank">#1</span>
                         </div>
                         <div class="title-desc">
-                            <h1 id="strat-name">Nombre de la Estrategia</h1>
-                            <p id="strat-desc">Descripción detallada de la lógica de entrada y salida.</p>
-                            <div class="indicator-tags" id="strat-tags">
-                                <!-- Tags loaded dynamically -->
-                            </div>
+                            <h1 id="strat-name">Nombre de la estrategia</h1>
+                            <p id="strat-desc">Descripción de la lógica de entrada y salida.</p>
+                            <p class="strat-narrative" id="strat-narrative">—</p>
+                            <div class="indicator-tags" id="strat-tags"></div>
                         </div>
                     </div>
                     <div class="header-actions">
-                        <a href="#pinescript-section" class="btn btn-primary">
-                            <i class="fa-solid fa-code"></i> Ver Código Pine
-                        </a>
+                        <button type="button" class="btn btn-primary" id="btn-goto-pine">
+                            <i class="fa-solid fa-code"></i> Ver Pine Script
+                        </button>
                     </div>
                 </section>
 
-                <!-- AGGREGATE SUMMARY CARDS -->
-                <section class="metrics-grid">
-                    <div class="metric-card bg-glow">
-                        <div class="metric-icon"><i class="fa-solid fa-percent"></i></div>
-                        <div class="metric-content">
-                            <h3>Retorno Promedio</h3>
-                            <p class="value" id="agg-return">0.00%</p>
-                            <span class="sub" id="agg-return-sub">CAGR: 0.00%</span>
-                        </div>
-                    </div>
-                    
-                    <div class="metric-card">
-                        <div class="metric-icon"><i class="fa-solid fa-gauge-high"></i></div>
-                        <div class="metric-content">
-                            <h3>Sharpe Promedio</h3>
-                            <p class="value" id="agg-sharpe">0.00</p>
-                            <span class="sub" id="agg-sharpe-status">Moderado</span>
-                        </div>
-                    </div>
-                    
-                    <div class="metric-card text-danger">
-                        <div class="metric-icon"><i class="fa-solid fa-arrow-trend-down"></i></div>
-                        <div class="metric-content">
-                            <h3>Max Drawdown Prom.</h3>
-                            <p class="value" id="agg-drawdown">0.00%</p>
-                            <span class="sub">Pérdida máxima pico a valle</span>
-                        </div>
-                    </div>
-                    
-                    <div class="metric-card text-success">
-                        <div class="metric-icon"><i class="fa-solid fa-trophy"></i></div>
-                        <div class="metric-content">
-                            <h3>Tickers Superados</h3>
-                            <p class="value" id="agg-beaten">0 / 18</p>
-                            <span class="sub">vs Buy & Hold</span>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- DETAILED TABS NAVIGATION -->
-                <div class="tabs-container">
-                    <div class="tab-buttons">
-                        <button class="tab-btn active" data-tab="tab-chart"><i class="fa-solid fa-chart-area"></i> Curva de Equidad</button>
-                        <button class="tab-btn" data-tab="tab-compare"><i class="fa-solid fa-table-cells"></i> Desglose por Activo</button>
-                        <button class="tab-btn" data-tab="tab-trades"><i class="fa-solid fa-list-check"></i> Historial de Operaciones</button>
-                        <button class="tab-btn" data-tab="tab-top-assets"><i class="fa-solid fa-trophy"></i> Mejor por Activo</button>
-                    </div>
-                    
-                    <div class="tab-content-container">
-                        
-                        <!-- TAB: CHART & SINGLE TICKER DETAIL -->
-                        <div class="tab-content active" id="tab-chart">
-                            <div class="chart-section-layout">
-                                <div class="chart-main">
-                                    <div class="chart-header-controls">
-                                        <h3>Visualización Curva de Equidad ($10k Inicial)</h3>
-                                        <div class="ticker-selectors" id="ticker-chips">
-                                            <!-- Dynamically filled with ticker chips -->
-                                        </div>
-                                    </div>
-                                    <div class="chart-wrapper">
-                                        <canvas id="equityChart"></canvas>
-                                    </div>
-                                </div>
-                                
-                                <div class="ticker-side-metrics">
-                                    <h4 class="side-title">Métricas de <span id="current-ticker-name">SPY</span></h4>
-                                    
-                                    <div class="mini-metrics-list">
-                                        <div class="mini-metric">
-                                            <span>Retorno Estrategia:</span>
-                                            <strong id="tk-return" class="text-success">0.00%</strong>
-                                        </div>
-                                        <div class="mini-metric">
-                                            <span>Retorno Buy & Hold:</span>
-                                            <strong id="tk-bh-return">0.00%</strong>
-                                        </div>
-                                        <div class="mini-metric">
-                                            <span>Max Drawdown (Strat):</span>
-                                            <strong id="tk-drawdown" class="text-danger">0.00%</strong>
-                                        </div>
-                                        <div class="mini-metric">
-                                            <span>Max Drawdown (B&H):</span>
-                                            <strong id="tk-bh-drawdown">0.00%</strong>
-                                        </div>
-                                        <div class="mini-metric">
-                                            <span>Sharpe Ratio:</span>
-                                            <strong id="tk-sharpe">0.00</strong>
-                                        </div>
-                                        <div class="mini-metric">
-                                            <span>Porcentaje Aciertos:</span>
-                                            <strong id="tk-winrate">0.00%</strong>
-                                        </div>
-                                        <div class="mini-metric">
-                                            <span>Profit Factor:</span>
-                                            <strong id="tk-pf">0.00</strong>
-                                        </div>
-                                        <div class="mini-metric">
-                                            <span>Operaciones Totales:</span>
-                                            <strong id="tk-trades">0</strong>
-                                        </div>
-                                        <div class="mini-metric">
-                                            <span>Duración Promedio:</span>
-                                            <strong id="tk-duration">0d</strong>
-                                        </div>
-                                    </div>
-
-                                    <div class="bench-comparison-card" id="bench-comp-banner">
-                                        <i class="fa-solid fa-circle-check text-success"></i>
-                                        <span>¡Supera a Buy & Hold por <strong id="outperformance-margin">0.00%</strong>!</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- TAB: DESGLOSE POR ACTIVO TABLE -->
-                        <div class="tab-content" id="tab-compare">
-                            <h3>Rendimiento Cruzado de la Estrategia</h3>
-                            <p class="section-desc">Comparativa del desempeño de la estrategia en los 18 tickers durante el periodo de 30 años.</p>
-                            
-                            <div class="table-wrapper">
-                                <table class="compare-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Activo</th>
-                                            <th>Retorno Estrategia</th>
-                                            <th>Retorno B&H</th>
-                                            <th>Diferencia</th>
-                                            <th>Max Drawdown (S)</th>
-                                            <th>Max Drawdown (B&H)</th>
-                                            <th>Sharpe</th>
-                                            <th>Operaciones</th>
-                                            <th>Win Rate</th>
-                                            <th>Señal Mañana</th>
-                                            <th>Último Precio</th>
-                                            <th>Resultado</th>
-                                            <th>Stop Loss / Target</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="compare-table-body">
-                                        <!-- Dynamically generated rows -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <!-- TAB: TOP ACTIVOS TABLE -->
-                        <div class="tab-content" id="tab-top-assets">
-                            <h3>Mejor Estrategia por Activo</h3>
-                            <p class="section-desc">La estrategia ganadora absoluta para cada ticker, maximizando el Retorno Total a lo largo de los años.</p>
-                            
-                            <div class="table-wrapper">
-                                <table class="data-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Activo</th>
-                                            <th>Estrategia</th>
-                                            <th>Retorno</th>
-                                            <th>Retorno B&H</th>
-                                            <th>Diferencia</th>
-                                            <th>Max DD (Strat)</th>
-                                            <th>Max DD (B&H)</th>
-                                            <th>Sharpe</th>
-                                            <th>Trades</th>
-                                            <th>Win Rate</th>
-                                            <th>Señal Mañana</th>
-                                            <th>vs B&H</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="top-assets-table-body">
-                                        <!-- Dynamically filled by JS -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <!-- TAB: TRADE LOG -->
-                        <div class="tab-content" id="tab-trades">
-                            <div class="trades-header">
-                                <h3>Registro de Operaciones Recientes (<span id="trades-ticker-title">SPY</span>)</h3>
-                                <p class="section-desc">Listado detallado de las entradas y salidas de la estrategia para el activo seleccionado.</p>
-                            </div>
-                            
-                            <div class="table-wrapper">
-                                <table class="trades-table">
-                                    <thead>
-                                         <tr>
-                                             <th>#</th>
-                                             <th id="th-hist-entry-date" class="sortable-th" style="cursor: pointer; user-select: none;" title="Haz clic para ordenar por fecha de entrada">Fecha Entrada <i class="fa-solid fa-sort" id="icon-hist-entry-date"></i></th>
-                                             <th>Precio Entrada</th>
-                                             <th id="th-hist-exit-date" class="sortable-th" style="cursor: pointer; user-select: none;" title="Haz clic para ordenar por fecha de salida">Fecha Salida <i class="fa-solid fa-sort" id="icon-hist-exit-date"></i></th>
-                                             <th>Precio Salida</th>
-                                             <th>Duración (Días)</th>
-                                             <th>Rendimiento (%)</th>
-                                             <th>Razón de Salida</th>
-                                         </tr>
-                                    </thead>
-                                    <tbody id="trades-table-body">
-                                        <!-- Dynamically generated rows -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-                <!-- AI UPDATE STATUS BANNER -->
+                <!-- AI banner (Lab only) -->
                 <div id="ai-status-banner" class="ai-status-banner hidden">
                     <div class="ai-banner-icon">
                         <i id="ai-banner-icon-el" class="fa-solid fa-robot"></i>
                     </div>
                     <div class="ai-banner-text">
-                        <h4 id="ai-banner-title">Estado del Oráculo IA</h4>
-                        <p id="ai-banner-desc">Comprobando sincronización de modelos...</p>
+                        <h4 id="ai-banner-title">Estado de modelos IA</h4>
+                        <p id="ai-banner-desc">Comprobando sincronización…</p>
                     </div>
                     <div class="ai-banner-action">
-                        <button id="ai-update-btn" class="btn btn-ai-update hidden" onclick="startAIUpdate()">
-                            <i class="fa-solid fa-bolt"></i> Actualizar IA en 2º Plano
+                        <button id="ai-update-btn" class="btn btn-ai-update hidden" type="button" onclick="startAIUpdate()">
+                            <i class="fa-solid fa-bolt"></i> Actualizar datos e IA
                         </button>
                         <span id="ai-status-badge" class="badge-status hidden">Al día</span>
                     </div>
                 </div>
 
-                <!-- PINE SCRIPT VIEW & COPY SECTION -->
-                <section class="pinescript-panel" id="pinescript-section">
-                    <div class="panel-header">
-                        <div class="panel-title">
-                            <i class="fa-solid fa-code text-indigo"></i>
-                            <div>
-                                <h3>Código Pine Script v5</h3>
-                                <p>Copia y pega este script en el editor Pine de TradingView para ejecutarlo e implementarlo.</p>
-                            </div>
+                <!-- 6 KPIs -->
+                <section class="metrics-grid metrics-grid-6">
+                    <div class="metric-card bg-glow" id="card-agg-return" title="Retorno total promedio (o del activo filtrado)">
+                        <div class="metric-icon"><i class="fa-solid fa-percent"></i></div>
+                        <div class="metric-content">
+                            <h3>Retorno medio</h3>
+                            <p class="value" id="agg-return">0.00%</p>
+                            <span class="sub" id="agg-return-sub">CAGR: 0.00%</span>
                         </div>
-                        <button class="btn btn-secondary btn-copy" id="btn-copy-code">
-                            <i class="fa-regular fa-copy"></i> Copiar Código
-                        </button>
                     </div>
-                    
-                    <div class="code-container">
-                        <pre><code id="pinescript-code" class="language-pinescript">
-// Selecciona una estrategia para cargar el código.
-                        </code></pre>
+                    <div class="metric-card" id="card-agg-cagr" title="Tasa de crecimiento anual compuesto">
+                        <div class="metric-icon"><i class="fa-solid fa-chart-line"></i></div>
+                        <div class="metric-content">
+                            <h3>CAGR medio</h3>
+                            <p class="value" id="agg-cagr">0.00%</p>
+                            <span class="sub">Crecimiento anualizado</span>
+                        </div>
                     </div>
-
-                    <div class="pinescript-instructions">
-                        <h4><i class="fa-solid fa-circle-info"></i> ¿Cómo usar este código en TradingView?</h4>
-                        <ol>
-                            <li>Haz clic en el botón de arriba <strong>"Copiar Código"</strong>.</li>
-                            <li>Abre tu gráfico en <a href="https://es.tradingview.com" target="_blank">TradingView</a>.</li>
-                            <li>En la parte inferior de la pantalla, selecciona la pestaña <strong>"Editor Pine"</strong>.</li>
-                            <li>Pega el código copiado (reemplaza cualquier texto existente en el editor).</li>
-                            <li>Haz clic en el botón <strong>"Añadir al gráfico"</strong> en la parte superior derecha del editor.</li>
-                            <li>Abre la pestaña <strong>"Probador de estrategias"</strong> al lado del Editor Pine para ver el backtesting detallado en tiempo real.</li>
-                        </ol>
+                    <div class="metric-card" id="card-agg-sharpe" title="Sharpe &gt; 1 suele considerarse bueno">
+                        <div class="metric-icon"><i class="fa-solid fa-gauge-high"></i></div>
+                        <div class="metric-content">
+                            <h3>Sharpe medio</h3>
+                            <p class="value" id="agg-sharpe">0.00</p>
+                            <span class="sub" id="agg-sharpe-status">Moderado</span>
+                        </div>
+                    </div>
+                    <div class="metric-card text-danger" id="card-agg-dd" title="Drawdown &lt; 30% suele ser aceptable para estrategias agresivas">
+                        <div class="metric-icon"><i class="fa-solid fa-arrow-trend-down"></i></div>
+                        <div class="metric-content">
+                            <h3>Max drawdown</h3>
+                            <p class="value" id="agg-drawdown">0.00%</p>
+                            <span class="sub">Pérdida máxima pico a valle</span>
+                        </div>
+                    </div>
+                    <div class="metric-card" id="card-agg-wr" title="Porcentaje de operaciones ganadoras">
+                        <div class="metric-icon"><i class="fa-solid fa-bullseye"></i></div>
+                        <div class="metric-content">
+                            <h3>Tasa de acierto</h3>
+                            <p class="value" id="agg-winrate">0.0%</p>
+                            <span class="sub">Win rate medio</span>
+                        </div>
+                    </div>
+                    <div class="metric-card text-success" id="card-agg-pf" title="Profit factor &gt; 1.5 suele ser sólido">
+                        <div class="metric-icon"><i class="fa-solid fa-scale-balanced"></i></div>
+                        <div class="metric-content">
+                            <h3>Profit factor</h3>
+                            <p class="value" id="agg-pf">0.00</p>
+                            <span class="sub" id="agg-beaten">0 / 18 vs Buy &amp; Hold</span>
+                        </div>
                     </div>
                 </section>
-                
+
+                <div class="tabs-container">
+                    <div class="tab-buttons">
+                        <button class="tab-btn active" data-tab="tab-chart" type="button"><i class="fa-solid fa-chart-area"></i> Rendimiento</button>
+                        <button class="tab-btn" data-tab="tab-compare" type="button"><i class="fa-solid fa-table-cells"></i> Por activo</button>
+                        <button class="tab-btn" data-tab="tab-trades" type="button"><i class="fa-solid fa-list-check"></i> Operaciones</button>
+                        <button class="tab-btn" data-tab="tab-top-assets" type="button"><i class="fa-solid fa-trophy"></i> Mejor setup</button>
+                        <button class="tab-btn" data-tab="tab-pine" type="button"><i class="fa-solid fa-code"></i> Pine Script</button>
+                    </div>
+                    
+                    <div class="tab-content-container">
+                        <!-- Rendimiento -->
+                        <div class="tab-content active" id="tab-chart">
+                            <div class="chart-section-layout">
+                                <div class="chart-main">
+                                    <div class="chart-header-controls">
+                                        <div>
+                                            <h3>Curva de equidad</h3>
+                                            <p class="chart-legend-hint">Estrategia vs Buy &amp; Hold · capital inicial $10.000 · puntos verdes = entradas, rojos = salidas</p>
+                                        </div>
+                                        <div class="ticker-selectors" id="ticker-chips"></div>
+                                    </div>
+                                    <div class="chart-wrapper chart-wrapper-equity">
+                                        <canvas id="equityChart"></canvas>
+                                    </div>
+                                    <div class="chart-wrapper chart-wrapper-dd">
+                                        <canvas id="drawdownChart"></canvas>
+                                    </div>
+                                </div>
+                                
+                                <div class="ticker-side-metrics">
+                                    <h4 class="side-title">Métricas de <span id="current-ticker-name">SPY</span></h4>
+                                    <div class="mini-metrics-list">
+                                        <div class="mini-metric">
+                                            <span>Retorno estrategia</span>
+                                            <strong id="tk-return" class="text-success">0.00%</strong>
+                                        </div>
+                                        <div class="mini-metric">
+                                            <span>Retorno Buy &amp; Hold</span>
+                                            <strong id="tk-bh-return">0.00%</strong>
+                                        </div>
+                                        <div class="mini-metric">
+                                            <span>Max drawdown (estr.)</span>
+                                            <strong id="tk-drawdown" class="text-danger">0.00%</strong>
+                                        </div>
+                                        <div class="mini-metric">
+                                            <span>Max drawdown (B&amp;H)</span>
+                                            <strong id="tk-bh-drawdown">0.00%</strong>
+                                        </div>
+                                        <div class="mini-metric">
+                                            <span>Sharpe</span>
+                                            <strong id="tk-sharpe">0.00</strong>
+                                        </div>
+                                        <div class="mini-metric">
+                                            <span>Tasa de acierto</span>
+                                            <strong id="tk-winrate">0.00%</strong>
+                                        </div>
+                                        <div class="mini-metric">
+                                            <span>Profit factor</span>
+                                            <strong id="tk-pf">0.00</strong>
+                                        </div>
+                                        <div class="mini-metric">
+                                            <span>Operaciones</span>
+                                            <strong id="tk-trades">0</strong>
+                                        </div>
+                                        <div class="mini-metric">
+                                            <span>Duración media</span>
+                                            <strong id="tk-duration">0d</strong>
+                                        </div>
+                                    </div>
+                                    <div class="bench-comparison-card" id="bench-comp-banner">
+                                        <i class="fa-solid fa-circle-check text-success"></i>
+                                        <span>Supera a Buy &amp; Hold por <strong id="outperformance-margin">0.00%</strong></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Por activo -->
+                        <div class="tab-content" id="tab-compare">
+                            <h3>Rendimiento por activo</h3>
+                            <p class="section-desc">Desempeño de la estrategia en los 18 tickers. Clic en una fila para ver el gráfico.</p>
+                            <div class="table-wrapper">
+                                <table class="compare-table">
+                                    <thead>
+                                        <tr>
+                                            <th class="sticky-col">Ticker</th>
+                                            <th>Retorno</th>
+                                            <th>CAGR</th>
+                                            <th>Sharpe</th>
+                                            <th>Max DD</th>
+                                            <th>Trades</th>
+                                            <th>Señal</th>
+                                            <th>vs B&amp;H</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="compare-table-body"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Mejor setup -->
+                        <div class="tab-content" id="tab-top-assets">
+                            <h3>Mejor setup por activo</h3>
+                            <p class="section-desc">La estrategia con mayor retorno histórico para cada ticker.</p>
+                            <div class="table-wrapper">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th class="sticky-col">Activo</th>
+                                            <th>Estrategia</th>
+                                            <th>Retorno</th>
+                                            <th>vs B&amp;H</th>
+                                            <th>Max DD</th>
+                                            <th>Sharpe</th>
+                                            <th>Trades</th>
+                                            <th>Señal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="top-assets-table-body"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Operaciones -->
+                        <div class="tab-content" id="tab-trades">
+                            <div class="trades-header">
+                                <h3>Operaciones (<span id="trades-ticker-title">SPY</span>)</h3>
+                                <p class="section-desc">Entradas y salidas históricas del activo seleccionado en la pestaña Rendimiento.</p>
+                            </div>
+                            <div class="table-wrapper">
+                                <table class="trades-table">
+                                    <thead>
+                                         <tr>
+                                             <th>#</th>
+                                             <th id="th-hist-entry-date" class="sortable-th" title="Ordenar por fecha de entrada">Fecha entrada <i class="fa-solid fa-sort" id="icon-hist-entry-date"></i></th>
+                                             <th>Precio entrada</th>
+                                             <th id="th-hist-exit-date" class="sortable-th" title="Ordenar por fecha de salida">Fecha salida <i class="fa-solid fa-sort" id="icon-hist-exit-date"></i></th>
+                                             <th>Precio salida</th>
+                                             <th>Duración</th>
+                                             <th>Rendimiento %</th>
+                                             <th>Razón de salida</th>
+                                         </tr>
+                                    </thead>
+                                    <tbody id="trades-table-body"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Pine Script -->
+                        <div class="tab-content" id="tab-pine">
+                            <section class="pinescript-panel pinescript-panel-embedded" id="pinescript-section">
+                                <div class="panel-header">
+                                    <div class="panel-title">
+                                        <i class="fa-solid fa-code text-indigo"></i>
+                                        <div>
+                                            <h3>Código Pine Script v5</h3>
+                                            <p>Copia y pega en el editor Pine de TradingView.</p>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-secondary btn-copy" id="btn-copy-code" type="button">
+                                        <i class="fa-regular fa-copy"></i> Copiar código
+                                    </button>
+                                </div>
+                                <div class="code-container">
+                                    <pre><code id="pinescript-code" class="language-pinescript">// Selecciona una estrategia para cargar el código.</code></pre>
+                                </div>
+                                <div class="pinescript-instructions">
+                                    <h4><i class="fa-solid fa-circle-info"></i> Cómo usarlo en TradingView</h4>
+                                    <ol>
+                                        <li>Copia el código con el botón de arriba.</li>
+                                        <li>Abre un gráfico en <a href="https://es.tradingview.com" target="_blank" rel="noopener">TradingView</a>.</li>
+                                        <li>Abre la pestaña <strong>Editor Pine</strong>.</li>
+                                        <li>Pega el código y pulsa <strong>Añadir al gráfico</strong>.</li>
+                                        <li>Revisa el <strong>Probador de estrategias</strong> para el backtest en TradingView.</li>
+                                    </ol>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
 
-    <!-- TOAST NOTIFICATION -->
-    <div class="toast" id="toast-message">Código copiado al portapapeles con éxito.</div>
+    <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
 
-    <!-- Script loading -->
-    <script src="app.js?v=6"></script>
+    <!-- Drawer historial simulado (Escáner) -->
+    <div class="trade-drawer-overlay hidden" id="trade-drawer-overlay"></div>
+    <aside class="trade-drawer hidden" id="tv-trade-log-panel" aria-label="Historial de trades">
+        <div class="panel-header">
+            <div class="panel-title">
+                <i class="fa-solid fa-list-check text-warning"></i>
+                <div>
+                    <h3>Historial simulado</h3>
+                    <p class="drawer-disclaimer">Simulación SS11/AIS11 — no es una cuenta real</p>
+                    <p><strong id="selected-trade-ticker">—</strong> · <strong id="selected-trade-strat">—</strong></p>
+                </div>
+            </div>
+            <button class="btn btn-secondary" id="btn-close-tv-trades" type="button"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <div class="drawer-strat-tabs" id="drawer-strat-tabs">
+            <button type="button" class="pill-btn active" data-drawer-strat="SS11">SS11</button>
+            <button type="button" class="pill-btn" data-drawer-strat="AIS11">AIS11</button>
+            <button type="button" class="pill-btn" data-drawer-strat="BOTH">Ambas</button>
+        </div>
+
+        <div class="tv-summary-metrics-grid">
+            <div class="tv-card"><span class="lbl">Ganancia neta</span><strong id="tv-net-profit" class="val text-success">$0.00</strong></div>
+            <div class="tv-card"><span class="lbl">Profit factor</span><strong id="tv-profit-factor" class="val">0.00</strong></div>
+            <div class="tv-card"><span class="lbl">Tasa de acierto</span><strong id="tv-win-rate" class="val">0.0%</strong></div>
+            <div class="tv-card"><span class="lbl">Operaciones</span><strong id="tv-total-trades" class="val">0</strong></div>
+        </div>
+
+        <div class="table-responsive drawer-table-wrap">
+            <table class="tv-trades-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th class="tv-sortable-th" data-sort="ticker">Ticker <i class="fa-solid fa-sort"></i></th>
+                        <th class="tv-sortable-th" data-sort="entry_date">Entrada <i class="fa-solid fa-sort"></i></th>
+                        <th>P. entrada</th>
+                        <th class="tv-sortable-th" data-sort="exit_date">Salida <i class="fa-solid fa-sort"></i></th>
+                        <th>P. salida</th>
+                        <th class="tv-sortable-th" data-sort="pct_return">Resultado % <i class="fa-solid fa-sort"></i></th>
+                        <th class="tv-sortable-th" data-sort="pnl">PnL $ <i class="fa-solid fa-sort"></i></th>
+                        <th class="tv-sortable-th" data-sort="duration_days">Días <i class="fa-solid fa-sort"></i></th>
+                        <th>Razón</th>
+                    </tr>
+                </thead>
+                <tbody id="tv-trades-tbody"></tbody>
+            </table>
+        </div>
+    </aside>
+
+    <div class="toast" id="toast-message">Código copiado al portapapeles.</div>
+    <script src="app.js?v=9"></script>
 </body>
 </html>

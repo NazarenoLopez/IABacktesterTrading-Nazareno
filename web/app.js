@@ -1,4 +1,4 @@
-// TradingView Backtesting Rankings - Dashboard Logic
+// PineLab Dashboard Logic
 document.addEventListener("DOMContentLoaded", () => {
     
     // Application State
@@ -8,6 +8,12 @@ document.addEventListener("DOMContentLoaded", () => {
     let activeFilter = "GLOBAL"; // Active sorting filter for sidebar
     let activeTab = "tab-chart";
     let equityChart = null; // Chart.js instance
+    let drawdownChart = null;
+    let currentView = "scanner"; // scanner | lab
+    let currentEquityTrades = [];
+    let drawerMode = "single"; // single | all
+    let drawerTicker = null;
+    let drawerStratFilter = "BOTH"; // SS11 | AIS11 | BOTH
 
     // Dom Elements
     const elTickerFilter = document.getElementById("ticker-filter");
@@ -38,10 +44,14 @@ document.addEventListener("DOMContentLoaded", () => {
     // Agg Metrics Elements
     const elAggReturn = document.getElementById("agg-return");
     const elAggReturnSub = document.getElementById("agg-return-sub");
+    const elAggCagr = document.getElementById("agg-cagr");
     const elAggSharpe = document.getElementById("agg-sharpe");
     const elAggSharpeStatus = document.getElementById("agg-sharpe-status");
     const elAggDrawdown = document.getElementById("agg-drawdown");
+    const elAggWinrate = document.getElementById("agg-winrate");
+    const elAggPf = document.getElementById("agg-pf");
     const elAggBeaten = document.getElementById("agg-beaten");
+    const elStratNarrative = document.getElementById("strat-narrative");
     
     // Ticker Details Elements
     const elCurrentTickerName = document.getElementById("current-ticker-name");
@@ -213,20 +223,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (data.status === "outdated") {
             banner.classList.add("warning");
-            if (title) title.textContent = "⚠️ Predicciones de IA Desactualizadas";
-            if (desc) desc.textContent = `Las señales calculadas llegan hasta el ${aiDateFmt}, pero el mercado avanzó hasta el ${mktDateFmt}. (Última actualización: ${updatedTimeFmt})`;
+            if (title) title.textContent = "Señales de IA desactualizadas";
+            if (desc) desc.textContent = `Las señales llegan hasta el ${aiDateFmt}, pero el mercado avanzó hasta el ${mktDateFmt}. (Última actualización: ${updatedTimeFmt})`;
             if (btn) btn.classList.remove("hidden");
         } else if (data.status === "running") {
             banner.classList.add("running");
-            if (title) title.textContent = "⏳ Actualizando Oráculo IA en GPU (Segundo Plano)";
-            if (desc) desc.textContent = `${data.step_name || 'Calculando modelos neuronales...'} ${data.step ? `(Paso ${data.step}/${data.total})` : ''}`;
+            if (title) title.textContent = "Actualizando datos de mercado e IA…";
+            if (desc) desc.textContent = `${data.step_name || 'Calculando modelos…'} ${data.step ? `(Paso ${data.step}/${data.total})` : ''}`;
         } else if (data.status === "up_to_date") {
             banner.classList.add("success");
-            if (title) title.textContent = "✨ Oráculo IA Sincronizado";
-            if (desc) desc.textContent = `Modelos neuronales 100% al día (${aiDateFmt}). Última actualización de IA: ${updatedTimeFmt} hs.`;
+            if (title) title.textContent = "Modelos IA al día";
+            if (desc) desc.textContent = `Señales sincronizadas (${aiDateFmt}). Última actualización: ${updatedTimeFmt}.`;
             if (badge) {
                 badge.classList.remove("hidden");
-                badge.textContent = `IA Actualizada: ${updatedTimeFmt}`;
+                badge.textContent = `Actualizado: ${updatedTimeFmt}`;
             }
         } else {
             banner.classList.add("hidden");
@@ -275,11 +285,11 @@ document.addEventListener("DOMContentLoaded", () => {
             let metricValue = "";
             
             if (activeFilter === "GLOBAL") {
-                metricLabel = "Avg Return";
+                metricLabel = "Retorno medio";
                 metricValue = `${strat.aggregate_metrics.avg_return.toFixed(1)}%`;
             } else {
                 const tr = strat.ticker_results[activeFilter]?.metrics.total_return || 0;
-                metricLabel = `${activeFilter} Return`;
+                metricLabel = `Retorno ${activeFilter}`;
                 metricValue = `${tr.toFixed(1)}%`;
             }
 
@@ -301,6 +311,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Handle Active Ticker Filter for Rankings
+    if (elTickerFilter) {
     elTickerFilter.addEventListener("change", (e) => {
         activeFilter = e.target.value;
         
@@ -318,6 +329,7 @@ document.addEventListener("DOMContentLoaded", () => {
             selectStrategy(selectedStrategyId);
         }
     });
+    }
 
     function updateDashboardHeaderRank() {
         const sortedList = Array.from(elStrategyList.querySelectorAll(".strategy-item"));
@@ -332,7 +344,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // -------------------------------------------------------------------------
     function selectStrategy(strategyId) {
         selectedStrategyId = strategyId;
-        showNoSelectionState(false);
+        if (currentView === "lab") {
+            showNoSelectionState(false);
+        }
 
         // Highlight sidebar active item
         elStrategyList.querySelectorAll(".strategy-item").forEach(li => {
@@ -346,49 +360,81 @@ document.addEventListener("DOMContentLoaded", () => {
         const strategy = db.ranking.find(s => s.strategy_id === strategyId);
         if (!strategy) return;
 
+        try {
         // 1. Header Information
         elStratName.textContent = strategy.name;
         elStratDesc.textContent = strategy.description;
         updateDashboardHeaderRank();
         
-        // Render Indicators Tags
+        // Render Indicators Tags (short + tooltip)
         elStratTags.innerHTML = "";
-        strategy.indicators.forEach(ind => {
+        (strategy.indicators || []).forEach(ind => {
             const tag = document.createElement("span");
             tag.className = "tag-item";
-            tag.textContent = ind;
+            tag.textContent = ind.length > 18 ? ind.slice(0, 16) + "…" : ind;
+            tag.title = ind;
             elStratTags.appendChild(tag);
         });
 
         // 2. Summary Metric Cards (Dynamic depending on activeFilter context)
-        let displayReturn, displayCagr, displaySharpe, displayMaxDD, displayBeaten;
+        let displayReturn, displayCagr, displaySharpe, displayMaxDD, displayBeaten, displayWinrate, displayPf;
+        let sharpeNum, ddNum, wrNum, pfNum;
         
         if (activeFilter === "GLOBAL") {
-            displayReturn = `${strategy.aggregate_metrics.avg_return.toFixed(1)}%`;
-            displayCagr = `${strategy.aggregate_metrics.avg_cagr.toFixed(1)}%`;
-            displaySharpe = strategy.aggregate_metrics.avg_sharpe.toFixed(2);
-            displayMaxDD = `${strategy.aggregate_metrics.avg_max_dd.toFixed(1)}%`;
+            const agg = strategy.aggregate_metrics;
+            displayReturn = `${agg.avg_return.toFixed(1)}%`;
+            displayCagr = `${agg.avg_cagr.toFixed(1)}%`;
+            displaySharpe = agg.avg_sharpe.toFixed(2);
+            displayMaxDD = `${agg.avg_max_dd.toFixed(1)}%`;
+            displayWinrate = `${(agg.avg_win_rate || 0).toFixed(1)}%`;
+            displayPf = (agg.avg_profit_factor || 0).toFixed(2);
             const totalTickers = Object.keys(strategy.ticker_results).length;
-            displayBeaten = `${strategy.aggregate_metrics.outperform_count} / ${totalTickers}`;
+            displayBeaten = `${agg.outperform_count} / ${totalTickers} vs Buy & Hold`;
+            sharpeNum = agg.avg_sharpe;
+            ddNum = Math.abs(agg.avg_max_dd);
+            wrNum = agg.avg_win_rate || 0;
+            pfNum = agg.avg_profit_factor || 0;
             
-            elAggReturnSub.textContent = `CAGR Promedio: ${displayCagr}`;
-            elAggSharpeStatus.textContent = getSharpeStatus(strategy.aggregate_metrics.avg_sharpe);
+            elAggReturnSub.textContent = `CAGR medio: ${displayCagr}`;
+            elAggSharpeStatus.textContent = getSharpeStatus(agg.avg_sharpe);
+            if (elStratNarrative) {
+                elStratNarrative.textContent = `Supera Buy & Hold en ${agg.outperform_count}/${totalTickers} activos · Sharpe medio ${displaySharpe} · Max DD ${displayMaxDD}`;
+            }
         } else {
             const tkData = strategy.ticker_results[activeFilter];
             displayReturn = `${tkData.metrics.total_return.toFixed(1)}%`;
             displayCagr = `${tkData.metrics.cagr.toFixed(1)}%`;
             displaySharpe = tkData.metrics.sharpe.toFixed(2);
             displayMaxDD = `${tkData.metrics.max_drawdown.toFixed(1)}%`;
-            displayBeaten = tkData.outperformed ? "Superado" : "No Superado";
+            displayWinrate = `${tkData.metrics.win_rate.toFixed(1)}%`;
+            displayPf = tkData.metrics.profit_factor.toFixed(2);
+            displayBeaten = tkData.outperformed ? "Supera Buy & Hold" : "No supera Buy & Hold";
+            sharpeNum = tkData.metrics.sharpe;
+            ddNum = Math.abs(tkData.metrics.max_drawdown);
+            wrNum = tkData.metrics.win_rate;
+            pfNum = tkData.metrics.profit_factor;
             
             elAggReturnSub.textContent = `CAGR en ${activeFilter}: ${displayCagr}`;
             elAggSharpeStatus.textContent = getSharpeStatus(tkData.metrics.sharpe);
+            if (elStratNarrative) {
+                elStratNarrative.textContent = `${activeFilter}: ${displayBeaten} · Sharpe ${displaySharpe} · Max DD ${displayMaxDD}`;
+            }
         }
         
         elAggReturn.textContent = displayReturn;
+        if (elAggCagr) elAggCagr.textContent = displayCagr;
         elAggSharpe.textContent = displaySharpe;
         elAggDrawdown.textContent = displayMaxDD;
-        elAggBeaten.textContent = displayBeaten;
+        if (elAggWinrate) elAggWinrate.textContent = displayWinrate;
+        if (elAggPf) elAggPf.textContent = displayPf;
+        if (elAggBeaten) elAggBeaten.textContent = displayBeaten;
+
+        applyMetricCardTone("card-agg-sharpe", sharpeNum >= 1 ? "good" : (sharpeNum >= 0.5 ? "warn" : "bad"));
+        applyMetricCardTone("card-agg-dd", ddNum <= 30 ? "good" : (ddNum <= 50 ? "warn" : "bad"));
+        applyMetricCardTone("card-agg-wr", wrNum >= 50 ? "good" : (wrNum >= 40 ? "warn" : "bad"));
+        applyMetricCardTone("card-agg-pf", pfNum >= 1.5 ? "good" : (pfNum >= 1 ? "warn" : "bad"));
+        applyMetricCardTone("card-agg-return", parseFloat(displayReturn) >= 0 ? "good" : "bad");
+        applyMetricCardTone("card-agg-cagr", parseFloat(displayCagr) >= 0 ? "good" : "bad");
 
         // 3. Render Ticker Selector Chips for Chart tab
         renderTickerChips(strategy);
@@ -404,10 +450,23 @@ document.addEventListener("DOMContentLoaded", () => {
         populateComparisonTable(strategy);
 
         // 6. Populate Pine Script v5 Code
-        elPineScriptCode.textContent = strategy.pinescript;
+        if (elPineScriptCode) elPineScriptCode.textContent = strategy.pinescript || "";
 
         // Reset scroll position of code container
-        elPineScriptCode.parentElement.parentElement.scrollTop = 0;
+        const codeWrap = elPineScriptCode?.parentElement?.parentElement;
+        if (codeWrap) codeWrap.scrollTop = 0;
+        } catch (err) {
+            console.error("Error al renderizar estrategia:", err);
+        }
+    }
+
+    function applyMetricCardTone(id, tone) {
+        const card = document.getElementById(id);
+        if (!card) return;
+        card.classList.remove("metric-good", "metric-warn", "metric-bad");
+        if (tone === "good") card.classList.add("metric-good");
+        else if (tone === "warn") card.classList.add("metric-warn");
+        else if (tone === "bad") card.classList.add("metric-bad");
     }
 
     function getSharpeStatus(val) {
@@ -419,6 +478,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function showNoSelectionState(show) {
+        if (currentView !== "lab") {
+            if (elNoSelectionState) elNoSelectionState.classList.add("hidden");
+            if (elDashboardState) elDashboardState.classList.add("hidden");
+            return;
+        }
         if (show) {
             elNoSelectionState.classList.remove("hidden");
             elDashboardState.classList.add("hidden");
@@ -491,34 +555,72 @@ document.addEventListener("DOMContentLoaded", () => {
                 <span>Rinde <strong id="outperformance-margin">${Math.abs(diff).toFixed(1)}%</strong> menos que Buy & Hold</span>`;
         }
 
-        // Draw Equity Curves
-        renderEquityChart(tkData.equity_curve, tkBh.equity_curve, ticker);
+        // Draw Equity Curves with trade markers
+        currentEquityTrades = tkData.trades || [];
+        renderEquityChart(tkData.equity_curve, tkBh.equity_curve, ticker, currentEquityTrades);
 
         // Populate Recent Trades Table
         populateTradesTable(tkData.trades);
     }
 
     // -------------------------------------------------------------------------
-    // 5. Chart.js Equity Curve Graph
+    // 5. Chart.js Equity Curve Graph + Drawdown
     // -------------------------------------------------------------------------
-    function renderEquityChart(strategyCurve, benchmarkCurve, tickerName) {
+    function computeDrawdownSeries(values) {
+        let peak = values[0] || 10000;
+        return values.map(v => {
+            if (v > peak) peak = v;
+            return peak > 0 ? ((v - peak) / peak) * 100 : 0;
+        });
+    }
+
+    function buildTradeMarkerDatasets(dates, values, trades) {
+        const dateIndex = new Map(dates.map((d, i) => [d, i]));
+        const findNearest = (dateStr) => {
+            if (!dateStr) return -1;
+            if (dateIndex.has(dateStr)) return dateIndex.get(dateStr);
+            let best = -1;
+            for (let i = 0; i < dates.length; i++) {
+                if (dates[i] <= dateStr) best = i;
+                else break;
+            }
+            return best;
+        };
+
+        const entryData = Array(dates.length).fill(null);
+        const exitData = Array(dates.length).fill(null);
+        (trades || []).forEach(t => {
+            const ei = findNearest(t.entry_date);
+            if (ei >= 0) entryData[ei] = values[ei];
+            if (t.exit_date && t.exit_date !== "EN CURSO") {
+                const xi = findNearest(t.exit_date);
+                if (xi >= 0) exitData[xi] = values[xi];
+            }
+        });
+        return { entryData, exitData };
+    }
+
+    function renderEquityChart(strategyCurve, benchmarkCurve, tickerName, trades = []) {
         if (equityChart) {
             equityChart.destroy();
+            equityChart = null;
+        }
+        if (drawdownChart) {
+            drawdownChart.destroy();
+            drawdownChart = null;
         }
 
-        // Align dates
         const dates = strategyCurve.map(pt => pt.date);
         const strategyValues = strategyCurve.map(pt => pt.value);
-        
-        // Map benchmark values. Dates might be slightly misaligned due to decimation steps,
-        // so we map benchmark values to closest dates or align indexing.
-        // Since we decimated them with the same step, lengths match closely.
-        // Let's map benchmark values directly based on matching indices to keep it simple.
         const benchmarkValues = benchmarkCurve.map(pt => pt.value);
+        const ddValues = computeDrawdownSeries(strategyValues);
+        const { entryData, exitData } = buildTradeMarkerDatasets(dates, strategyValues, trades);
 
-        const ctx = document.getElementById("equityChart").getContext("2d");
-        
-        // Custom Area Gradient
+        const equityCanvas = document.getElementById("equityChart");
+        const ddCanvas = document.getElementById("drawdownChart");
+        if (!equityCanvas) return;
+
+        const ctx = equityCanvas.getContext("2d");
         const gradient = ctx.createLinearGradient(0, 0, 0, 300);
         gradient.addColorStop(0, "rgba(92, 96, 245, 0.25)");
         gradient.addColorStop(1, "rgba(92, 96, 245, 0.0)");
@@ -537,10 +639,11 @@ document.addEventListener("DOMContentLoaded", () => {
                         fill: true,
                         tension: 0.15,
                         pointRadius: 0,
-                        pointHoverRadius: 5
+                        pointHoverRadius: 5,
+                        order: 3
                     },
                     {
-                        label: 'Buy & Hold (Referencia)',
+                        label: 'Buy & Hold',
                         data: benchmarkValues,
                         borderColor: 'rgba(255, 179, 0, 0.8)',
                         borderWidth: 1.5,
@@ -549,7 +652,30 @@ document.addEventListener("DOMContentLoaded", () => {
                         fill: false,
                         tension: 0.15,
                         pointRadius: 0,
-                        pointHoverRadius: 4
+                        pointHoverRadius: 4,
+                        order: 4
+                    },
+                    {
+                        label: 'Entradas',
+                        data: entryData,
+                        borderColor: '#00e676',
+                        backgroundColor: '#00e676',
+                        showLine: false,
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        pointStyle: 'triangle',
+                        order: 1
+                    },
+                    {
+                        label: 'Salidas',
+                        data: exitData,
+                        borderColor: '#ff1744',
+                        backgroundColor: '#ff1744',
+                        showLine: false,
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        pointStyle: 'rectRot',
+                        order: 2
                     }
                 ]
             },
@@ -565,10 +691,8 @@ document.addEventListener("DOMContentLoaded", () => {
                         position: 'top',
                         labels: {
                             color: '#8a94a6',
-                            font: {
-                                family: 'Inter',
-                                size: 11
-                            }
+                            font: { family: 'Inter', size: 11 },
+                            filter: (item) => item.text !== undefined
                         }
                     },
                     tooltip: {
@@ -578,62 +702,96 @@ document.addEventListener("DOMContentLoaded", () => {
                         borderColor: 'rgba(255, 255, 255, 0.08)',
                         borderWidth: 1,
                         padding: 10,
-                        font: {
-                            family: 'Inter'
-                        },
                         callbacks: {
                             label: function(context) {
+                                if (context.parsed.y === null) return null;
                                 let label = context.dataset.label || '';
-                                if (label) {
-                                    label += ': ';
+                                if (label) label += ': ';
+                                if (context.dataset.label === 'Entradas' || context.dataset.label === 'Salidas') {
+                                    return label + new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y);
                                 }
-                                if (context.parsed.y !== null) {
-                                    label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y);
-                                }
-                                return label;
+                                return label + new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y);
                             }
                         }
                     }
                 },
                 scales: {
                     x: {
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.02)'
-                        },
-                        ticks: {
-                            color: '#8a94a6',
-                            font: { size: 10 },
-                            maxTicksLimit: 8
-                        }
+                        grid: { color: 'rgba(255, 255, 255, 0.02)' },
+                        ticks: { color: '#8a94a6', font: { size: 10 }, maxTicksLimit: 8 }
                     },
                     y: {
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.02)'
-                        },
+                        grid: { color: 'rgba(255, 255, 255, 0.02)' },
                         ticks: {
                             color: '#8a94a6',
                             font: { size: 10 },
-                            callback: function(value) {
-                                return '$' + value.toLocaleString();
-                            }
+                            callback: function(value) { return '$' + value.toLocaleString(); }
                         }
                     }
                 }
             }
         });
+
+        if (ddCanvas) {
+            const ddCtx = ddCanvas.getContext("2d");
+            const ddGrad = ddCtx.createLinearGradient(0, 0, 0, 120);
+            ddGrad.addColorStop(0, "rgba(255, 23, 68, 0.05)");
+            ddGrad.addColorStop(1, "rgba(255, 23, 68, 0.25)");
+
+            drawdownChart = new Chart(ddCtx, {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [{
+                        label: `Drawdown ${tickerName}`,
+                        data: ddValues,
+                        borderColor: '#ff1744',
+                        borderWidth: 1.5,
+                        backgroundColor: ddGrad,
+                        fill: true,
+                        tension: 0.1,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            labels: { color: '#8a94a6', font: { family: 'Inter', size: 10 } }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => `Drawdown: ${ctx.parsed.y.toFixed(2)}%`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            display: false
+                        },
+                        y: {
+                            grid: { color: 'rgba(255, 255, 255, 0.02)' },
+                            ticks: {
+                                color: '#8a94a6',
+                                font: { size: 9 },
+                                callback: (v) => v.toFixed(0) + '%'
+                            }
+                        }
+                    }
+                }
+            });
+        }
     }
 
     // -------------------------------------------------------------------------
     // 6. Cross-Ticker Breakdown Table
     // -------------------------------------------------------------------------
     function getSignalBadge(signal) {
-        if (signal === "BUY") {
-            return '<span style="color: #39ff14; font-weight: bold; text-shadow: 0 0 5px #39ff14;">BUY</span>';
-        } else if (signal === "SELL") {
-            return '<span style="color: #ff3333; font-weight: bold;">SELL</span>';
-        } else {
-            return `<span style="color: #888888; font-weight: bold;">${signal || "WAIT"}</span>`;
-        }
+        const sig = (signal || "WAIT").toUpperCase();
+        const cls = sig === "BUY" ? "signal-buy" : (sig === "SELL" ? "signal-sell" : (sig === "HOLD" ? "signal-hold" : "signal-wait"));
+        return `<span class="badge-signal ${cls}">${sig}</span>`;
     }
 
     function populateComparisonTable(strategy) {
@@ -646,47 +804,37 @@ document.addEventListener("DOMContentLoaded", () => {
             const tkBh = db.benchmarks[tk];
             if (!tkData || !tkBh) return;
 
-            const diff = tkData.metrics.total_return - tkBh.total_return;
-            const diffClass = diff >= 0 ? "text-success" : "text-danger";
-            const diffPrefix = diff >= 0 ? "+" : "";
+            const tipParts = [
+                `Sortino: ${(tkData.metrics.sortino || 0).toFixed(2)}`,
+                `Duración media: ${Math.round(tkData.metrics.avg_duration || 0)}d`,
+                `Valor final: $${(tkData.metrics.ending_val || 0).toLocaleString()}`,
+                `B&H: ${tkBh.total_return.toFixed(1)}%`
+            ].join(" · ");
 
             const tr = document.createElement("tr");
+            tr.title = tipParts;
             tr.innerHTML = `
-                <td class="compare-row-ticker">${tk}</td>
+                <td class="compare-row-ticker sticky-col">${tk}</td>
                 <td class="${tkData.metrics.total_return >= 0 ? 'text-success' : 'text-danger'} font-bold">${tkData.metrics.total_return.toFixed(1)}%</td>
-                <td>${tkBh.total_return.toFixed(1)}%</td>
-                <td class="${diffClass} font-bold">${diffPrefix}${diff.toFixed(1)}%</td>
-                <td class="text-danger">${tkData.metrics.max_drawdown.toFixed(1)}%</td>
-                <td>${tkBh.max_drawdown.toFixed(1)}%</td>
+                <td>${tkData.metrics.cagr.toFixed(1)}%</td>
                 <td>${tkData.metrics.sharpe.toFixed(2)}</td>
+                <td class="text-danger">${tkData.metrics.max_drawdown.toFixed(1)}%</td>
                 <td>${tkData.metrics.num_trades}</td>
-                <td>${tkData.metrics.win_rate.toFixed(1)}%</td>
                 <td>${getSignalBadge(tkData.metrics.current_signal)}</td>
-                <td class="live-price-cell" data-ticker="${tk}" data-last-price="${tkData.metrics.current_price}">$${tkData.metrics.current_price.toFixed(2)}</td>
                 <td>
                     <span class="badge ${tkData.outperformed ? 'badge-success' : 'badge-danger'}">
-                        ${tkData.outperformed ? 'Superó B&H' : 'No Superó'}
+                        ${tkData.outperformed ? 'Supera' : 'No'}
                     </span>
                 </td>
-                <td>${tkData.metrics.exit_threshold || '-'}</td>
             `;
             
-            // Double click row to select that ticker in the dashboard chart
             tr.addEventListener("click", () => {
                 currentTicker = tk;
-                
-                // Swap back to the chart tab to view details
                 switchTab("tab-chart");
-                
-                // Highlight the correct chip in UI
                 elTickerChips.querySelectorAll(".ticker-chip").forEach(chip => {
-                    if (chip.textContent === tk) {
-                        chip.classList.add("active");
-                    } else {
-                        chip.classList.remove("active");
-                    }
+                    if (chip.textContent === tk) chip.classList.add("active");
+                    else chip.classList.remove("active");
                 });
-                
                 updateTickerDetails(strategy, tk);
             });
             
@@ -724,27 +872,18 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!tkData || !tkBh) return;
 
             const diff = tkData.metrics.total_return - tkBh.total_return;
-            const diffClass = diff >= 0 ? "text-success" : "text-danger";
             const diffPrefix = diff >= 0 ? "+" : "";
 
             const tr = document.createElement("tr");
             tr.innerHTML = `
-                <td class="compare-row-ticker">${tk}</td>
-                <td><a href="#" class="strategy-link" data-id="${bestStrat.strategy_id}" style="color: #5c60f5; text-decoration: underline; font-weight: bold;">${bestStrat.strategy_id}</a></td>
+                <td class="compare-row-ticker sticky-col">${tk}</td>
+                <td><a href="#" class="strategy-link" data-id="${bestStrat.strategy_id}">${bestStrat.strategy_id}</a></td>
                 <td class="${tkData.metrics.total_return >= 0 ? 'text-success' : 'text-danger'} font-bold">${tkData.metrics.total_return.toFixed(1)}%</td>
-                <td>${tkBh.total_return.toFixed(1)}%</td>
-                <td class="${diffClass} font-bold">${diffPrefix}${diff.toFixed(1)}%</td>
+                <td class="${diff >= 0 ? 'text-success' : 'text-danger'} font-bold">${diffPrefix}${diff.toFixed(1)}%</td>
                 <td class="text-danger">${tkData.metrics.max_drawdown.toFixed(1)}%</td>
-                <td>${tkBh.max_drawdown.toFixed(1)}%</td>
                 <td>${tkData.metrics.sharpe.toFixed(2)}</td>
                 <td>${tkData.metrics.num_trades}</td>
-                <td>${tkData.metrics.win_rate.toFixed(1)}%</td>
                 <td>${getSignalBadge(tkData.metrics.current_signal)}</td>
-                <td>
-                    <span class="badge ${tkData.outperformed ? 'badge-success' : 'badge-danger'}">
-                        ${tkData.outperformed ? 'Superó B&H' : 'No Superó'}
-                    </span>
-                </td>
             `;
             
             // Add click listener to the strategy link
@@ -752,7 +891,6 @@ document.addEventListener("DOMContentLoaded", () => {
             link.addEventListener("click", (e) => {
                 e.preventDefault();
                 selectStrategy(bestStrat.strategy_id);
-                // Optionally scroll to top
                 window.scrollTo({ top: 0, behavior: "smooth" });
             });
             
@@ -843,18 +981,20 @@ document.addEventListener("DOMContentLoaded", () => {
     // -------------------------------------------------------------------------
     // 8. Clipboard Utilities & UI Interactivity
     // -------------------------------------------------------------------------
-    elBtnCopyCode.addEventListener("click", () => {
-        const code = elPineScriptCode.textContent;
-        navigator.clipboard.writeText(code).then(() => {
-            // Show toast
-            elToastMessage.classList.add("show");
-            setTimeout(() => {
-                elToastMessage.classList.remove("show");
-            }, 3000);
-        }).catch(err => {
-            alert("No se pudo copiar el código: " + err);
+    // Clipboard
+    if (elBtnCopyCode) {
+        elBtnCopyCode.addEventListener("click", () => {
+            const code = elPineScriptCode.textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                elToastMessage.classList.add("show");
+                setTimeout(() => {
+                    elToastMessage.classList.remove("show");
+                }, 3000);
+            }).catch(err => {
+                alert("No se pudo copiar el código: " + err);
+            });
         });
-    });
+    }
 
     // Tab Navigation
     document.querySelectorAll(".tab-btn").forEach(btn => {
@@ -886,11 +1026,18 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         // Trigger chart redraw to handle resizing if swapping back to chart
-        if (tabId === "tab-chart" && equityChart) {
+        if (tabId === "tab-chart") {
             setTimeout(() => {
-                equityChart.resize();
+                if (equityChart) equityChart.resize();
+                if (drawdownChart) drawdownChart.resize();
             }, 50);
         }
+    }
+
+    // Pine Script shortcut
+    const elBtnGotoPine = document.getElementById("btn-goto-pine");
+    if (elBtnGotoPine) {
+        elBtnGotoPine.addEventListener("click", () => switchTab("tab-pine"));
     }
 
     // -------------------------------------------------------------------------
@@ -943,6 +1090,79 @@ document.addEventListener("DOMContentLoaded", () => {
     let liveScannerData = null;
     let selectedScannerStrategy = "COMBO"; // SS11, AIS11, COMBO
     let selectedScannerUniverse = "ALL";  // ALL, US, CRYPTO, BUY_ONLY
+    let watchlistPage = 0;
+    const WATCHLIST_PAGE_SIZE = 60;
+    let watchlistActionableOnly = false;
+    let lastWatchlistFiltered = [];
+
+    function signalPriority(sig) {
+        const s = (sig || "WAIT").toUpperCase();
+        if (s === "BUY") return 0;
+        if (s === "SELL") return 1;
+        if (s === "HOLD") return 2;
+        return 3;
+    }
+
+    function pickPrimarySignal(signalsByStrat) {
+        const vals = Object.values(signalsByStrat || {});
+        if (!vals.length) return "WAIT";
+        return vals.slice().sort((a, b) => signalPriority(a) - signalPriority(b))[0];
+    }
+
+    function mergeComboByTicker(ss11List, ais11List) {
+        const map = new Map();
+        const ingest = (item) => {
+            const key = item.ticker;
+            if (!map.has(key)) {
+                map.set(key, {
+                    ...item,
+                    signals_by_strat: { [item.strat_label]: item.signal },
+                    legs: [item],
+                    is_combo: true
+                });
+                return;
+            }
+            const row = map.get(key);
+            row.signals_by_strat[item.strat_label] = item.signal;
+            row.legs.push(item);
+            // Prefer non-null metrics / fresher price
+            if (item.price != null) row.price = item.price;
+            if (item.change_24h != null) row.change_24h = item.change_24h;
+            if (item.dist_sl_pct != null) row.dist_sl_pct = item.dist_sl_pct;
+            if (item.dist_sma20_pct != null) row.dist_sma20_pct = item.dist_sma20_pct;
+            row.signal = pickPrimarySignal(row.signals_by_strat);
+            const posLegs = row.legs.filter(l => l.metrics && l.metrics.is_currently_in_position);
+            if (posLegs.length) {
+                // Prefer the leg with larger |PnL| for display metrics
+                const best = posLegs.slice().sort((a, b) =>
+                    Math.abs(b.metrics.floating_pnl_pct || 0) - Math.abs(a.metrics.floating_pnl_pct || 0)
+                )[0];
+                row.metrics = { ...best.metrics, is_currently_in_position: true };
+                row.strat_label = best.strat_label;
+                row.dist_sl_pct = best.dist_sl_pct != null ? best.dist_sl_pct : row.dist_sl_pct;
+            } else {
+                row.metrics = row.metrics || item.metrics || {};
+                if (row.metrics) row.metrics.is_currently_in_position = false;
+            }
+        };
+        ss11List.forEach(ingest);
+        ais11List.forEach(ingest);
+        return Array.from(map.values());
+    }
+
+    function renderSignalCell(item) {
+        if (item.is_combo && item.signals_by_strat) {
+            return ["SS11", "AIS11"].map(strat => {
+                if (item.signals_by_strat[strat] == null) return "";
+                const sig = String(item.signals_by_strat[strat]).toUpperCase();
+                const cls = sig === "BUY" ? "signal-buy" : (sig === "SELL" ? "signal-sell" : (sig === "HOLD" ? "signal-hold" : "signal-wait"));
+                return `<span class="badge-signal-pair"><span class="strat-mini">${strat}</span><span class="badge-signal ${cls}">${sig}</span></span>`;
+            }).join("");
+        }
+        const sig = (item.signal || "WAIT").toUpperCase();
+        const cls = sig === "BUY" ? "signal-buy" : (sig === "SELL" ? "signal-sell" : (sig === "HOLD" ? "signal-hold" : "signal-wait"));
+        return `<span class="badge-signal ${cls}">${sig}</span>`;
+    }
 
     // Table sorting states
     let posSortKey = "pnl";
@@ -973,6 +1193,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const elScannerSearchInput = document.getElementById("scanner-search-input");
 
     const elTvTradeLogPanel = document.getElementById("tv-trade-log-panel");
+    const elTradeDrawerOverlay = document.getElementById("trade-drawer-overlay");
     const elBtnCloseTvTrades = document.getElementById("btn-close-tv-trades");
     const elSelectedTradeTicker = document.getElementById("selected-trade-ticker");
     const elSelectedTradeStrat = document.getElementById("selected-trade-strat");
@@ -981,30 +1202,71 @@ document.addEventListener("DOMContentLoaded", () => {
     const elTvWinRate = document.getElementById("tv-win-rate");
     const elTvTotalTrades = document.getElementById("tv-total-trades");
     const elTvTradesTbody = document.getElementById("tv-trades-tbody");
+    const elDrawerStratTabs = document.getElementById("drawer-strat-tabs");
+    const elKpiOpenPos = document.getElementById("kpi-open-positions");
+    const elKpiBuySignals = document.getElementById("kpi-buy-signals");
+    const elKpiAvgPnl = document.getElementById("kpi-avg-pnl");
+    const elKpiLastScan = document.getElementById("kpi-last-scan");
+    const elKpiScanCountdown = document.getElementById("kpi-scan-countdown");
+    const elBtnOpenSidebar = document.getElementById("btn-open-sidebar");
+    const elBtnCloseSidebar = document.getElementById("btn-close-sidebar");
+    const elSidebarBackdrop = document.getElementById("sidebar-backdrop");
 
-    // Top Navigation View Switcher
-    if (elNavBtnScanner && elNavBtnBacktester) {
-        elNavBtnScanner.addEventListener("click", () => {
+    function setAppView(view) {
+        currentView = view;
+        document.body.setAttribute("data-view", view);
+        document.body.classList.remove("sidebar-open");
+
+        if (view === "scanner") {
             elNavBtnScanner.classList.add("active");
             elNavBtnBacktester.classList.remove("active");
             if (elScannerViewPanel) elScannerViewPanel.classList.remove("hidden");
             if (elDashboardState) elDashboardState.classList.add("hidden");
             if (elNoSelectionState) elNoSelectionState.classList.add("hidden");
-        });
-
-        elNavBtnBacktester.addEventListener("click", () => {
+        } else {
             elNavBtnBacktester.classList.add("active");
             elNavBtnScanner.classList.remove("active");
             if (elScannerViewPanel) elScannerViewPanel.classList.add("hidden");
             if (selectedStrategyId) {
                 if (elDashboardState) elDashboardState.classList.remove("hidden");
                 if (elNoSelectionState) elNoSelectionState.classList.add("hidden");
+                setTimeout(() => {
+                    if (equityChart) equityChart.resize();
+                    if (drawdownChart) drawdownChart.resize();
+                }, 80);
             } else {
                 if (elDashboardState) elDashboardState.classList.add("hidden");
                 if (elNoSelectionState) elNoSelectionState.classList.remove("hidden");
             }
-        });
+        }
     }
+
+    function openLabSidebar() {
+        document.body.classList.add("sidebar-open");
+    }
+    function closeLabSidebar() {
+        document.body.classList.remove("sidebar-open");
+    }
+
+    if (elBtnOpenSidebar) elBtnOpenSidebar.addEventListener("click", openLabSidebar);
+    if (elBtnCloseSidebar) elBtnCloseSidebar.addEventListener("click", closeLabSidebar);
+    if (elSidebarBackdrop) elSidebarBackdrop.addEventListener("click", closeLabSidebar);
+
+    function openTradeDrawer() {
+        if (elTvTradeLogPanel) elTvTradeLogPanel.classList.remove("hidden");
+        if (elTradeDrawerOverlay) elTradeDrawerOverlay.classList.remove("hidden");
+    }
+    function closeTradeDrawer() {
+        if (elTvTradeLogPanel) elTvTradeLogPanel.classList.add("hidden");
+        if (elTradeDrawerOverlay) elTradeDrawerOverlay.classList.add("hidden");
+    }
+
+    // Top Navigation View Switcher
+    if (elNavBtnScanner && elNavBtnBacktester) {
+        elNavBtnScanner.addEventListener("click", () => setAppView("scanner"));
+        elNavBtnBacktester.addEventListener("click", () => setAppView("lab"));
+    }
+    setAppView("scanner");
 
     // Hardware GPU Detection
     async function loadHardwareStatus() {
@@ -1014,9 +1276,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 const hw = await res.json();
                 if (elGpuNameText) {
                     if (hw.cuda_available) {
-                        elGpuNameText.textContent = `⚡ NVIDIA CUDA GPU: ${hw.device_name}`;
+                        elGpuNameText.textContent = `CUDA: ${hw.device_name}`;
                     } else {
-                        elGpuNameText.textContent = `CPU Processing (${hw.device_name})`;
+                        elGpuNameText.textContent = `CPU (${hw.device_name})`;
                     }
                 }
             }
@@ -1031,6 +1293,7 @@ document.addEventListener("DOMContentLoaded", () => {
             document.querySelectorAll("#strategy-pill-group .pill-btn").forEach(b => b.classList.remove("active"));
             btn.classList.add("active");
             selectedScannerStrategy = btn.getAttribute("data-strat");
+            watchlistPage = 0;
             renderLiveScannerData();
         });
     });
@@ -1040,6 +1303,7 @@ document.addEventListener("DOMContentLoaded", () => {
             document.querySelectorAll("#universe-pill-group .pill-btn").forEach(b => b.classList.remove("active"));
             btn.classList.add("active");
             selectedScannerUniverse = btn.getAttribute("data-univ");
+            watchlistPage = 0;
             renderLiveScannerData();
         });
     });
@@ -1052,6 +1316,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (elScannerSearchInput) {
         elScannerSearchInput.addEventListener("input", () => {
+            watchlistPage = 0;
+            renderLiveScannerData();
+        });
+    }
+
+    const elWatchlistActionable = document.getElementById("watchlist-actionable-only");
+    if (elWatchlistActionable) {
+        elWatchlistActionable.addEventListener("change", () => {
+            watchlistActionableOnly = !!elWatchlistActionable.checked;
+            watchlistPage = 0;
             renderLiveScannerData();
         });
     }
@@ -1079,13 +1353,30 @@ document.addEventListener("DOMContentLoaded", () => {
                 scannerSortKey = key;
                 scannerSortDir = (key === "ticker" || key === "category" || key === "signal") ? "ASC" : "DESC";
             }
+            watchlistPage = 0;
             renderLiveScannerData();
         });
     });
 
     if (elBtnCloseTvTrades) {
-        elBtnCloseTvTrades.addEventListener("click", () => {
-            if (elTvTradeLogPanel) elTvTradeLogPanel.classList.add("hidden");
+        elBtnCloseTvTrades.addEventListener("click", closeTradeDrawer);
+    }
+    if (elTradeDrawerOverlay) {
+        elTradeDrawerOverlay.addEventListener("click", closeTradeDrawer);
+    }
+
+    if (elDrawerStratTabs) {
+        elDrawerStratTabs.querySelectorAll("[data-drawer-strat]").forEach(btn => {
+            btn.addEventListener("click", () => {
+                elDrawerStratTabs.querySelectorAll(".pill-btn").forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+                drawerStratFilter = btn.getAttribute("data-drawer-strat");
+                if (drawerMode === "all") {
+                    openAllTradesDrawer(false);
+                } else if (drawerTicker) {
+                    openTradingViewTradeLog(drawerTicker, drawerStratFilter === "BOTH" ? "COMBO" : drawerStratFilter, false);
+                }
+            });
         });
     }
 
@@ -1123,16 +1414,20 @@ document.addEventListener("DOMContentLoaded", () => {
             if (mg.is_active) {
                 elMacroGuardBanner.classList.add("danger");
                 if (elMacroIcon) elMacroIcon.className = "fa-solid fa-triangle-exclamation macro-icon text-danger";
-                if (elMacroStatusTitle) elMacroStatusTitle.textContent = "🚨 CRASH SISTÉMICO MACRO DETECTADO (SPY)";
-                if (elMacroStatusDesc) elMacroStatusDesc.textContent = `Filtro Macro activado: Caída brusca en SPY. Capital en Liquidez por ${mg.days_remaining} sesiones restantes.`;
+                if (elMacroStatusTitle) elMacroStatusTitle.textContent = "Crash sistémico Macro detectado (SPY)";
+                if (elMacroStatusDesc) elMacroStatusDesc.textContent = `Filtro Macro activo: caída brusca en SPY. Capital en liquidez por ${mg.days_remaining} sesiones.`;
                 if (elMacroStatusTag) elMacroStatusTag.textContent = `CRASH ACTIVO (${mg.days_remaining}d)`;
             } else {
                 elMacroGuardBanner.classList.remove("danger");
                 if (elMacroIcon) elMacroIcon.className = "fa-solid fa-shield-halved macro-icon text-success";
-                if (elMacroStatusTitle) elMacroStatusTitle.textContent = "🟢 Filtro Macro Anti-Crash Global: MERCADO SEGURO";
-                if (elMacroStatusDesc) elMacroStatusDesc.textContent = "El índice S&P 500 se encuentra estable. Las estrategias están operando con normalidad.";
-                if (elMacroStatusTag) elMacroStatusTag.textContent = "MERCADO SEGURO (SPY OK)";
+                if (elMacroStatusTitle) elMacroStatusTitle.textContent = "Filtro Macro: mercado seguro";
+                if (elMacroStatusDesc) elMacroStatusDesc.textContent = "El S&P 500 está estable. Las estrategias operan con normalidad.";
+                if (elMacroStatusTag) elMacroStatusTag.textContent = "MERCADO SEGURO";
             }
+        }
+
+        if (elKpiLastScan && liveScannerData.timestamp) {
+            elKpiLastScan.textContent = liveScannerData.timestamp;
         }
 
         // Prepare signal lists with strategy tags
@@ -1140,21 +1435,30 @@ document.addEventListener("DOMContentLoaded", () => {
         const ais11 = (liveScannerData.ais11_signals || []).map(x => ({ ...x, strat_label: "AIS11" }));
 
         // Determine list of signals based on strategy pill
+        // COMBO: 1 fila por ticker (sin duplicar SS11+AIS11)
         let list = [];
+        let positionLegs = [];
         if (selectedScannerStrategy === "SS11") {
             list = ss11;
+            positionLegs = ss11;
         } else if (selectedScannerStrategy === "AIS11") {
             list = ais11;
+            positionLegs = ais11;
         } else {
-            // COMBO view: Combine both SS11 and AIS11 signals!
-            list = [...ss11, ...ais11];
+            list = mergeComboByTicker(ss11, ais11);
+            positionLegs = [...ss11, ...ais11];
         }
 
         // Update Universe Pill Count Badges dynamically
         const totalCount = list.length;
         const usCount = list.filter(x => x.category === "US Stock").length;
         const cryptoCount = list.filter(x => x.category === "Crypto").length;
-        const buyCount = list.filter(x => x.signal === "BUY").length;
+        const buyCount = list.filter(x => {
+            if (x.signals_by_strat) {
+                return Object.values(x.signals_by_strat).some(s => s === "BUY");
+            }
+            return x.signal === "BUY";
+        }).length;
         const posCount = list.filter(x => x.metrics && x.metrics.is_currently_in_position).length;
 
         const pillAll = document.querySelector("#universe-pill-group [data-univ='ALL']");
@@ -1164,22 +1468,43 @@ document.addEventListener("DOMContentLoaded", () => {
         const pillPos = document.querySelector("#universe-pill-group [data-univ='POS_ONLY']");
 
         if (pillAll) pillAll.textContent = `Todos (${totalCount})`;
-        if (pillUs) pillUs.textContent = `Top 250 EE.UU. (${usCount})`;
-        if (pillCrypto) pillCrypto.textContent = `Top 50 Criptos (${cryptoCount})`;
-        if (pillBuy) pillBuy.textContent = `🚀 Oportunidades BUY (${buyCount})`;
-        if (pillPos) pillPos.textContent = `💼 Posiciones Activas (${posCount})`;
+        if (pillUs) pillUs.textContent = `EE.UU. (${usCount})`;
+        if (pillCrypto) pillCrypto.textContent = `Cripto (${cryptoCount})`;
+        if (pillBuy) pillBuy.textContent = `BUY (${buyCount})`;
+        if (pillPos) pillPos.textContent = `Posiciones (${posCount})`;
+
+        // KPI strip
+        const posForKpi = list.filter(x => x.metrics && x.metrics.is_currently_in_position);
+        const avgPnl = posForKpi.length
+            ? posForKpi.reduce((acc, x) => acc + (x.metrics.floating_pnl_pct || 0), 0) / posForKpi.length
+            : null;
+        if (elKpiOpenPos) elKpiOpenPos.textContent = String(posCount);
+        if (elKpiBuySignals) elKpiBuySignals.textContent = String(buyCount);
+        if (elKpiAvgPnl) {
+            if (avgPnl === null) {
+                elKpiAvgPnl.textContent = "—";
+                elKpiAvgPnl.className = "scanner-kpi-value";
+            } else {
+                elKpiAvgPnl.textContent = `${avgPnl >= 0 ? "+" : ""}${avgPnl.toFixed(2)}%`;
+                elKpiAvgPnl.className = `scanner-kpi-value ${avgPnl >= 0 ? "text-success" : "text-danger"}`;
+            }
+        }
+
+        // Auto-collapse watchlist when there are actionable items (once preference allows)
+        maybeCollapseWatchlist(buyCount, posCount);
 
         const searchTerm = (elScannerSearchInput ? elScannerSearchInput.value : "").trim().toUpperCase();
 
         // 2. Render Active Positions Table (sortable list view)
-        const activePosItems = list.filter(item => {
+        // En Combo: una fila por estrategia en posición (entrada/PnL distintos), no duplicar en watchlist
+        const activePosItems = positionLegs.filter(item => {
             if (searchTerm && !item.ticker.toUpperCase().includes(searchTerm)) return false;
             if (selectedScannerUniverse === "US" && item.category !== "US Stock") return false;
             if (selectedScannerUniverse === "CRYPTO" && item.category !== "Crypto") return false;
             return item.metrics && item.metrics.is_currently_in_position;
         });
 
-        if (elActivePosCountBadge) elActivePosCountBadge.textContent = `${activePosItems.length} Posiciones Abiertas`;
+        if (elActivePosCountBadge) elActivePosCountBadge.textContent = `${activePosItems.length} abiertas`;
 
         // Sort Active Positions
         activePosItems.sort((a, b) => {
@@ -1248,51 +1573,28 @@ document.addEventListener("DOMContentLoaded", () => {
                         ? `<span class="badge-strat ais11"><i class="fa-solid fa-microchip"></i>AIS11</span>`
                         : `<span class="badge-strat ss11"><i class="fa-solid fa-chess-knight"></i>SS11</span>`;
                     const distSlVal = (item.dist_sl_pct !== undefined && item.dist_sl_pct !== null) ? item.dist_sl_pct : -15.0;
-
-                    // Color code badge for active position
-                    let sigBadgeClass = 'hold';
-                    let sigBadgeIcon = 'fa-lock';
-                    let sigBadgeText = item.signal || 'HOLD';
-
-                    if (item.signal === 'BUY') {
-                        sigBadgeClass = 'buy';
-                        sigBadgeIcon = 'fa-circle-dot';
-                    } else if (item.signal === 'SELL') {
-                        sigBadgeClass = 'sell';
-                        sigBadgeIcon = 'fa-triangle-exclamation';
-                    } else {
-                        // Position in hold: Green if in profit, Red if in loss!
-                        if (floatPnl >= 0) {
-                            sigBadgeClass = 'buy';
-                            sigBadgeIcon = 'fa-circle-check';
-                        } else {
-                            sigBadgeClass = 'sell';
-                            sigBadgeIcon = 'fa-shield-halved';
-                        }
-                    }
+                    const sig = (item.signal || "HOLD").toUpperCase();
+                    const sigClass = sig === "BUY" ? "signal-buy" : (sig === "SELL" ? "signal-sell" : (sig === "HOLD" ? "signal-hold" : "signal-wait"));
+                    const pnlChip = `<span class="pnl-chip ${floatPnl >= 0 ? "pnl-pos" : "pnl-neg"}">${floatPnl >= 0 ? "+" : ""}${floatPnl.toFixed(2)}%</span>`;
 
                     return `
                         <tr>
-                            <td>
-                                <strong style="font-family: var(--font-mono); font-size: 14px; color: #ffffff;">
-                                    <i class="fa-solid fa-briefcase text-warning" style="font-size:11px; margin-right:6px;"></i>${item.ticker}
-                                </strong>
+                            <td class="sticky-col">
+                                <strong style="font-family: var(--font-mono); font-size: 14px;">${item.ticker}</strong>
                             </td>
-                            <td><span class="opp-cat">${stratTag}${item.category}</span></td>
-                            <td style="font-family: var(--font-mono); font-weight: 600;">${entryP}</td>
-                            <td style="font-family: var(--font-mono); font-weight: 600;">${currP}</td>
-                            <td style="font-family: var(--font-mono); font-weight: 700;" class="${floatPnl >= 0 ? 'text-success' : 'text-danger'}">
-                                ${floatPnl >= 0 ? '+' : ''}${floatPnl.toFixed(2)}%
-                            </td>
+                            <td>${stratTag}</td>
+                            <td style="font-family: var(--font-mono);">${entryP}</td>
+                            <td style="font-family: var(--font-mono);">${currP}</td>
+                            <td>${pnlChip}</td>
                             <td style="font-family: var(--font-mono);" class="${distSlVal >= 0 ? 'text-success' : 'text-danger'}">
                                 ${distSlVal > 0 ? '+' : ''}${distSlVal.toFixed(1)}%
                             </td>
                             <td>
-                                <span class="badge-signal ${sigBadgeClass}"><i class="fa-solid ${sigBadgeIcon}"></i> ${sigBadgeText}</span>
+                                <span class="badge-signal ${sigClass}">${sig}</span>
                             </td>
                             <td style="text-align: center;">
-                                <button class="btn btn-secondary btn-view-trades" data-ticker="${item.ticker}" data-strat="${item.strat_label || selectedScannerStrategy}" style="font-size: 11px; padding: 4px 12px;">
-                                    <i class="fa-solid fa-list-check text-warning"></i> Ver Trades
+                                <button class="btn btn-secondary btn-view-trades" data-ticker="${item.ticker}" data-strat="${item.strat_label || selectedScannerStrategy}" type="button" style="font-size: 11px; padding: 4px 12px;">
+                                    <i class="fa-solid fa-list-check"></i> Trades
                                 </button>
                             </td>
                         </tr>
@@ -1309,10 +1611,22 @@ document.addEventListener("DOMContentLoaded", () => {
             if (selectedScannerUniverse === "US" && item.category !== "US Stock") return false;
             if (selectedScannerUniverse === "CRYPTO" && item.category !== "Crypto") return false;
             if (selectedScannerUniverse === "BUY_ONLY") {
-                if (buyCount > 0) return item.signal === "BUY";
+                if (buyCount > 0) {
+                    if (item.signals_by_strat) {
+                        return Object.values(item.signals_by_strat).some(s => s === "BUY");
+                    }
+                    return item.signal === "BUY";
+                }
                 return !item.metrics || !item.metrics.is_currently_in_position;
             }
             if (selectedScannerUniverse === "POS_ONLY" && (!item.metrics || !item.metrics.is_currently_in_position)) return false;
+            if (watchlistActionableOnly) {
+                const hasBuySell = item.signals_by_strat
+                    ? Object.values(item.signals_by_strat).some(s => s === "BUY" || s === "SELL")
+                    : (item.signal === "BUY" || item.signal === "SELL");
+                const inPos = item.metrics && item.metrics.is_currently_in_position;
+                if (!hasBuySell && !inPos) return false;
+            }
             return true;
         });
 
@@ -1331,8 +1645,12 @@ document.addEventListener("DOMContentLoaded", () => {
             } else if (scannerSortKey === "change_24h") {
                 valA = a.change_24h || 0; valB = b.change_24h || 0;
             } else if (scannerSortKey === "signal") {
-                valA = a.signal || ""; valB = b.signal || "";
-                return scannerSortDir === "ASC" ? valA.localeCompare(valB) : valB.localeCompare(valA);
+                valA = signalPriority(a.signal);
+                valB = signalPriority(b.signal);
+                if (valA === valB) {
+                    return (a.ticker || "").localeCompare(b.ticker || "");
+                }
+                return scannerSortDir === "ASC" ? (valA - valB) : (valB - valA);
             } else if (scannerSortKey === "pnl") {
                 valA = (a.metrics && a.metrics.floating_pnl_pct !== undefined) ? a.metrics.floating_pnl_pct : -999;
                 valB = (b.metrics && b.metrics.floating_pnl_pct !== undefined) ? b.metrics.floating_pnl_pct : -999;
@@ -1347,6 +1665,28 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             return scannerSortDir === "ASC" ? (valA - valB) : (valB - valA);
         });
+
+        // Default: priorizar señales accionables cuando el sort es ticker ASC (carga inicial)
+        if (scannerSortKey === "ticker" && scannerSortDir === "ASC" && selectedScannerUniverse === "ALL") {
+            filtered.sort((a, b) => {
+                const pa = signalPriority(a.signal);
+                const pb = signalPriority(b.signal);
+                if (pa !== pb) return pa - pb;
+                return (a.ticker || "").localeCompare(b.ticker || "");
+            });
+        }
+
+        lastWatchlistFiltered = filtered;
+        const elWatchlistCount = document.getElementById("watchlist-count-badge");
+        if (elWatchlistCount) elWatchlistCount.textContent = `${filtered.length} tickers`;
+
+        const totalPages = Math.max(1, Math.ceil(filtered.length / WATCHLIST_PAGE_SIZE));
+        if (watchlistPage >= totalPages) watchlistPage = totalPages - 1;
+        if (watchlistPage < 0) watchlistPage = 0;
+        const pageSlice = filtered.slice(
+            watchlistPage * WATCHLIST_PAGE_SIZE,
+            (watchlistPage + 1) * WATCHLIST_PAGE_SIZE
+        );
 
         // Update Scanner Table Header Icons
         document.querySelectorAll(".scanner-sortable-th").forEach(th => {
@@ -1366,6 +1706,9 @@ document.addEventListener("DOMContentLoaded", () => {
             if (searchTerm && !item.ticker.toUpperCase().includes(searchTerm)) return false;
             if (selectedScannerUniverse === "US" && item.category !== "US Stock") return false;
             if (selectedScannerUniverse === "CRYPTO" && item.category !== "Crypto") return false;
+            if (item.signals_by_strat) {
+                return Object.values(item.signals_by_strat).some(s => s === "BUY");
+            }
             return item.signal === "BUY";
         });
 
@@ -1412,8 +1755,8 @@ document.addEventListener("DOMContentLoaded", () => {
                         ? `<span class="badge-strat ais11"><i class="fa-solid fa-microchip"></i>AIS11</span>`
                         : `<span class="badge-strat ss11"><i class="fa-solid fa-chess-knight"></i>SS11</span>`;
                     const badgeHtml = isShowingCandidates 
-                        ? `<span class="badge-signal wait" style="background:rgba(92,96,245,0.2); color:#a5b4fc;"><i class="fa-solid fa-fire text-indigo"></i> CANDIDATO #${idx + 1}</span>`
-                        : `<span class="badge-signal buy"><i class="fa-solid fa-circle"></i> BUY</span>`;
+                        ? `<span class="badge-signal signal-wait"><i class="fa-solid fa-fire"></i> Candidato #${idx + 1}</span>`
+                        : `<span class="badge-signal signal-buy">BUY</span>`;
                     
                     const distSlOpp = (item.dist_sl_pct !== undefined && item.dist_sl_pct !== null) ? item.dist_sl_pct : -15.0;
                     const distSma20Opp = (item.dist_sma20_pct !== undefined && item.dist_sma20_pct !== null) ? item.dist_sma20_pct : 0.0;
@@ -1457,50 +1800,48 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-        // 4. Render Live Signals Table
+        // 4. Render Live Signals Table (paginated, no duplicates in Combo)
         if (elLiveScannerTbody) {
             if (filtered.length === 0) {
                 let msg = "No se encontraron activos para los filtros seleccionados.";
                 if (selectedScannerStrategy === "SS11" && selectedScannerUniverse === "CRYPTO") {
-                    msg = `🛡️ <b>Estrategia SS11 (Macro Base Pura)</b> está diseñada y optimizada exclusivamente para acciones y ETFs de Wall Street (filtro Macro SPY). Para escanear Criptomonedas, selecciona la estrategia <b>AIS11 (Multi-IA GPU)</b>.`;
+                    msg = `<b>SS11</b> está pensada para acciones/ETFs (filtro Macro SPY). Para cripto usá <b>AIS11</b>.`;
                 } else if (selectedScannerUniverse === "BUY_ONLY") {
-                    msg = `ℹ️ No hay nuevas señales de compra (BUY) generadas en la sesión de hoy (${buyCount}). Tus operaciones abiertas se encuentran en estado HOLD en la pestaña <b>💼 Posiciones Activas (${posCount})</b>.`;
+                    msg = `No hay señales BUY hoy. Revisá <b>Posiciones</b> (${posCount}).`;
                 } else if (selectedScannerUniverse === "POS_ONLY") {
-                    msg = `ℹ️ No hay posiciones abiertas actualmente para este mercado.`;
+                    msg = `No hay posiciones abiertas para este filtro.`;
+                } else if (watchlistActionableOnly) {
+                    msg = `No hay filas accionables. Desactivá «Solo accionables» para ver el universo completo.`;
                 }
-                elLiveScannerTbody.innerHTML = `<tr><td colspan="9" class="text-center p-4 text-muted">${msg}</td></tr>`;
+                elLiveScannerTbody.innerHTML = `<tr><td colspan="7" class="text-center p-4 text-muted">${msg}</td></tr>`;
             } else {
-                elLiveScannerTbody.innerHTML = filtered.map(item => {
-                    const sigClass = item.signal.toLowerCase();
-                    const sigIcon = item.signal === 'BUY' ? 'fa-circle-dot' : (item.signal === 'HOLD' ? 'fa-lock' : (item.signal === 'SELL' ? 'fa-triangle-exclamation' : 'fa-clock'));
-                    const floatPnl = (item.metrics && item.metrics.floating_pnl_pct !== undefined) ? item.metrics.floating_pnl_pct : 0.0;
-                    const stratTag = item.strat_label === "AIS11"
-                        ? `<span class="badge-strat ais11"><i class="fa-solid fa-microchip"></i>AIS11</span>`
-                        : `<span class="badge-strat ss11"><i class="fa-solid fa-chess-knight"></i>SS11</span>`;
+                elLiveScannerTbody.innerHTML = pageSlice.map(item => {
+                    const distSl = (item.dist_sl_pct !== undefined && item.dist_sl_pct !== null) ? item.dist_sl_pct : 0;
+                    const distSma = (item.dist_sma20_pct !== undefined && item.dist_sma20_pct !== null) ? item.dist_sma20_pct : 0;
+                    const stratLine = item.is_combo
+                        ? `<div class="ticker-sub">${item.category || ""}</div>`
+                        : `<div class="ticker-sub">${item.strat_label || ""} · ${item.category || ""}</div>`;
                     
                     return `
                         <tr>
-                            <td><strong style="font-family: var(--font-mono); font-size: 14px;">${item.ticker}</strong></td>
-                            <td><span class="opp-cat">${stratTag}${item.category}</span></td>
-                            <td style="font-family: var(--font-mono); font-weight: 600;">${formatPrice(item.price)}</td>
-                            <td style="font-family: var(--font-mono);" class="${item.change_24h >= 0 ? 'text-success' : 'text-danger'}">
-                                ${item.change_24h >= 0 ? '+' : ''}${item.change_24h.toFixed(2)}%
+                            <td class="sticky-col">
+                                <strong class="ticker-main">${item.ticker}</strong>
+                                ${stratLine}
                             </td>
-                            <td>
-                                <span class="badge-signal ${sigClass}"><i class="fa-solid ${sigIcon}"></i> ${item.signal}</span>
+                            <td class="mono-cell">${formatPrice(item.price)}</td>
+                            <td class="mono-cell ${(item.change_24h || 0) >= 0 ? 'text-success' : 'text-danger'}">
+                                ${(item.change_24h || 0) >= 0 ? '+' : ''}${(item.change_24h || 0).toFixed(2)}%
                             </td>
-                            <td style="font-family: var(--font-mono);" class="${floatPnl >= 0 ? 'text-success' : 'text-danger'}">
-                                ${(item.metrics && item.metrics.is_currently_in_position) ? `${floatPnl >= 0 ? '+' : ''}${floatPnl.toFixed(2)}%` : '<span class="text-muted">-</span>'}
+                            <td class="signal-cell">${renderSignalCell(item)}</td>
+                            <td class="mono-cell ${distSl >= 0 ? 'text-success' : 'text-danger'}" title="Distancia al stop loss -15%">
+                                ${distSl > 0 ? '+' : ''}${distSl.toFixed(1)}%
                             </td>
-                            <td style="font-family: var(--font-mono);" class="${item.dist_sl_pct >= 0 ? 'text-success' : 'text-danger'}">
-                                ${item.dist_sl_pct > 0 ? '+' : ''}${item.dist_sl_pct.toFixed(1)}%
+                            <td class="mono-cell ${distSma >= 0 ? 'text-success' : 'text-danger'}" title="Distancia a SMA 20 (reentrada)">
+                                ${distSma > 0 ? '+' : ''}${distSma.toFixed(1)}%
                             </td>
-                            <td style="font-family: var(--font-mono);" class="${item.dist_sma20_pct >= 0 ? 'text-success' : 'text-danger'}">
-                                ${item.dist_sma20_pct > 0 ? '+' : ''}${item.dist_sma20_pct.toFixed(1)}%
-                            </td>
-                            <td>
-                                <button class="btn btn-secondary btn-view-trades" data-ticker="${item.ticker}" data-strat="${item.strat_label || selectedScannerStrategy}" style="font-size: 11px; padding: 4px 10px;">
-                                    <i class="fa-solid fa-list-check"></i> Pine Trades
+                            <td style="text-align:center;">
+                                <button class="btn btn-secondary btn-view-trades" data-ticker="${item.ticker}" data-strat="${item.is_combo ? 'COMBO' : (item.strat_label || selectedScannerStrategy)}" type="button" style="font-size: 11px; padding: 4px 10px;">
+                                    <i class="fa-solid fa-list-check"></i>
                                 </button>
                             </td>
                         </tr>
@@ -1508,6 +1849,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 }).join('');
             }
         }
+
+        renderWatchlistPager(filtered.length, totalPages);
 
         // Attach event listeners for "Ver Trades" buttons
         document.querySelectorAll(".btn-view-trades").forEach(btn => {
@@ -1517,6 +1860,35 @@ document.addEventListener("DOMContentLoaded", () => {
                 openTradingViewTradeLog(tk, strat);
             });
         });
+    }
+
+    function renderWatchlistPager(totalItems, totalPages) {
+        const elPager = document.getElementById("watchlist-pager");
+        if (!elPager) return;
+        if (totalItems <= WATCHLIST_PAGE_SIZE) {
+            elPager.innerHTML = totalItems
+                ? `<span class="pager-meta">Mostrando ${totalItems} tickers</span>`
+                : "";
+            return;
+        }
+        const from = watchlistPage * WATCHLIST_PAGE_SIZE + 1;
+        const to = Math.min(totalItems, (watchlistPage + 1) * WATCHLIST_PAGE_SIZE);
+        elPager.innerHTML = `
+            <span class="pager-meta">${from}–${to} de ${totalItems}</span>
+            <div class="pager-actions">
+                <button type="button" class="btn btn-secondary btn-pager" id="watchlist-prev" ${watchlistPage <= 0 ? "disabled" : ""}>
+                    <i class="fa-solid fa-chevron-left"></i> Anterior
+                </button>
+                <span class="pager-page">Pág. ${watchlistPage + 1} / ${totalPages}</span>
+                <button type="button" class="btn btn-secondary btn-pager" id="watchlist-next" ${watchlistPage >= totalPages - 1 ? "disabled" : ""}>
+                    Siguiente <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            </div>
+        `;
+        const prev = document.getElementById("watchlist-prev");
+        const next = document.getElementById("watchlist-next");
+        if (prev) prev.addEventListener("click", () => { watchlistPage -= 1; renderLiveScannerData(); });
+        if (next) next.addEventListener("click", () => { watchlistPage += 1; renderLiveScannerData(); });
     }
 
     // Open TradingView Trade Log Modal/Section
@@ -1541,59 +1913,101 @@ document.addEventListener("DOMContentLoaded", () => {
     // Botón para ver TODOS los trades globales de la cartera por fecha
     const elBtnShowAllTrades = document.getElementById("btn-show-all-trades");
     if (elBtnShowAllTrades) {
-        elBtnShowAllTrades.addEventListener("click", () => {
-            if (!liveScannerData) return;
-            let list = (selectedScannerStrategy === "AIS11") ? liveScannerData.ais11_signals : liveScannerData.ss11_signals;
-            
-            // Base estándar de capital asignado por trade para la consolidación global de cartera ($10,000 por operación)
-            const BASE_CAPITAL_PER_TRADE = 10000;
+        elBtnShowAllTrades.addEventListener("click", () => openAllTradesDrawer(true));
+    }
 
-            let allTrades = [];
-            (list || []).forEach(item => {
-                (item.recent_trades || []).forEach(t => {
-                    const retPct = Number(t.pct_return) || 0;
-                    // Normalizar PnL nominal para que cada activo pese equitativamente y no por cuentas virtuales desorbitadas
-                    const normalizedPnl = Math.round((retPct / 100.0) * BASE_CAPITAL_PER_TRADE * 100) / 100;
-                    allTrades.push({
-                        ...t,
-                        ticker: item.ticker,
-                        pnl: normalizedPnl // Asignación homogénea de $10,000 por operación
-                    });
-                });
-            });
+    function collectSignalsForDrawer(stratFilter) {
+        if (!liveScannerData) return [];
+        const ss11 = (liveScannerData.ss11_signals || []).map(x => ({ ...x, strat_label: "SS11" }));
+        const ais11 = (liveScannerData.ais11_signals || []).map(x => ({ ...x, strat_label: "AIS11" }));
+        if (stratFilter === "SS11") return ss11;
+        if (stratFilter === "AIS11") return ais11;
+        return [...ss11, ...ais11];
+    }
 
-            if (elSelectedTradeTicker) elSelectedTradeTicker.textContent = `TODOS LOS ACTIVOS (${allTrades.length} Trades)`;
-            if (elSelectedTradeStrat) elSelectedTradeStrat.textContent = (selectedScannerStrategy === "AIS11") ? "AIS11: Multi-IA GPU (Acciones & Cripto)" : "SS11: Macro Base Pura (Acciones & ETFs)";
-
-            // Calcular métricas globales consolidadas sobre base homogénea
-            const closedTrades = allTrades.filter(t => !t.is_open && t.exit_date !== "EN CURSO");
-            const totalClosed = closedTrades.length;
-            const wins = closedTrades.filter(t => (Number(t.pct_return) || 0) > 0);
-            const winRate = totalClosed > 0 ? (wins.length / totalClosed) * 100 : 0;
-
-            const totalNetProfit = closedTrades.reduce((acc, t) => acc + (Number(t.pnl) || 0), 0);
-            const gains = closedTrades.filter(t => (Number(t.pct_return) || 0) > 0).reduce((acc, t) => acc + Number(t.pnl), 0);
-            const losses = closedTrades.filter(t => (Number(t.pct_return) || 0) < 0).reduce((acc, t) => acc + Math.abs(Number(t.pnl)), 0);
-            const profitFactor = losses > 0 ? (gains / losses) : (gains > 0 ? 99.0 : 1.0);
-
-            if (elTvNetProfit) {
-                elTvNetProfit.textContent = `$${totalNetProfit.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-                elTvNetProfit.className = `val ${totalNetProfit >= 0 ? 'text-success' : 'text-danger'}`;
-            }
-            if (elTvProfitFactor) elTvProfitFactor.textContent = profitFactor.toFixed(2);
-            if (elTvWinRate) elTvWinRate.textContent = `${winRate.toFixed(1)}%`;
-            if (elTvTotalTrades) elTvTotalTrades.textContent = totalClosed;
-
-            activeTvTradesList = allTrades;
-            tvTradesSortKey = "entry_date";
-            tvTradesSortDir = "DESC";
-            renderTvTradesTable();
-
-            if (elTvTradeLogPanel) {
-                elTvTradeLogPanel.classList.remove("hidden");
-                elTvTradeLogPanel.scrollIntoView({ behavior: 'smooth' });
-            }
+    function summarizeTrades(allTrades) {
+        const BASE_CAPITAL_PER_TRADE = 10000;
+        const normalized = allTrades.map(t => {
+            if (t.pnl !== undefined && t.pnl !== null && !Number.isNaN(Number(t.pnl))) return t;
+            const retPct = Number(t.pct_return) || 0;
+            return { ...t, pnl: Math.round((retPct / 100.0) * BASE_CAPITAL_PER_TRADE * 100) / 100 };
         });
+        const closedTrades = normalized.filter(t => !t.is_open && t.exit_date !== "EN CURSO");
+        const totalClosed = closedTrades.length;
+        const wins = closedTrades.filter(t => (Number(t.pct_return) || 0) > 0);
+        const winRate = totalClosed > 0 ? (wins.length / totalClosed) * 100 : 0;
+        const totalNetProfit = closedTrades.reduce((acc, t) => acc + (Number(t.pnl) || 0), 0);
+        const gains = closedTrades.filter(t => (Number(t.pct_return) || 0) > 0).reduce((acc, t) => acc + Number(t.pnl), 0);
+        const losses = closedTrades.filter(t => (Number(t.pct_return) || 0) < 0).reduce((acc, t) => acc + Math.abs(Number(t.pnl)), 0);
+        const profitFactor = losses > 0 ? (gains / losses) : (gains > 0 ? 99.0 : 1.0);
+        return { normalized, totalClosed, winRate, totalNetProfit, profitFactor };
+    }
+
+    function applyTvSummary(summary) {
+        if (elTvNetProfit) {
+            elTvNetProfit.textContent = `$${summary.totalNetProfit.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            elTvNetProfit.className = `val ${summary.totalNetProfit >= 0 ? 'text-success' : 'text-danger'}`;
+        }
+        if (elTvProfitFactor) elTvProfitFactor.textContent = summary.profitFactor.toFixed(2);
+        if (elTvWinRate) elTvWinRate.textContent = `${summary.winRate.toFixed(1)}%`;
+        if (elTvTotalTrades) elTvTotalTrades.textContent = summary.totalClosed;
+    }
+
+    function openAllTradesDrawer(resetTabs = true) {
+        if (!liveScannerData) return;
+        drawerMode = "all";
+        drawerTicker = null;
+        if (resetTabs) {
+            drawerStratFilter = selectedScannerStrategy === "COMBO" ? "BOTH" : selectedScannerStrategy;
+            syncDrawerStratTabs();
+        }
+        if (elDrawerStratTabs) elDrawerStratTabs.classList.remove("hidden-tabs");
+
+        const list = collectSignalsForDrawer(drawerStratFilter);
+        let allTrades = [];
+        list.forEach(item => {
+            (item.recent_trades || []).forEach(t => {
+                allTrades.push({ ...t, ticker: item.ticker, strat_label: item.strat_label });
+            });
+        });
+
+        const summary = summarizeTrades(allTrades);
+        if (elSelectedTradeTicker) elSelectedTradeTicker.textContent = `Todos los activos (${summary.normalized.length})`;
+        if (elSelectedTradeStrat) {
+            elSelectedTradeStrat.textContent = drawerStratFilter === "BOTH" ? "SS11 + AIS11" : drawerStratFilter;
+        }
+        applyTvSummary(summary);
+        activeTvTradesList = summary.normalized;
+        tvTradesSortKey = "entry_date";
+        tvTradesSortDir = "DESC";
+        renderTvTradesTable();
+        openTradeDrawer();
+    }
+
+    function syncDrawerStratTabs() {
+        if (!elDrawerStratTabs) return;
+        elDrawerStratTabs.querySelectorAll(".pill-btn").forEach(b => {
+            b.classList.toggle("active", b.getAttribute("data-drawer-strat") === drawerStratFilter);
+        });
+    }
+
+    let watchlistAutoCollapsedOnce = false;
+    function maybeCollapseWatchlist(buyCount, posCount) {
+        if (watchlistAutoCollapsedOnce) return;
+        if (buyCount <= 0 && posCount <= 0) return;
+        const header = document.querySelector('[data-collapse-target="live-signals-body"]');
+        const body = document.getElementById("live-signals-body");
+        if (!header || !body) return;
+        if (localStorage.getItem("collapse_state_live-signals-body") !== null) {
+            watchlistAutoCollapsedOnce = true;
+            return;
+        }
+        header.classList.add("is-collapsed");
+        body.style.display = "none";
+        const hintSpan = header.querySelector(".collapse-hint");
+        if (hintSpan) hintSpan.innerHTML = `<i class="fa-solid fa-expand"></i> Expandir`;
+        localStorage.setItem("collapse_state_live-signals-body", "true");
+        watchlistAutoCollapsedOnce = true;
     }
 
     function renderTvTradesTable() {
@@ -1660,37 +2074,65 @@ document.addEventListener("DOMContentLoaded", () => {
         `).join('');
     }
 
-    function openTradingViewTradeLog(ticker, stratId) {
+    function openTradingViewTradeLog(ticker, stratId, resetTabs = true) {
         if (!liveScannerData) return;
+
+        drawerMode = "single";
+        drawerTicker = ticker;
 
         let effectiveStrat = stratId;
         if (!effectiveStrat || effectiveStrat === "COMBO") {
-            effectiveStrat = "SS11";
+            effectiveStrat = drawerStratFilter === "AIS11" ? "AIS11" : (drawerStratFilter === "SS11" ? "SS11" : "BOTH");
         }
 
-        let list = (effectiveStrat === "AIS11") ? liveScannerData.ais11_signals : liveScannerData.ss11_signals;
-        const item = (list || []).find(x => x.ticker === ticker);
-        if (!item) return;
+        if (resetTabs) {
+            if (stratId === "AIS11" || stratId === "SS11") {
+                drawerStratFilter = stratId;
+            } else {
+                drawerStratFilter = "BOTH";
+            }
+            syncDrawerStratTabs();
+        }
+
+        if (elDrawerStratTabs) elDrawerStratTabs.classList.remove("hidden-tabs");
+
+        const filter = resetTabs ? drawerStratFilter : (drawerStratFilter || effectiveStrat);
+        const list = collectSignalsForDrawer(filter === "BOTH" ? "BOTH" : filter);
+        const matches = list.filter(x => x.ticker === ticker);
+        if (!matches.length) return;
+
+        let allTrades = [];
+        matches.forEach(item => {
+            (item.recent_trades || []).forEach(t => {
+                allTrades.push({ ...t, ticker, strat_label: item.strat_label });
+            });
+        });
 
         if (elSelectedTradeTicker) elSelectedTradeTicker.textContent = ticker;
-        if (elSelectedTradeStrat) elSelectedTradeStrat.textContent = (effectiveStrat === "AIS11") ? "AIS11: Multi-IA GPU" : "SS11: Macro Base Pura";
-
-        const m = item.metrics;
-        if (elTvNetProfit) {
-            elTvNetProfit.textContent = `$${m.net_profit_usd.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            elTvNetProfit.className = `val ${m.net_profit_usd >= 0 ? 'text-success' : 'text-danger'}`;
+        if (elSelectedTradeStrat) {
+            elSelectedTradeStrat.textContent = filter === "BOTH"
+                ? matches.map(m => m.strat_label).join(" + ")
+                : (filter === "AIS11" ? "AIS11" : "SS11");
         }
-        if (elTvProfitFactor) elTvProfitFactor.textContent = m.profit_factor.toFixed(2);
-        if (elTvWinRate) elTvWinRate.textContent = `${m.win_rate.toFixed(1)}%`;
-        if (elTvTotalTrades) elTvTotalTrades.textContent = m.trades_count;
 
-        activeTvTradesList = (item.recent_trades || []).map(t => ({ ...t, ticker: ticker }));
+        if (matches.length === 1 && matches[0].metrics) {
+            const m = matches[0].metrics;
+            if (elTvNetProfit) {
+                elTvNetProfit.textContent = `$${(m.net_profit_usd || 0).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                elTvNetProfit.className = `val ${(m.net_profit_usd || 0) >= 0 ? 'text-success' : 'text-danger'}`;
+            }
+            if (elTvProfitFactor) elTvProfitFactor.textContent = (m.profit_factor || 0).toFixed(2);
+            if (elTvWinRate) elTvWinRate.textContent = `${(m.win_rate || 0).toFixed(1)}%`;
+            if (elTvTotalTrades) elTvTotalTrades.textContent = m.trades_count || allTrades.length;
+            activeTvTradesList = allTrades;
+        } else {
+            const summary = summarizeTrades(allTrades);
+            applyTvSummary(summary);
+            activeTvTradesList = summary.normalized;
+        }
+
         renderTvTradesTable();
-
-        if (elTvTradeLogPanel) {
-            elTvTradeLogPanel.classList.remove("hidden");
-            elTvTradeLogPanel.scrollIntoView({ behavior: 'smooth' });
-        }
+        openTradeDrawer();
     }
 
     // -------------------------------------------------------------------------
@@ -1756,6 +2198,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (elAutoTimerBadge) {
             elAutoTimerBadge.innerHTML = `<i class="fa-solid fa-clock"></i> Auto (${autoRefreshCountdown}s)`;
         }
+        if (elKpiScanCountdown) {
+            elKpiScanCountdown.textContent = `Auto ${autoRefreshCountdown}s`;
+        }
     }, 1000);
 
     async function checkServerStatus() {
@@ -1765,7 +2210,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const data = await res.json();
                 if (data.loading === false) {
                     // Server is ready! Hide loader and load data
-                    if (elLoaderStatusText) elLoaderStatusText.textContent = "Datos listos. Iniciando dashboard...";
+                    if (elLoaderStatusText) elLoaderStatusText.textContent = "Datos listos. Iniciando PineLab…";
                     setTimeout(() => {
                         if (elStartupLoader) {
                             elStartupLoader.classList.add("hidden-loader");

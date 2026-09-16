@@ -374,7 +374,7 @@ def simulate_strategy_trades(df, signals_long, signals_exit, stop_loss_pct=-15.0
                 "exit_price":   smart_round_price(opens[i]),
                 "pct_return":   round(float(pct_ret), 2),
                 "pnl":          round(float(pnl), 2),
-                "reason":       "Stop Loss -15%" if hit_stop_loss else "Salida de Estrategia",
+                "reason":       "Stop Loss (umbral -15%)" if hit_stop_loss else "Salida de Estrategia",
                 "duration_days": _days_diff(dates[i], dates[entry_idx]),
                 "is_open": False
             })
@@ -472,14 +472,21 @@ def simulate_strategy_trades(df, signals_long, signals_exit, stop_loss_pct=-15.0
 # -------------------------------------------------------------------------
 # Ejecución del Escáner Completo
 # -------------------------------------------------------------------------
-def _infer_exit_reason(item, is_macro_active):
-    """Motivo legible de salida a partir de trades recientes / macro / score."""
+def _last_closed_trade(item):
+    """Último trade cerrado de recent_trades (si existe)."""
     recent = item.get("recent_trades") or []
     closed = [t for t in recent if not t.get("is_open")]
-    if closed:
-        reason = closed[-1].get("reason") or "Salida de Estrategia"
+    return closed[-1] if closed else None
+
+
+def _infer_exit_reason(item, is_macro_active):
+    """Motivo legible de salida a partir de trades recientes / macro / score."""
+    last = _last_closed_trade(item)
+    if last:
+        reason = last.get("reason") or "Salida de Estrategia"
         if "Stop Loss" in str(reason):
-            return "Stop Loss -15%"
+            # El -15% es el umbral sobre el cierre previo; el fill es al open siguiente.
+            return "Stop Loss (umbral -15%, fill al open)"
         if is_macro_active:
             return "Macro Crash Guard"
         return reason

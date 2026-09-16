@@ -22,6 +22,7 @@ from utils.scanner_engine import (
     load_ais11_params,
     compute_ais11_score,
     simulate_strategy_trades,
+    _infer_exit_reason,
 )
 from utils import telegram_bot
 
@@ -207,6 +208,108 @@ class TestTelegramStateMachine(unittest.TestCase):
         with open(self.state_path, encoding="utf-8") as f:
             st = json.load(f)
         self.assertTrue(st["AIS11_MSFT"]["in_pos"])
+
+    def test_sell_card_uses_trade_pnl_not_latest_close(self):
+        """Resultado debe venir del trade (fill), no de latest_close vs entry."""
+        card = telegram_bot._format_sell_card({
+            "ticker": "VICI",
+            "category": "US Stock",
+            "strategy": "SS11",
+            "price": 24.76,          # exit fill
+            "entry_price": 22.80,
+            "pct_return": 8.63,      # P&L real del trade
+            "exit_reason": "Stop Loss (umbral -15%, fill al open)",
+        })
+        self.assertIn("+8.63%", card)
+        self.assertIn("Stop Loss (umbral -15%, fill al open)", card)
+        self.assertIn("Precio entrada", card)
+        # No debe recalcular con un close distinto: si ignorara pct_return
+        # y usara price/entry distintos, el % cambiaría.
+        card_mismatch = telegram_bot._format_sell_card({
+            "ticker": "VICI",
+            "category": "US Stock",
+            "strategy": "SS11",
+            "price": 30.0,           # latest_close recuperado
+            "entry_price": 22.80,
+            "pct_return": -14.50,    # fill real ~SL
+            "exit_reason": "Stop Loss (umbral -15%, fill al open)",
+        })
+        self.assertIn("-14.50%", card_mismatch)
+        self.assertNotIn("+31.", card_mismatch)
+
+    def test_sell_transition_prefers_recent_trade_fill(self):
+        telegram_bot.check_and_notify_trades(self._scanner(False, False, ticker="VICI"))
+        telegram_bot.check_and_notify_trades(self._scanner(False, True, ticker="VICI"))
+        scanner = self._scanner(False, False, ticker="VICI")
+        scanner["ss11_signals"][0]["price"] = 30.0  # latest_close (engañoso)
+        scanner["ss11_signals"][0]["exit_reason"] = "Stop Loss (umbral -15%, fill al open)"
+        scanner["ss11_signals"][0]["recent_trades"] = [{
+            "entry_price": 22.80,
+            "exit_price": 24.76,
+            "pct_return": 8.63,
+            "reason": "Stop Loss (umbral -15%)",
+            "is_open": False,
+        }]
+        # Capturar alertas formateadas vía dry-run + espía
+        sent = []
+        orig = telegram_bot.send_telegram_message
+
+        def _spy(msg, *a, **k):
+            sent.append(msg)
+            return orig(msg, *a, **k)
+
+        telegram_bot.send_telegram_message = _spy
+        try:
+            r = telegram_bot.check_and_notify_trades(scanner)
+        finally:
+            telegram_bot.send_telegram_message = orig
+        self.assertEqual(r["sells"], 1)
+        self.assertTrue(any("+8.63%" in m for m in sent))
+        self.assertTrue(any("24.76" in m for m in sent))
+        self.assertFalse(any("+31." in m for m in sent))
+
+
+class TestStopLossReasonClarity(unittest.TestCase):
+    def test_infer_exit_reason_clarifies_sl_fill(self):
+        item = {
+            "signal": "WAIT",
+            "recent_trades": [{
+                "reason": "Stop Loss (umbral -15%)",
+                "pct_return": 8.63,
+                "is_open": False,
+            }],
+        }
+        self.assertEqual(
+            _infer_exit_reason(item, is_macro_active=False),
+            "Stop Loss (umbral -15%, fill al open)",
+        )
+
+    def test_sl_gap_up_can_be_green_with_sl_label(self):
+        """SL dispara por cierre -15%, fill al open puede quedar en verde."""
+        n = 40
+        closes = np.full(n, 100.0)
+        opens = np.full(n, 100.0)
+        # Entra en i=10 (señal en i=9)
+        # Cierre i=20 cae a 84 → dispara SL; open i=21 sube a 108
+        closes[20] = 84.0
+        opens[21] = 108.0
+        idx = pd.date_range("2024-01-01", periods=n, freq="B")
+        df = pd.DataFrame({"Open": opens, "Close": closes}, index=idx)
+        df["SMA_20"] = df["Close"].rolling(20, min_periods=1).mean()
+
+        signals_long = np.zeros(n, dtype=bool)
+        signals_long[9] = True
+        signals_exit = np.zeros(n, dtype=bool)
+
+        _, _, trades = simulate_strategy_trades(
+            df, signals_long, signals_exit, stop_loss_pct=-15.0, is_strict_reentry=False
+        )
+        closed = [t for t in trades if not t["is_open"]]
+        self.assertGreaterEqual(len(closed), 1)
+        sl = [t for t in closed if "Stop Loss" in str(t["reason"])]
+        self.assertEqual(len(sl), 1)
+        self.assertGreater(sl[0]["pct_return"], 0.0)
+        self.assertIn("umbral -15%", sl[0]["reason"])
 
 
 if __name__ == "__main__":

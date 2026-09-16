@@ -435,20 +435,35 @@ def _format_buy_card(alert):
     )
 
 
+def _last_closed_trade_from_item(item):
+    """Último trade cerrado en recent_trades del ítem del scanner."""
+    recent = item.get("recent_trades") or []
+    closed = [t for t in recent if not t.get("is_open")]
+    return closed[-1] if closed else None
+
+
 def _format_sell_card(alert):
     curr_p = alert["price"]
     ent_p = alert.get("entry_price") or curr_p
-    ret_pct = ((curr_p / ent_p) - 1.0) * 100.0 if ent_p else 0.0
+    # Preferir P&L del trade simulado (fill real) sobre (latest_close / entry).
+    if alert.get("pct_return") is not None:
+        ret_pct = float(alert["pct_return"])
+    else:
+        ret_pct = ((curr_p / ent_p) - 1.0) * 100.0 if ent_p else 0.0
     emoji_ret = "🟢" if ret_pct >= 0 else "🔴"
     tv_url = _tv_url(alert["ticker"])
     reason = alert.get("exit_reason") or "Salida de Estrategia"
     score_line = ""
     if alert.get("strategy") == "AIS11" and alert.get("ai_score") is not None:
         score_line = f"• <b>Score IA:</b> <code>{alert['ai_score']:.1f}/100</code>\n"
+    entry_line = ""
+    if ent_p and ent_p != curr_p:
+        entry_line = f"• <b>Precio entrada:</b> <code>{format_price_telegram(ent_p)}</code>\n"
 
     return (
         f"🔴 <b>VENTA CONFIRMADA — {alert['strategy']}</b>\n\n"
         f"• <b>Activo:</b> <a href=\"{tv_url}\">{alert['ticker']}</a> ({alert['category']})\n"
+        f"{entry_line}"
         f"• <b>Precio salida:</b> <code>{format_price_telegram(curr_p)}</code>\n"
         f"• <b>Resultado:</b> {emoji_ret} <b>{ret_pct:+.2f}%</b>\n"
         f"{score_line}"
@@ -532,11 +547,21 @@ def _process_strategy_transitions(items, strategy, saved_state, current_time, is
                 "last_alert_time": current_time,
                 "last_sell_time": current_time,
             }
+            last_trade = _last_closed_trade_from_item(item)
+            exit_price = (
+                last_trade.get("exit_price") if last_trade and last_trade.get("exit_price") is not None
+                else item.get("price", 0.0)
+            )
+            entry_price = (
+                last_trade.get("entry_price") if last_trade and last_trade.get("entry_price") is not None
+                else (prev.get("entry_price") or prev.get("last_price") or item.get("price", 0.0))
+            )
             sell_alerts.append({
                 "ticker": tk,
                 "category": item.get("category", "N/A"),
-                "price": item.get("price", 0.0),
-                "entry_price": prev.get("entry_price") or prev.get("last_price") or item.get("price", 0.0),
+                "price": exit_price,
+                "entry_price": entry_price,
+                "pct_return": last_trade.get("pct_return") if last_trade else None,
                 "ai_score": item.get("ai_score"),
                 "strategy": strategy,
                 "exit_reason": item.get("exit_reason") or "Salida de Estrategia",

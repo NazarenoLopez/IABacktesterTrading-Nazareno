@@ -10,6 +10,8 @@ sys.path.insert(0, os.path.join(ROOT, 'tests'))
 
 from test_live_parity import (
     TestAis11Parity,
+    TestAiPipelineAndUniverse,
+    TestSs11StrictReentryDivergence,
     TestTelegramStateMachine,
 )
 
@@ -22,7 +24,9 @@ def main():
 
     suite = unittest.TestSuite()
     suite.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(TestAis11Parity))
+    suite.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(TestSs11StrictReentryDivergence))
     suite.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(TestTelegramStateMachine))
+    suite.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(TestAiPipelineAndUniverse))
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     if not result.wasSuccessful():
         sys.exit(1)

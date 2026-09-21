@@ -4,8 +4,8 @@ import time
 # pyrefly: ignore [missing-import]
 import numpy as np
 import pandas as pd
-import yfinance as yf
 from datetime import datetime
+from utils.yf_fetch import fetch_with_cache, flatten_ohlc_columns
 
 CACHE_DIR = ".data_cache"
 os.makedirs(CACHE_DIR, exist_ok=True)
@@ -20,7 +20,13 @@ END_DATE = datetime.today().strftime('%Y-%m-%d')
 def sigmoid_norm(x, scale=1.0):
     return 100.0 / (1.0 + np.exp(-x / scale))
 
-def fetch_data():
+def fetch_data(tickers=None, start_date=None):
+    """
+    tickers=None → TICKERS (18 del dashboard).
+    start_date=None → START_DATE (1996). Para live-US pasar 5y.
+    """
+    tickers = list(tickers) if tickers is not None else list(TICKERS)
+    fetch_start = start_date if start_date else START_DATE
     print("Loading AI JSON signals...")
     try:
         with open("data/minirocket_gpu_signals.json", "r") as f:
@@ -46,7 +52,7 @@ def fetch_data():
     # Invalidate cache if it's older than specified seconds (default 3600 for 1-hour updates)
     cache_expire = float(os.environ.get("YF_CACHE_SECONDS", 3600))
     data = {}
-    for ticker in TICKERS:
+    for ticker in tickers:
         cache_path = os.path.join(CACHE_DIR, f"{ticker}.csv")
         
         cache_valid = False
@@ -58,29 +64,26 @@ def fetch_data():
         if cache_valid:
             df = pd.read_csv(cache_path, index_col=0, parse_dates=True)
             df.index.name = "Date"
+            df = flatten_ohlc_columns(df)
         else:
-            df = pd.DataFrame()
-            for attempt in range(3):
-                try:
-                    df = yf.download(ticker, start=START_DATE, progress=False)
-                    if not df.empty:
-                        break
-                    time.sleep(2)
-                except Exception:
-                    time.sleep(2)
-                    
-            if isinstance(df.columns, pd.MultiIndex):
-                df.columns = [col[0] for col in df.columns]
-                
-            if df.empty and os.path.exists(cache_path) and os.path.getsize(cache_path) > 100:
-                df = pd.read_csv(cache_path, index_col=0, parse_dates=True)
-                df.index.name = "Date"
-            elif not df.empty:
-                df.to_csv(cache_path)
-            elif ticker == "C" and os.path.exists(os.path.join(CACHE_DIR, "C_daily.csv")):
+            df = fetch_with_cache(
+                ticker,
+                start=fetch_start,
+                cache_expire_sec=cache_expire,
+                stale_ok=True,
+            )
+            df = flatten_ohlc_columns(df)
+            if df.empty and ticker == "C" and os.path.exists(os.path.join(CACHE_DIR, "C_daily.csv")):
                 df = pd.read_csv(os.path.join(CACHE_DIR, "C_daily.csv"), index_col=0, parse_dates=True)
                 df.index.name = "Date"
                 df.to_csv(cache_path)
+
+        if df.empty:
+            continue
+        if start_date:
+            df = df[df.index >= pd.to_datetime(start_date)]
+        if df.empty or "Close" not in df.columns:
+            continue
         
         # Pre-compute indicators for V10 strategies
         c = df['Close']

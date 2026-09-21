@@ -115,16 +115,68 @@ class TestAis11Parity(unittest.TestCase):
         self.assertFalse(has_ai)
 
 
+class TestSs11StrictReentryDivergence(unittest.TestCase):
+    """SS11 live debe reentrar como el original (sin SMA20 post-SL)."""
+
+    def _ss11_sl_then_weak_recovery(self):
+        n = 26
+        closes = np.full(n, 100.0)
+        opens = np.full(n, 100.0)
+        # Entra al inicio. Cierre i=20 cae -16% → SL en i=21.
+        # Quedan pocas barras a 84: SMA20 sigue ~98, live no reentra; original sí.
+        closes[20] = 84.0
+        opens[21] = 84.0
+        for i in range(22, n):
+            closes[i] = 84.0
+            opens[i] = 84.0
+        idx = pd.date_range("2024-01-01", periods=n, freq="B")
+        df = pd.DataFrame({"Open": opens, "Close": closes}, index=idx)
+        # SMA forzada por encima del piso: aísla el gate de reentrada (no el rolling).
+        df["SMA_20"] = 200.0
+        signals_long = np.ones(n, dtype=bool)   # SS11: ~macro
+        signals_exit = np.zeros(n, dtype=bool)
+        return df, signals_long, signals_exit
+
+    def test_original_ss11_reenters_without_sma20(self):
+        df, slong, sexit = self._ss11_sl_then_weak_recovery()
+        sig, met, trades = simulate_strategy_trades(
+            df, slong, sexit, stop_loss_pct=-15.0, is_strict_reentry=False
+        )
+        self.assertTrue(met["is_currently_in_position"], "SS11 original debe reentrar sin SMA20")
+        self.assertIn(sig, ("HOLD", "BUY"))
+
+    def test_live_ss11_matches_original_reentry(self):
+        df, slong, sexit = self._ss11_sl_then_weak_recovery()
+        sig, met, trades = simulate_strategy_trades(
+            df, slong, sexit, stop_loss_pct=-15.0, is_strict_reentry=False
+        )
+        self.assertTrue(met["is_currently_in_position"], "SS11 live alineado: reentra sin SMA20")
+        self.assertIn(sig, ("HOLD", "BUY"))
+        closed_sl = [t for t in trades if (not t["is_open"]) and "Stop Loss" in str(t["reason"])]
+        self.assertGreaterEqual(len(closed_sl), 1)
+
+    def test_strict_true_still_blocks_below_sma(self):
+        df, slong, sexit = self._ss11_sl_then_weak_recovery()
+        sig, met, _ = simulate_strategy_trades(
+            df, slong, sexit, stop_loss_pct=-15.0, is_strict_reentry=True
+        )
+        self.assertFalse(met["is_currently_in_position"])
+        self.assertEqual(sig, "WAIT")
+
+
 class TestTelegramStateMachine(unittest.TestCase):
     def setUp(self):
         self._tmpdir = tempfile.TemporaryDirectory()
         self.state_path = os.path.join(self._tmpdir.name, "telegram_state.json")
         self._orig_state = telegram_bot.STATE_PATH
+        self._orig_health = telegram_bot.HEALTH_PATH
         telegram_bot.STATE_PATH = self.state_path
+        telegram_bot.HEALTH_PATH = os.path.join(self._tmpdir.name, "telegram_health.json")
         os.environ["TELEGRAM_DRY_RUN"] = "1"
 
     def tearDown(self):
         telegram_bot.STATE_PATH = self._orig_state
+        telegram_bot.HEALTH_PATH = self._orig_health
         self._tmpdir.cleanup()
         os.environ.pop("TELEGRAM_DRY_RUN", None)
 
@@ -268,6 +320,31 @@ class TestTelegramStateMachine(unittest.TestCase):
         self.assertTrue(any("24.76" in m for m in sent))
         self.assertFalse(any("+31." in m for m in sent))
 
+    def test_no_ai_never_notifies(self):
+        telegram_bot.check_and_notify_trades(self._scanner(False, False))
+        scanner = self._scanner(True, False)
+        scanner["ais11_signals"][0]["signal"] = "NO_AI"
+        scanner["ais11_signals"][0]["notify_eligible"] = False
+        scanner["ais11_signals"][0]["has_ai"] = False
+        scanner["ais11_signals"][0]["ai_score"] = None
+        r = telegram_bot.check_and_notify_trades(scanner)
+        self.assertEqual(r["buys"], 0)
+        self.assertEqual(r["sells"], 0)
+
+    def test_no_ai_drops_ghost_state(self):
+        telegram_bot.check_and_notify_trades(self._scanner(True, False))
+        with open(self.state_path, encoding="utf-8") as f:
+            st = json.load(f)
+        self.assertIn("AIS11_MSFT", st)
+        scanner = self._scanner(True, False)
+        scanner["ais11_signals"][0]["signal"] = "NO_AI"
+        scanner["ais11_signals"][0]["notify_eligible"] = False
+        scanner["ais11_signals"][0]["has_ai"] = False
+        telegram_bot.check_and_notify_trades(scanner)
+        with open(self.state_path, encoding="utf-8") as f:
+            st = json.load(f)
+        self.assertNotIn("AIS11_MSFT", st)
+
 
 class TestStopLossReasonClarity(unittest.TestCase):
     def test_infer_exit_reason_clarifies_sl_fill(self):
@@ -310,6 +387,61 @@ class TestStopLossReasonClarity(unittest.TestCase):
         self.assertEqual(len(sl), 1)
         self.assertGreater(sl[0]["pct_return"], 0.0)
         self.assertIn("umbral -15%", sl[0]["reason"])
+
+
+class TestAiPipelineAndUniverse(unittest.TestCase):
+    def test_evaluate_cores_write_only_if_all_ok(self):
+        from utils.ai_pipeline import evaluate_ais11_cores
+        ok, _ = evaluate_ais11_cores({
+            "models/precalculate_timesfm.py": "ok",
+            "models/finetune_tspulse.py": "ok",
+            "models/train_minirocket_gpu.py": "ok",
+        })
+        self.assertTrue(ok)
+        ok2, msg = evaluate_ais11_cores({
+            "models/precalculate_timesfm.py": "skipped",
+            "models/finetune_tspulse.py": "skipped",
+            "models/train_minirocket_gpu.py": "skipped",
+        })
+        self.assertFalse(ok2)
+        self.assertIn("GPU", msg)
+        ok3, msg3 = evaluate_ais11_cores({
+            "models/precalculate_timesfm.py": "ok",
+            "models/finetune_tspulse.py": "failed",
+            "models/train_minirocket_gpu.py": "ok",
+        })
+        self.assertFalse(ok3)
+        self.assertIn("tspulse", msg3)
+
+    def test_skip_gpu_scripts_without_cuda(self):
+        from utils.ai_pipeline import should_skip_gpu_script
+        self.assertTrue(should_skip_gpu_script("models/finetune_tspulse.py", has_cuda=False))
+        self.assertFalse(should_skip_gpu_script("models/finetune_tspulse.py", has_cuda=True))
+        self.assertFalse(should_skip_gpu_script("models/train_minirocket.py", has_cuda=False))
+
+    def test_lab_extras_in_us_universe(self):
+        from utils.tickers_universe import (
+            LAB_UNIVERSE_EXTRAS,
+            get_all_tickers,
+            get_live_us_ai_tickers,
+            get_us_tickers,
+        )
+        us = get_us_tickers()
+        all_tk = get_all_tickers()
+        for t in LAB_UNIVERSE_EXTRAS:
+            self.assertIn(t, us)
+            self.assertIn(t, all_tk)
+        ai = get_live_us_ai_tickers()
+        self.assertIn("SPY", ai)
+        self.assertIn("GOOG", ai)
+        self.assertNotIn("BTC-USD", ai)
+
+    def test_fetch_data_accepts_tickers_and_start(self):
+        import inspect
+        from backtester import fetch_data
+        params = inspect.signature(fetch_data).parameters
+        self.assertIn("tickers", params)
+        self.assertIn("start_date", params)
 
 
 if __name__ == "__main__":

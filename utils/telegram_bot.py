@@ -399,6 +399,39 @@ def format_health_message(scanner_data=None):
     age_txt = "desconocida" if ai_age is None else f"{ai_age:.1f} días"
     stale_line = "⚠️ Señales IA DESACTUALIZADAS" if stale else "✅ Señales IA OK"
 
+    sl_rec = summary.get("ss11_sl_recovery", "?")
+    no_ai_pct = summary.get("ais11_no_ai_pct")
+    if no_ai_pct is None and summary.get("with_ai") is not None:
+        tot = (summary.get("with_ai") or 0) + (summary.get("without_ai") or 0)
+        no_ai_pct = round(100.0 * (summary.get("without_ai") or 0) / tot, 1) if tot else 0.0
+
+    file_ages = (scanner_data or {}).get("ai_file_ages") or {}
+    if not file_ages:
+        try:
+            from utils.scanner_engine import get_ai_signals_ages_by_file
+            file_ages = get_ai_signals_ages_by_file()
+        except Exception:
+            file_ages = {}
+    ages_bits = []
+    for name in ("timesfm_signals.json", "tspulse_signals.json", "minirocket_gpu_signals.json"):
+        val = file_ages.get(name)
+        ages_bits.append(f"{name.replace('_signals.json', '')}=" + ("—" if val is None else f"{val:.1f}d"))
+
+    pipe_err = "N/A"
+    pipe_path = os.path.join(BASE_DIR, "data", "ai_pipeline_status.json")
+    if os.path.exists(pipe_path):
+        try:
+            with open(pipe_path, "r", encoding="utf-8") as f:
+                pipe = json.load(f)
+            if pipe.get("error"):
+                pipe_err = str(pipe["error"])[:160]
+            elif pipe.get("cores_ok") is False:
+                pipe_err = "cores AIS11 no regenerados (GPU ausente o fallo)"
+            elif pipe.get("cores_ok"):
+                pipe_err = "OK"
+        except Exception:
+            pass
+
     return "\n".join([
         "🩺 <b>SALUD DEL MONITOR</b>",
         f"• Token Telegram: {'✅' if token_ok else '❌'}",
@@ -407,11 +440,15 @@ def format_health_message(scanner_data=None):
         f"• Último escaneo: <code>{last_scan}</code>",
         f"• AIS11 params: <code>{params_txt}</code>",
         f"• Edad señales IA: <b>{age_txt}</b> — {stale_line}",
+        f"• Archivos IA: <code>{' | '.join(ages_bits)}</code>",
+        f"• Pipeline IA: <code>{pipe_err}</code>",
         f"• Macro: {macro}",
         f"• Cartera SS11/AIS11: <b>{summary.get('ss11_in_position', '?')}</b> / "
         f"<b>{summary.get('ais11_in_position', '?')}</b>",
+        f"• SS11 en recovery SL: <b>{sl_rec}</b>",
         f"• Con IA / sin IA: <b>{summary.get('with_ai', '?')}</b> / "
-        f"<b>{summary.get('without_ai', '?')}</b>",
+        f"<b>{summary.get('without_ai', '?')}</b>"
+        + (f" (<b>{no_ai_pct}%</b> NO_AI)" if no_ai_pct is not None else ""),
     ])
 
 
@@ -481,10 +518,18 @@ def _process_strategy_transitions(items, strategy, saved_state, current_time, is
     sell_alerts = []
     current_state = {}
 
+    dropped_keys = []
+
     for item in items:
+        tk = item.get("ticker")
+        key = f"{strategy}_{tk}" if tk else None
         if strategy == "AIS11" and not item.get("notify_eligible", item.get("has_ai", False)):
+            if key:
+                dropped_keys.append(key)
             continue
         if item.get("signal") == "NO_AI":
+            if key:
+                dropped_keys.append(key)
             continue
 
         tk = item["ticker"]
@@ -574,7 +619,7 @@ def _process_strategy_transitions(items, strategy, saved_state, current_time, is
                 "last_sell_time": last_sell_time,
             }
 
-    return buy_alerts, sell_alerts, current_state
+    return buy_alerts, sell_alerts, current_state, dropped_keys
 
 
 def check_and_notify_trades(scanner_data):
@@ -633,16 +678,18 @@ def check_and_notify_trades(scanner_data):
     sell_alerts = []
     current_state = {}
 
-    b1, s1, st1 = _process_strategy_transitions(
+    b1, s1, st1, d1 = _process_strategy_transitions(
         scanner_data.get("ss11_signals", []), "SS11", saved_state, current_time, is_initial_run
     )
-    b2, s2, st2 = _process_strategy_transitions(
+    b2, s2, st2, d2 = _process_strategy_transitions(
         scanner_data.get("ais11_signals", []), "AIS11", saved_state, current_time, is_initial_run
     )
     buy_alerts.extend(b1 + b2)
     sell_alerts.extend(s1 + s2)
     current_state.update(st1)
     current_state.update(st2)
+    for k in d1 + d2:
+        saved_state.pop(k, None)
 
     saved_state.update(current_state)
     saved_state["__last_scan"] = scanner_data.get("timestamp")

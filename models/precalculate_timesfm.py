@@ -43,7 +43,11 @@ def run_timesfm_precalculation():
     context_len = 192 # Lookback window
     forecast_len = 5  # Predict 5 days into future
     
-    data = fetch_data()
+    try:
+        from utils.ai_pipeline import fetch_ai_dataset
+        data, _ = fetch_ai_dataset()
+    except Exception:
+        data = fetch_data()
     
     try:
         with open("data/timesfm_signals.json", "r") as f:

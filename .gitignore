@@ -33,6 +33,8 @@ data/*_signals*.json
 data/live_scanner_cache.json
 data/results*.json
 data/telegram_state.json
+data/ai_pipeline_status.json
+data/diagnosis_live_vs_original.json
 
 .data_cache/
 .data

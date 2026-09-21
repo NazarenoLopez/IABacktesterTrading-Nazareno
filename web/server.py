@@ -5,8 +5,6 @@ import json
 import traceback
 import sys
 import os
-import io
-import contextlib
 import shutil
 from datetime import datetime, timedelta, timezone
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -31,14 +29,27 @@ AI_STATUS = {
     "current_step": 0,
     "total_steps": 6,
     "step_name": "",
-    "error": None
+    "error": None,
+    "step_results": {},
+    "cores_ok": None,
+    "last_updated_written": False,
 }
 
 def run_ai_update_background():
     global AI_STATUS
+    from utils.ai_pipeline import (
+        cuda_available,
+        evaluate_ais11_cores,
+        save_pipeline_status,
+        should_skip_gpu_script,
+    )
+
     AI_STATUS["is_running"] = True
     AI_STATUS["error"] = None
     AI_STATUS["current_step"] = 0
+    AI_STATUS["step_results"] = {}
+    AI_STATUS["cores_ok"] = None
+    AI_STATUS["last_updated_written"] = False
 
     steps = [
         ("models/precalculate_timesfm.py", "[1/6] Google TimesFM (Oráculo Principal)"),
@@ -57,17 +68,31 @@ def run_ai_update_background():
 
     env = os.environ.copy()
     env["YF_CACHE_SECONDS"] = "3600"
+    has_cuda = cuda_available()
 
     try:
         import subprocess
         for idx, (script, desc) in enumerate(steps, 1):
             AI_STATUS["current_step"] = idx
             AI_STATUS["step_name"] = desc
+            if should_skip_gpu_script(script, has_cuda):
+                print(f"\n[AI Background Update] SKIP (sin CUDA): {desc}")
+                AI_STATUS["step_results"][script] = "skipped"
+                continue
             print(f"\n[AI Background Update] {desc}...")
             res = subprocess.run(base_cmd + [script], env=env)
             if res.returncode != 0:
-                print(f"[AI Background Update] Advertencia en {script} (Código {res.returncode})")
-        
+                print(f"[AI Background Update] Fallo en {script} (Código {res.returncode})")
+                AI_STATUS["step_results"][script] = "failed"
+            else:
+                AI_STATUS["step_results"][script] = "ok"
+
+        cores_ok, cores_msg = evaluate_ais11_cores(AI_STATUS["step_results"])
+        AI_STATUS["cores_ok"] = cores_ok
+        if not cores_ok:
+            AI_STATUS["error"] = cores_msg
+            print(f"[AI Background Update] No se actualiza ai_last_updated.json ({cores_msg})")
+
         AI_STATUS["step_name"] = "Regenerando rankings y backtests finales..."
         import importlib
         importlib.reload(backtester)
@@ -76,14 +101,35 @@ def run_ai_update_background():
             json.dump(result_dict, f, indent=2, ensure_ascii=False)
 
         now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        try:
-            with open("data/ai_last_updated.json", "w", encoding="utf-8") as f:
-                json.dump({"last_updated": now_str}, f, indent=2)
-        except Exception: pass
-            
+        if cores_ok:
+            try:
+                with open("data/ai_last_updated.json", "w", encoding="utf-8") as f:
+                    json.dump({"last_updated": now_str}, f, indent=2)
+                AI_STATUS["last_updated_written"] = True
+            except Exception:
+                pass
+
+        save_pipeline_status({
+            "cores_ok": cores_ok,
+            "error": AI_STATUS["error"],
+            "step_results": AI_STATUS["step_results"],
+            "last_updated_written": AI_STATUS["last_updated_written"],
+            "cuda": has_cuda,
+        })
+
     except Exception as e:
         AI_STATUS["error"] = str(e)
         traceback.print_exc()
+        try:
+            save_pipeline_status({
+                "cores_ok": False,
+                "error": str(e),
+                "step_results": AI_STATUS.get("step_results") or {},
+                "last_updated_written": False,
+                "cuda": has_cuda,
+            })
+        except Exception:
+            pass
     finally:
         AI_STATUS["is_running"] = False
         AI_STATUS["step_name"] = "Completado"
@@ -93,15 +139,13 @@ LIVE_PRICES_CACHE = {}
 def update_live_prices_loop():
     global LIVE_PRICES_CACHE
     import time
-    import yfinance as yf
     import pandas as pd
     from backtester import TICKERS
+    from utils.yf_fetch import download_tickers
 
     while True:
         try:
-            buf = io.StringIO()
-            with contextlib.redirect_stdout(buf), contextlib.redirect_stderr(buf):
-                df = yf.download(TICKERS, period="1d", interval="1m", progress=False)
+            df = download_tickers(TICKERS, period="1d", interval="1m")
             if not df.empty:
                 prices = {}
                 if isinstance(df.columns, pd.MultiIndex):
@@ -119,8 +163,7 @@ def update_live_prices_loop():
                         if not valid_s.empty:
                             last_val = valid_s.iloc[-1]
                             if pd.notna(last_val):
-                                for tk in TICKERS:
-                                    prices[tk] = float(last_val)
+                                prices = {TICKERS[0]: float(last_val)} if len(TICKERS) == 1 else {}
                 if prices:
                     LIVE_PRICES_CACHE = prices
         except Exception:
@@ -219,34 +262,48 @@ class APIHandler(http.server.SimpleHTTPRequestHandler):
             self.send_header('Content-type', 'application/json')
             self.end_headers()
             try:
-                from utils.scanner_engine import get_ai_signals_age_days, load_ais11_params
+                from utils.scanner_engine import (
+                    get_ai_signals_age_days,
+                    get_ai_signals_ages_by_file,
+                    load_ais11_params,
+                )
                 from utils.telegram_bot import get_bot_token, get_saved_chat_id, is_dry_run
+                from utils.ai_pipeline import load_pipeline_status
                 ai_age = get_ai_signals_age_days()
                 params = load_ais11_params()
                 cache_ts = None
+                cache_summary = None
                 if os.path.exists("data/live_scanner_cache.json"):
                     try:
                         with open("data/live_scanner_cache.json", "r", encoding="utf-8") as f:
-                            cache_ts = json.load(f).get("timestamp")
+                            cache = json.load(f)
+                        cache_ts = cache.get("timestamp")
+                        cache_summary = cache.get("summary")
                     except Exception:
                         pass
+                pipe = load_pipeline_status()
                 payload = {
                     "ok": True,
                     "telegram_token": bool(get_bot_token()),
                     "telegram_chat": bool(get_saved_chat_id()),
                     "telegram_dry_run": is_dry_run(),
                     "ai_signals_age_days": None if ai_age is None else round(ai_age, 2),
+                    "ai_file_ages": get_ai_signals_ages_by_file(),
                     "ais11_params": {
                         "entry_th": params["entry_th"],
                         "exit_th": params["exit_th"],
                     },
                     "last_scanner_cache": cache_ts,
                     "last_scanner_meta": LAST_SCANNER_META,
+                    "scanner_summary": cache_summary,
                     "ai_status": {
                         "is_running": AI_STATUS["is_running"],
                         "step_name": AI_STATUS["step_name"],
                         "error": AI_STATUS["error"],
+                        "cores_ok": AI_STATUS.get("cores_ok"),
+                        "last_updated_written": AI_STATUS.get("last_updated_written"),
                     },
+                    "ai_pipeline": pipe,
                     "next_ai_update_utc": (
                         f"{AI_UPDATE_HOUR_UTC:02d}:{AI_UPDATE_MINUTE_UTC:02d} UTC diário"
                     ),

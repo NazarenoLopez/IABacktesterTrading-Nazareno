@@ -10,14 +10,12 @@ Tickers sin señales IA no inventan score híbrido: quedan marcados NO_AI (no pu
 
 import os
 import sys
-import io
-import contextlib
 import json
 import time
 import numpy as np
 import pandas as pd
-import yfinance as yf
 from datetime import datetime
+from utils.yf_fetch import fetch_with_cache, flatten_ohlc_columns
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from utils.tickers_universe import get_all_tickers, get_us_tickers, get_crypto_tickers, BENCHMARK_TICKER
@@ -65,6 +63,19 @@ def get_ai_signals_age_days():
     if newest is None:
         return None
     return (time.time() - newest) / 86400.0
+
+
+def get_ai_signals_ages_by_file():
+    """Edad en días por archivo core AIS11. None si el archivo no existe."""
+    ages = {}
+    now = time.time()
+    for path in AI_SIGNAL_FILES:
+        name = os.path.basename(path)
+        if os.path.exists(path):
+            ages[name] = round((now - os.path.getmtime(path)) / 86400.0, 2)
+        else:
+            ages[name] = None
+    return ages
 
 
 def compute_ais11_score(df, params):
@@ -207,29 +218,13 @@ def fetch_ticker_data(tickers=None, cache_expire=1800):
                 cache_valid = False
 
         if not cache_valid or df.empty:
-            buf = io.StringIO()
-            for attempt in range(2):
-                try:
-                    with contextlib.redirect_stdout(buf), contextlib.redirect_stderr(buf):
-                        df = yf.download(ticker, period="5y", progress=False)
-                    if not df.empty:
-                        break
-                    time.sleep(0.5)
-                except Exception:
-                    time.sleep(0.5)
-
-            if isinstance(df.columns, pd.MultiIndex):
-                df.columns = [col[0] for col in df.columns]
-
-            if df.empty and os.path.exists(cache_path) and os.path.getsize(cache_path) > 100:
-                try:
-                    df = pd.read_csv(cache_path, index_col=0, parse_dates=True)
-                    df.index.name = "Date"
-                except Exception: pass
-            elif not df.empty:
-                try:
-                    df.to_csv(cache_path)
-                except Exception: pass
+            df = fetch_with_cache(
+                ticker,
+                period="5y",
+                cache_expire_sec=cache_expire_sec,
+                stale_ok=True,
+            )
+            df = flatten_ohlc_columns(df)
 
         if df.empty or len(df) < 30:
             continue
@@ -254,29 +249,21 @@ def fetch_ticker_data(tickers=None, cache_expire=1800):
         roc10 = c.pct_change(10).fillna(0.0) * 100
         df['ROC_10_NORM'] = sigmoid_norm(roc10, 10.0)
 
-        # Cargar AI Signals para AIS11 si existen
+        # Paridad con backtester.fetch_data: reindex sin fillna inventado
         s_gpu = pd.Series(minirocket_gpu_data.get(ticker, {}))
         if not s_gpu.empty:
             s_gpu.index = pd.to_datetime(s_gpu.index)
-            df['AI_MINIROCKET_GPU'] = s_gpu.reindex(df.index).ffill().fillna(0.5) * 100.0
-        else:
-            df['AI_MINIROCKET_GPU'] = np.nan
+        df['AI_MINIROCKET_GPU'] = s_gpu.reindex(df.index) * 100.0
 
         s_tfm = pd.Series(timesfm_data.get(ticker, {}))
         if not s_tfm.empty:
             s_tfm.index = pd.to_datetime(s_tfm.index)
-            s_tfm_aligned = s_tfm.reindex(df.index).ffill().fillna(0.0)
-            df['AI_TIMESFM'] = sigmoid_norm(s_tfm_aligned * 100.0, 2.0)
-        else:
-            df['AI_TIMESFM'] = np.nan
+        df['AI_TIMESFM'] = sigmoid_norm(s_tfm.reindex(df.index) * 100.0, 2.0)
 
         s_tsp = pd.Series(tspulse_data.get(ticker, {}))
         if not s_tsp.empty:
             s_tsp.index = pd.to_datetime(s_tsp.index)
-            s_tsp_aligned = s_tsp.reindex(df.index).ffill().fillna(0.0)
-            df['AI_TSPULSE'] = sigmoid_norm(s_tsp_aligned * 100.0, 2.0)
-        else:
-            df['AI_TSPULSE'] = np.nan
+        df['AI_TSPULSE'] = sigmoid_norm(s_tsp.reindex(df.index) * 100.0, 2.0)
 
         data[ticker] = df
 
@@ -542,6 +529,7 @@ def run_live_scanner(tickers=None):
             "ss11_buys": 0,
             "ss11_holds": 0,
             "ss11_in_position": 0,
+            "ss11_sl_recovery": 0,
             "ais11_buys": 0,
             "ais11_holds": 0,
             "ais11_in_position": 0,
@@ -576,7 +564,7 @@ def run_live_scanner(tickers=None):
             ss11_exit = macro_aligned
 
             ss11_sig, ss11_met, ss11_trades = simulate_strategy_trades(
-                df, ss11_long, ss11_exit, stop_loss_pct=-15.0, is_strict_reentry=True
+                df, ss11_long, ss11_exit, stop_loss_pct=-15.0, is_strict_reentry=False
             )
 
             dist_sl = -15.0
@@ -606,6 +594,8 @@ def run_live_scanner(tickers=None):
                 results["summary"]["ss11_holds"] += 1
             if ss11_met.get("is_currently_in_position"):
                 results["summary"]["ss11_in_position"] += 1
+            if ss11_met.get("in_sl_recovery"):
+                results["summary"]["ss11_sl_recovery"] += 1
 
         # -----------------------------------------------------------------
         # 2. AIS11 — espejo exacto del backtester (params JSON)
@@ -689,6 +679,11 @@ def run_live_scanner(tickers=None):
             results["summary"]["ais11_in_position"] += 1
         results["summary"]["with_ai"] += 1
         results["summary"]["total_scanned"] += 1
+
+    sm0 = results["summary"]
+    ais_n = sm0["with_ai"] + sm0["without_ai"]
+    sm0["ais11_no_ai_pct"] = round(100.0 * sm0["without_ai"] / ais_n, 2) if ais_n else 0.0
+    results["ai_file_ages"] = get_ai_signals_ages_by_file()
 
     priority = {"BUY": 0, "HOLD": 1, "WAIT": 2, "SELL": 3, "NO_AI": 4}
     results["ss11_signals"].sort(key=lambda x: (priority.get(x["signal"], 99), -x["change_24h"]))

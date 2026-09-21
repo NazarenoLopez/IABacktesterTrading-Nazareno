@@ -70,15 +70,20 @@ def run_gpu_training():
     print("  MiniRocket GPU (tsai): Entrenamiento S18")
     print("=" * 60)
     
-    data = fetch_data()
+    try:
+        from utils.ai_pipeline import fetch_ai_dataset
+        data, loop_tickers = fetch_ai_dataset()
+    except Exception:
+        data = fetch_data()
+        loop_tickers = list(TICKERS)
     try:
         with open(OUTPUT_FILE, "r") as f:
             predictions_cache = json.load(f)
             print(f"Caché cargado con {len(predictions_cache)} tickers.")
     except FileNotFoundError:
-        predictions_cache = {tk: {} for tk in TICKERS}
+        predictions_cache = {tk: {} for tk in loop_tickers}
     
-    for tk in TICKERS:
+    for tk in loop_tickers:
         if tk not in data: continue
         df = data[tk]
         if len(df) <= CONTEXT_LEN + FORECAST_HORIZON: continue
